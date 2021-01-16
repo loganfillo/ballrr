@@ -1,0 +1,145 @@
+- table:
+    schema: public
+    name: comment_likes
+  object_relationships:
+  - name: comment
+    using:
+      foreign_key_constraint_on: comment_id
+  - name: user
+    using:
+      foreign_key_constraint_on: user_id
+- table:
+    schema: public
+    name: comments
+  object_relationships:
+  - name: commented_post
+    using:
+      foreign_key_constraint_on: post_id
+  - name: commenter
+    using:
+      foreign_key_constraint_on: user_id
+  array_relationships:
+  - name: comment_likes
+    using:
+      foreign_key_constraint_on:
+        column: comment_id
+        table:
+          schema: public
+          name: comment_likes
+- table:
+    schema: public
+    name: followers
+  object_relationships:
+  - name: user_followed
+    using:
+      foreign_key_constraint_on: user_id
+  - name: user_follower
+    using:
+      foreign_key_constraint_on: follower_id
+- table:
+    schema: public
+    name: media
+  array_relationships:
+  - name: post_content
+    using:
+      foreign_key_constraint_on:
+        column: media_id
+        table:
+          schema: public
+          name: posts
+  - name: profile_pic
+    using:
+      foreign_key_constraint_on:
+        column: media_id
+        table:
+          schema: public
+          name: users
+- table:
+    schema: public
+    name: media_type
+  is_enum: true
+- table:
+    schema: public
+    name: post_likes
+  object_relationships:
+  - name: liked_post
+    using:
+      foreign_key_constraint_on: liked_post_id
+  - name: user_id_of_like
+    using:
+      foreign_key_constraint_on: user_id
+- table:
+    schema: public
+    name: posts
+  object_relationships:
+  - name: post_content
+    using:
+      foreign_key_constraint_on: media_id
+  - name: post_user_id
+    using:
+      foreign_key_constraint_on: user_id
+  array_relationships:
+  - name: comments
+    using:
+      foreign_key_constraint_on:
+        column: post_id
+        table:
+          schema: public
+          name: comments
+  - name: post_likes
+    using:
+      foreign_key_constraint_on:
+        column: liked_post_id
+        table:
+          schema: public
+          name: post_likes
+- table:
+    schema: public
+    name: users
+  object_relationships:
+  - name: profile_pic
+    using:
+      foreign_key_constraint_on: media_id
+  array_relationships:
+  - name: comment_likes
+    using:
+      foreign_key_constraint_on:
+        column: user_id
+        table:
+          schema: public
+          name: comment_likes
+  - name: comments
+    using:
+      foreign_key_constraint_on:
+        column: user_id
+        table:
+          schema: public
+          name: comments
+  - name: followers
+    using:
+      foreign_key_constraint_on:
+        column: follower_id
+        table:
+          schema: public
+          name: followers
+  - name: followersByUserId
+    using:
+      foreign_key_constraint_on:
+        column: user_id
+        table:
+          schema: public
+          name: followers
+  - name: post_likes
+    using:
+      foreign_key_constraint_on:
+        column: user_id
+        table:
+          schema: public
+          name: post_likes
+  - name: user_posts
+    using:
+      foreign_key_constraint_on:
+        column: user_id
+        table:
+          schema: public
+          name: posts
