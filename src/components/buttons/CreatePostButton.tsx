@@ -2,7 +2,7 @@ import { TouchableOpacity, StyleSheet } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { AntDesign } from '@expo/vector-icons';
 import { ActionSheet, Text, View } from 'native-base';
-import { Media } from '../../lib/types';
+import { Media, MediaType } from '../../lib/types';
 import * as VideoThumbnails from 'expo-video-thumbnails';
 import { chooseMedia, takeMedia } from '../../lib/media';
 import { useNavigation } from '@react-navigation/native';
@@ -36,7 +36,7 @@ const CreatePostButton: React.FC = () => {
         let thumbnailUri: string = PLACEHOLDER_IMAGE;
         try {
             let imageUri = media.uri;
-            if (!media.file?.type.includes('image')) {
+            if (media.type === MediaType.VIDEO) {
                 const { uri } = await VideoThumbnails.getThumbnailAsync(media.uri ?? '', {
                     time: 15000,
                 });

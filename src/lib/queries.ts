@@ -26,6 +26,7 @@ export const GET_USERS_POSTS = gql`
             id
             post_content {
                 s3_key
+                type
             }
         }
     }

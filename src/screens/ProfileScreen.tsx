@@ -15,8 +15,12 @@ import {
 import { Grid, Row, Col } from 'react-native-easy-grid';
 import LogoutButton from '../components/buttons/LogoutButton';
 import { GET_USERS_POSTS } from '../lib/queries';
-import { ProfilePost } from '../lib/types';
+import { Media, MediaType, ProfilePost } from '../lib/types';
 import { useUser } from '../lib/user';
+import * as VideoThumbnails from 'expo-video-thumbnails';
+
+const PLACEHOLDER_IMAGE =
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Soccerball.svg/1200px-Soccerball.svg.png';
 
 const ProfileScreen: React.FC = (): JSX.Element => {
     const [posts, setPosts] = useState<ProfilePost[]>([]);
@@ -26,13 +30,35 @@ const ProfileScreen: React.FC = (): JSX.Element => {
     const { loading, error, data } = useQuery(GET_USERS_POSTS, { variables: { user_id: user.id } });
 
     useEffect(() => {
+        async function getThumbnailUri(url: string): Promise<string> {
+            let thumbnailUri: string = PLACEHOLDER_IMAGE;
+            try {
+                const { uri } = await VideoThumbnails.getThumbnailAsync(url ?? '', {
+                    time: 15000,
+                });
+
+                if (uri !== undefined) {
+                    thumbnailUri = uri;
+                }
+            } catch (e) {
+                console.log(e);
+            }
+            return thumbnailUri;
+        }
         async function fetchPosts() {
             if (!loading && !error) {
                 const fetchedPosts: ProfilePost[] = [];
                 for (const post of data.posts) {
+                    let thumnbailUrl: string;
+                    const url = (await Storage.get(post.post_content.s3_key)) as string;
+                    if (post.post_content.type === MediaType.VIDEO) {
+                        thumnbailUrl = await getThumbnailUri(url);
+                    } else {
+                        thumnbailUrl = url;
+                    }
                     fetchedPosts.push({
                         id: post.id,
-                        url: (await Storage.get(post.post_content.s3_key)) as string,
+                        url: thumnbailUrl,
                     });
                 }
                 setPosts(fetchedPosts);
@@ -136,7 +162,6 @@ const styles = StyleSheet.create({
         height: 75,
         width: 75,
         justifyContent: 'center',
-        textAlign: 'center',
         alignSelf: 'center',
     },
     userContainer: {
