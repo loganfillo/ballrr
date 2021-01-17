@@ -10,8 +10,8 @@
   "dependencies": {
     "@apollo/client": "^3.3.7",
     "@react-native-community/masked-view": "0.1.10",
-    "@react-native-community/netinfo": "^5.9.10",
-    "@react-native-community/viewpager": "^4.2.2",
+    "@react-native-community/netinfo": "5.9.7",
+    "@react-native-community/viewpager": "4.2.0",
     "@react-navigation/bottom-tabs": "^5.11.3",
     "@react-navigation/material-bottom-tabs": "^5.3.11",
     "@react-navigation/material-top-tabs": "^5.3.11",

@@ -61,3 +61,10 @@ export interface ProfilePost {
     url: string;
     id: number;
 }
+
+export interface Challenge {
+    posterUri: string;
+    type: string;
+    title: string;
+    userCount: number;
+}
