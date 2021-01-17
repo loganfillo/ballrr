@@ -56,3 +56,8 @@ export interface Post {
     caption: string;
     type: MediaType;
 }
+
+export interface ProfilePost {
+    url: string;
+    id: number;
+}

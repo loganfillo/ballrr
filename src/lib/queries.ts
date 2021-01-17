@@ -20,6 +20,17 @@ export const CREATE_POST = gql`
     }
 `;
 
+export const GET_USERS_POSTS = gql`
+    query getUsersPosts($user_id: Int!) {
+        posts(where: { user_id: { _eq: $user_id } }, order_by: { created_at: desc }) {
+            id
+            post_content {
+                s3_key
+            }
+        }
+    }
+`;
+
 export const GET_ALL_POSTS = gql`
     query getAllPosts {
         posts(order_by: { created_at: desc }) {
