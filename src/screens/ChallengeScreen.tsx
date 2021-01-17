@@ -218,15 +218,17 @@ const Tab = createMaterialTopTabNavigator();
 
 const ChallengeNavigator: React.FC = () => {
     return (
-        <Tab.Navigator
-            swipeEnabled={false}
-            tabBarOptions={{
-                indicatorStyle: { backgroundColor: 'green' },
-            }}
-        >
-            <Tab.Screen name="Browse" component={BrowseChallengeScreen} />
-            <Tab.Screen name="Saved" component={SavedChallengeScreen} />
-        </Tab.Navigator>
+        <SafeAreaView style={{ flex: 1 }}>
+            <Tab.Navigator
+                swipeEnabled={false}
+                tabBarOptions={{
+                    indicatorStyle: { backgroundColor: 'green' },
+                }}
+            >
+                <Tab.Screen name="Browse" component={BrowseChallengeScreen} />
+                <Tab.Screen name="Saved" component={SavedChallengeScreen} />
+            </Tab.Navigator>
+        </SafeAreaView>
     );
 };
 
