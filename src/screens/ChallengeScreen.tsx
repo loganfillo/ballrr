@@ -104,6 +104,10 @@ const LeaderBoard: React.FC<Props> = ({ challenge }: Props) => {
             >
                 {challenge.title}
             </Text>
+            <Image
+                style={{ height: 200, width: '100%', marginTop: 20 }}
+                source={{ uri: challenge.posterUri }}
+            />
             <View style={styles.container}>
                 <Table borderStyle={{ borderWidth: 2, borderColor: '#c8e1ff' }}>
                     <Row data={tableHead} style={styles.head} textStyle={styles.text} />
@@ -150,7 +154,7 @@ const FeedChallenge: React.FC<Props> = ({ challenge }: Props) => {
             </Modal>
             <Card style={{ flex: 1 }}>
                 <CardItem cardBody style={{ flex: 1 }} onPress={() => setModalOpen(true)}>
-                    <ImageBackground
+                    <Image
                         resizeMode="cover"
                         style={{ height: '100%', flex: 1, width: '100%' }}
                         source={{ uri: challenge.posterUri }}
