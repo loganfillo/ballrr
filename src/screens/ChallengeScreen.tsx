@@ -76,9 +76,15 @@ const LeaderBoard: React.FC<Props> = ({ challenge }: Props) => {
     const tableHead = ['#', 'User', 'Views', 'Likes'];
     const tableData = [
         ['1', 'Logan', '2000', '123'],
-        ['2', 'Dana', '1500', '12'],
-        ['3', 'Liam', '1000', '9'],
-        ['4', 'Simon', '100', '6'],
+        ['2', 'Dana', '1500', '100'],
+        ['3', 'Liam', '1000', '90'],
+        ['4', 'Simon', '100', '12'],
+        ['5', 'Des', '97', '11'],
+        ['6', 'Ben', '81', '10'],
+        ['7', 'Colin', '56', '9'],
+        ['8', 'Marcus', '34', '8'],
+        ['9', 'Luis', '12', '3'],
+        ['10', 'Fatty', '1', '1'],
     ];
     return (
         <View style={styles.modalContainer}>
@@ -92,7 +98,7 @@ const LeaderBoard: React.FC<Props> = ({ challenge }: Props) => {
             <Text
                 style={{
                     textAlign: 'center',
-                    fontSize: 40,
+                    fontSize: 30,
                     textDecorationLine: 'underline',
                 }}
             >
@@ -143,7 +149,7 @@ const FeedChallenge: React.FC<Props> = ({ challenge }: Props) => {
                 </ScrollView>
             </Modal>
             <Card style={{ flex: 1 }}>
-                <CardItem cardBody style={{ flex: 1 }}>
+                <CardItem cardBody style={{ flex: 1 }} onPress={() => setModalOpen(true)}>
                     <ImageBackground
                         resizeMode="cover"
                         style={{ height: '100%', flex: 1, width: '100%' }}
