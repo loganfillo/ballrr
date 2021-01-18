@@ -38,7 +38,6 @@ export interface UploadedMedia {
 
 export interface Media {
     cancelled: boolean;
-    uri?: string;
     file?: MediaFile;
     type?: MediaType;
 }

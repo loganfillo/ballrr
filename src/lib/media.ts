@@ -5,6 +5,8 @@ import { Alert, Platform } from 'react-native';
 import { CREATE_MEDIA } from './queries';
 import { Media, UploadedMedia, MediaFile, MediaType } from './types';
 import uuid from 'uuid-random';
+import * as VideoThumbnails from 'expo-video-thumbnails';
+import * as ImageManipulator from 'expo-image-manipulator';
 
 /**
  * Opens camera and allows user to take media to upload. Returns the media
@@ -21,16 +23,20 @@ export async function takeMedia(): Promise<Media> {
         const result = await ImagePicker.launchCameraAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
             allowsEditing: true,
-            aspect: [4, 3],
+            aspect: [4, 4],
             quality: 1,
         });
 
-        const file: MediaFile | null = await mediaResultToFile(result);
-        if (file !== null && !result.cancelled) {
-            media.uri = result.uri;
-            media.cancelled = false;
-            media.file = file;
-            media.type = result.type as MediaType;
+        if (!result.cancelled) {
+            const file: MediaFile | null = await constructMediaFile(
+                result.uri,
+                result.type as MediaType,
+            );
+            if (file !== null) {
+                media.cancelled = false;
+                media.file = file;
+                media.type = result.type as MediaType;
+            }
         }
     }
     return media;
@@ -51,16 +57,20 @@ export async function chooseMedia(): Promise<Media> {
         const result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
             allowsEditing: true,
-            aspect: [4, 3],
+            aspect: [4, 4],
             quality: 1,
         });
 
-        const file: MediaFile | null = await mediaResultToFile(result);
-        if (file !== null && !result.cancelled) {
-            media.uri = result.uri;
-            media.cancelled = false;
-            media.file = file;
-            media.type = result.type as MediaType;
+        if (!result.cancelled) {
+            const file: MediaFile | null = await constructMediaFile(
+                result.uri,
+                result.type as MediaType,
+            );
+            if (file !== null) {
+                media.cancelled = false;
+                media.file = file;
+                media.type = result.type as MediaType;
+            }
         }
     }
 
@@ -119,27 +129,79 @@ export async function createMedia(
 }
 
 /**
- * Parses a image picker result into a File object, returns null if error occured
+ * Creates a thumbnail image from a media
  *
- * @param result Image picker result
+ * @param media The media to create a thumbnail from
+ * @returns The media object for the thumbnail image
  */
-async function mediaResultToFile(result: ImagePicker.ImagePickerResult): Promise<MediaFile | null> {
-    if (!result.cancelled) {
-        const uri = result.uri;
-        const mediaType = result.type;
-
-        const extension: string | null = extensionFromURI(uri);
-        if (extension === null) {
-            return null;
+export async function getThumbnail(media: Media): Promise<Media> {
+    const thumbnailMedia: Media = { cancelled: true };
+    try {
+        let thumbnailUri: string | null = null;
+        if (media.file && media.type === MediaType.VIDEO) {
+            const { uri, height, width } = await VideoThumbnails.getThumbnailAsync(media.file.uri, {
+                time: 15000,
+            });
+            if (uri !== undefined) {
+                thumbnailUri = await resizeAndFormatThumbnail(uri, height / 2, width / 2);
+            }
+        } else if (media.file && media.type === MediaType.IMAGE) {
+            thumbnailUri = await resizeAndFormatThumbnail(media.file.uri, 300, 300);
         }
-        const type: string | null = mimeTypeFromMediaType(mediaType);
-        if (type === null) {
-            return null;
+        if (thumbnailUri !== null) {
+            const file: MediaFile | null = await constructMediaFile(thumbnailUri, MediaType.IMAGE);
+            if (file !== null) {
+                thumbnailMedia.cancelled = false;
+                thumbnailMedia.type = MediaType.IMAGE;
+                thumbnailMedia.file = file;
+            }
         }
-
-        return { type, uri, extension };
+    } catch (e) {
+        console.log(e);
     }
-    return null;
+
+    return thumbnailMedia;
+}
+
+/**
+ * Constructs a media file object from uri and type, returns null if error occured
+ *
+ * @param uri Local file Uri
+ * @param mediaType Media type
+ */
+async function constructMediaFile(uri: string, mediaType: MediaType): Promise<MediaFile | null> {
+    const extension: string | null = extensionFromURI(uri);
+    if (extension === null) {
+        return null;
+    }
+    const type: string | null = mimeTypeFromMediaType(mediaType);
+    if (type === null) {
+        return null;
+    }
+
+    return { type, uri, extension };
+}
+
+/**
+ * Resizes and formats a image to be a small jpeg thumbnail image
+ *
+ * @param imageUri The image uri to resize
+ * @returns The local uri of the resized image
+ */
+async function resizeAndFormatThumbnail(
+    imageUri: string,
+    height: number,
+    width: number,
+): Promise<string> {
+    const { uri } = await ImageManipulator.manipulateAsync(
+        imageUri,
+        [{ resize: { height, width } }],
+        {
+            compress: 1,
+            format: ImageManipulator.SaveFormat.JPEG,
+        },
+    );
+    return uri;
 }
 
 /**

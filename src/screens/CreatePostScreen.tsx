@@ -27,7 +27,9 @@ const CreatePostScreen: React.FC = () => {
 
     useEffect(() => {
         setMedia(params.media);
-        setThumbnailUri(params.thumbnailUri);
+        if (params.thumbnail.file) {
+            setThumbnailUri(params.thumbnail.file.uri);
+        }
     }, [params]);
 
     function createPostAndReturnHome(
@@ -128,12 +130,12 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     contentPreviewColumn: {
-        width: 125,
+        width: 100,
         alignContent: 'flex-end',
     },
     contentPreview: {
-        height: 125,
-        width: 125,
+        height: 100,
+        width: 100,
         alignContent: 'flex-end',
     },
     caption: {
