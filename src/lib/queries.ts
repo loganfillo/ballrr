@@ -68,8 +68,8 @@ export const GET_USER = gql`
     }
 `;
 
-export const CREATE_MEDIA = gql`
-    mutation createMedia($type: media_type_enum!, $s3_key: String!, $postID: Int!) {
+export const CREATE_POST_MEDIA = gql`
+    mutation createPostMedia($type: media_type_enum!, $s3_key: String!, $postID: Int!) {
         insert_post_media_one(object: { type: $type, s3_key: $s3_key, post_id: $postID }) {
             id
         }

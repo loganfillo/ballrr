@@ -12,7 +12,6 @@ interface Props {
 
 const DeletePostButton: React.FC<Props> = ({ post }: Props) => {
     const [confirmDelete, setConfirmDelete] = useState<boolean>();
-
     const [addTodo, { data }] = useMutation(DELETE_POST, {
         variables: { id: post.id },
     });
@@ -23,7 +22,7 @@ const DeletePostButton: React.FC<Props> = ({ post }: Props) => {
             deleteFromS3(post.s3_key);
             Alert.alert('Post Deleted');
         }
-    }, [data]);
+    }, [confirmDelete]);
 
     return (
         <TouchableOpacity

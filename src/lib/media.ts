@@ -2,7 +2,7 @@ import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
 import { Storage } from 'aws-amplify';
 import * as ImagePicker from 'expo-image-picker';
 import { Alert, Platform } from 'react-native';
-import { CREATE_MEDIA } from './queries';
+import { CREATE_POST_MEDIA } from './queries';
 import { Media, UploadedMedia, MediaFile, MediaType } from './types';
 import uuid from 'uuid-random';
 
@@ -106,14 +106,14 @@ export async function uploadMediaToS3(media: Media): Promise<UploadedMedia> {
  * @param type Type of the media
  * @returns Media table id of created row
  */
-export async function createMedia(
+export async function createPostMedia(
     apolloClient: ApolloClient<NormalizedCacheObject>,
     s3_key: string,
     type: MediaType,
     postID: number,
 ): Promise<number> {
     const res = await apolloClient.mutate({
-        mutation: CREATE_MEDIA,
+        mutation: CREATE_POST_MEDIA,
         variables: { s3_key, type, postID },
     });
     return res.data.insert_post_media_one.id;
