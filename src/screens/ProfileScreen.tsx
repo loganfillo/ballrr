@@ -50,8 +50,8 @@ const ProfileScreen: React.FC = (): JSX.Element => {
                 const fetchedPosts: ProfilePost[] = [];
                 for (const post of data.posts) {
                     let thumnbailUrl: string;
-                    const url = (await Storage.get(post.post_content.s3_key)) as string;
-                    if (post.post_content.type === MediaType.VIDEO) {
+                    const url = (await Storage.get(post.media.s3_key)) as string;
+                    if (post.media.type === MediaType.VIDEO) {
                         thumnbailUrl = await getThumbnailUri(url);
                     } else {
                         thumnbailUrl = url;

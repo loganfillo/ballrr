@@ -110,12 +110,13 @@ export async function createMedia(
     apolloClient: ApolloClient<NormalizedCacheObject>,
     s3_key: string,
     type: MediaType,
+    postID: number,
 ): Promise<number> {
     const res = await apolloClient.mutate({
         mutation: CREATE_MEDIA,
-        variables: { s3_key, type },
+        variables: { s3_key, type, postID },
     });
-    return res.data.insert_media_one.id;
+    return res.data.insert_post_media_one.id;
 }
 
 /**
