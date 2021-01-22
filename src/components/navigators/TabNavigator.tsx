@@ -3,10 +3,10 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import ProfileStackNavigator from './ProfileNavigator';
 import HomeScreen from '../../screens/HomeScreen';
 import SearchScreen from '../../screens/SearchScreen';
-import ChallengeScreen from '../../screens/ChallengeScreen';
 import { AntDesign } from '@expo/vector-icons';
 import CreatePostButton from '../buttons/CreatePostButton';
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
+import ChallengeNavigator from './ChallengeNavigator';
 
 export type TabNavigatorParamList = {
     Home: undefined;
@@ -81,7 +81,7 @@ const TabNavigator: React.FC = () => {
             />
             <Tab.Screen
                 name="Challenges"
-                component={ChallengeScreen}
+                component={ChallengeNavigator}
                 options={{
                     tabBarIcon: ChallengeTab,
                 }}
