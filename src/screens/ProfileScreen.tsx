@@ -15,7 +15,7 @@ import {
 import { Grid, Row, Col } from 'react-native-easy-grid';
 import LogoutButton from '../components/buttons/LogoutButton';
 import { GET_USERS_POSTS } from '../lib/queries';
-import { Media, MediaType, ProfilePost } from '../lib/types';
+import { MediaType, ProfilePost } from '../lib/types';
 import { useUser } from '../lib/user';
 import * as VideoThumbnails from 'expo-video-thumbnails';
 
