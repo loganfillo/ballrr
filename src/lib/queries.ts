@@ -13,8 +13,8 @@ export const GET_PROFILE = gql`
 `;
 
 export const CREATE_POST = gql`
-    mutation createPost($user_id: Int!, $caption: String!, $media_id: Int!) {
-        insert_posts_one(object: { user_id: $user_id, caption: $caption, media_id: $media_id }) {
+    mutation createPost($user_id: Int!, $caption: String!) {
+        insert_posts_one(object: { user_id: $user_id, caption: $caption }) {
             id
         }
     }
@@ -24,7 +24,7 @@ export const GET_USERS_POSTS = gql`
     query getUsersPosts($user_id: Int!) {
         posts(where: { user_id: { _eq: $user_id } }, order_by: { created_at: desc }) {
             id
-            post_content {
+            media {
                 s3_key
                 type
             }
@@ -40,10 +40,11 @@ export const GET_ALL_POSTS = gql`
                 username
                 full_name
             }
-            post_content {
+            media {
                 s3_key
                 type
             }
+            id
         }
     }
 `;
@@ -67,9 +68,17 @@ export const GET_USER = gql`
     }
 `;
 
-export const CREATE_MEDIA = gql`
-    mutation createMedia($type: media_type_enum!, $s3_key: String!) {
-        insert_media_one(object: { type: $type, s3_key: $s3_key }) {
+export const CREATE_POST_MEDIA = gql`
+    mutation createPostMedia($type: media_type_enum!, $s3_key: String!, $postID: Int!) {
+        insert_post_media_one(object: { type: $type, s3_key: $s3_key, post_id: $postID }) {
+            id
+        }
+    }
+`;
+
+export const DELETE_POST = gql`
+    mutation deletePost($id: Int!) {
+        delete_posts_by_pk(id: $id) {
             id
         }
     }

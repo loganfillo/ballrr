@@ -2,7 +2,7 @@ import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
 import { Storage } from 'aws-amplify';
 import * as ImagePicker from 'expo-image-picker';
 import { Alert, Platform } from 'react-native';
-import { CREATE_MEDIA } from './queries';
+import { CREATE_POST_MEDIA } from './queries';
 import { Media, UploadedMedia, MediaFile, MediaType } from './types';
 import uuid from 'uuid-random';
 
@@ -99,6 +99,20 @@ export async function uploadMediaToS3(media: Media): Promise<UploadedMedia> {
 }
 
 /**
+ * Deletes media from AWS S3 and returns a promise
+ * Logs error if delete was not successful
+ *
+ * @param s3_key The key to the S3 media to delete
+ */
+export async function deleteFromS3(s3_key: string): Promise<void> {
+    try {
+        await Storage.remove(s3_key);
+    } catch (e) {
+        console.log('Failed to delete post. Error: \n', e);
+    }
+}
+
+/**
  * Creates the media in the database
  *
  * @param apolloClient GraphQL CLient
@@ -106,16 +120,17 @@ export async function uploadMediaToS3(media: Media): Promise<UploadedMedia> {
  * @param type Type of the media
  * @returns Media table id of created row
  */
-export async function createMedia(
+export async function createPostMedia(
     apolloClient: ApolloClient<NormalizedCacheObject>,
     s3_key: string,
     type: MediaType,
+    postID: number,
 ): Promise<number> {
     const res = await apolloClient.mutate({
-        mutation: CREATE_MEDIA,
-        variables: { s3_key, type },
+        mutation: CREATE_POST_MEDIA,
+        variables: { s3_key, type, postID },
     });
-    return res.data.insert_media_one.id;
+    return res.data.insert_post_media_one.id;
 }
 
 /**

@@ -1,5 +1,5 @@
 import { CREATE_POST } from './queries';
-import { uploadMediaToS3, createMedia } from './media';
+import { uploadMediaToS3, createPostMedia } from './media';
 import { Alert } from 'react-native';
 import { Media, UploadedMedia, User } from './types';
 import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
@@ -17,14 +17,13 @@ async function createPostEntry(
     apolloClient: ApolloClient<NormalizedCacheObject>,
     user_id: number,
     caption: string,
-    media_id: number,
-): Promise<string> {
+): Promise<number> {
     const res = await apolloClient.mutate({
         mutation: CREATE_POST,
-        variables: { user_id, caption, media_id },
+        variables: { user_id, caption },
     });
 
-    return res.data.insert_posts_one;
+    return res.data.insert_posts_one.id;
 }
 /**
  * Creates a post. Uploads media file to s3 then creates the media and post entries
@@ -43,8 +42,8 @@ export async function createPost(
 ): Promise<void> {
     const uploadedMedia: UploadedMedia = await uploadMediaToS3(media);
     if (uploadedMedia.ok && uploadedMedia.name !== undefined && uploadedMedia.type !== undefined) {
-        const mediaID = await createMedia(apolloClient, uploadedMedia.name, uploadedMedia.type);
-        await createPostEntry(apolloClient, user.id, caption, mediaID);
+        const postID = await createPostEntry(apolloClient, user.id, caption);
+        await createPostMedia(apolloClient, uploadedMedia.name, uploadedMedia.type, postID);
         Alert.alert('Post Uploaded!');
     } else {
         Alert.alert('Could not enter post into DB');
