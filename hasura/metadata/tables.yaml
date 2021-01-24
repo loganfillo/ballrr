@@ -60,14 +60,6 @@
   - name: post
     using:
       foreign_key_constraint_on: post_id
-  array_relationships:
-  - name: profile_pic
-    using:
-      foreign_key_constraint_on:
-        column: media_id
-        table:
-          schema: public
-          name: users
 - table:
     schema: public
     name: posts
@@ -101,10 +93,6 @@
 - table:
     schema: public
     name: users
-  object_relationships:
-  - name: profile_pic
-    using:
-      foreign_key_constraint_on: media_id
   array_relationships:
   - name: comment_likes
     using:

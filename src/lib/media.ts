@@ -99,6 +99,20 @@ export async function uploadMediaToS3(media: Media): Promise<UploadedMedia> {
 }
 
 /**
+ * Deletes media from AWS S3 and returns a promise
+ * Logs error if delete was not successful
+ *
+ * @param s3_key The key to the S3 media to delete
+ */
+export async function deleteFromS3(s3_key: string): Promise<void> {
+    try {
+        await Storage.remove(s3_key);
+    } catch (e) {
+        console.log('Failed to delete post. Error: \n', e);
+    }
+}
+
+/**
  * Creates the media in the database
  *
  * @param apolloClient GraphQL CLient

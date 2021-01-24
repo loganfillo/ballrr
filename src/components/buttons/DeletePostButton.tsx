@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { DELETE_POST } from '../../lib/queries';
 import { useMutation } from '@apollo/client';
-import { deleteFromS3 } from '../../lib/delete';
+import { deleteFromS3 } from '../../lib/media';
 import { Post } from '../../lib/types';
 
 interface Props {
@@ -12,13 +12,13 @@ interface Props {
 
 const DeletePostButton: React.FC<Props> = ({ post }: Props) => {
     const [confirmDelete, setConfirmDelete] = useState<boolean>();
-    const [addTodo, { data }] = useMutation(DELETE_POST, {
+    const [deletePost, { data }] = useMutation(DELETE_POST, {
         variables: { id: post.id },
     });
 
     useEffect(() => {
         if (confirmDelete) {
-            addTodo();
+            deletePost();
             deleteFromS3(post.s3_key);
             Alert.alert('Post Deleted');
         }
