@@ -70,3 +70,14 @@ export interface Challenge {
     title: string;
     userCount: number;
 }
+
+export enum NotificationType {
+    LIKE = 'like',
+}
+
+export interface Notification {
+    id: number;
+    username: string;
+    type: NotificationType;
+    seen: boolean;
+}
