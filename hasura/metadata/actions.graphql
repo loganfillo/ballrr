@@ -1,2 +1,16 @@
+type Mutation {
+  s3_upload (
+    type: String!
+  ): UploadOutput
+}
 
+
+
+
+type UploadOutput {
+  postUrl : String!
+  getUrl : String!
+  name : String!
+  fields : String!
+}
 
