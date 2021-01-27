@@ -126,14 +126,14 @@
   - name: followers
     using:
       foreign_key_constraint_on:
-        column: user_id
+        column: follower_id
         table:
           schema: public
           name: followers
   - name: followersByUserId
     using:
       foreign_key_constraint_on:
-        column: user_followed_id
+        column: user_id
         table:
           schema: public
           name: followers
