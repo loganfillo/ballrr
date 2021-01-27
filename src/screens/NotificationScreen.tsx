@@ -68,44 +68,23 @@ const NotificationScreen: React.FC = () => {
             refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         >
             <List.Section>
-                {notifications
-                    .filter((n) => !n.seen)
-                    .map((notification, index) => {
-                        return (
-                            <List.Item
-                                key={index}
-                                title={`${notification.username} Liked your post`}
-                                left={() => (
-                                    <Avatar.Image
-                                        size={35}
-                                        source={{
-                                            uri:
-                                                'https://files.thehandbook.com/uploads/2019/03/ronaldo.jpg',
-                                        }}
-                                    />
-                                )}
-                            />
-                        );
-                    })}
-                {notifications
-                    .filter((n) => n.seen)
-                    .map((notification, index) => {
-                        return (
-                            <List.Item
-                                key={index}
-                                title={`${notification.username} Liked your post`}
-                                left={() => (
-                                    <Avatar.Image
-                                        size={35}
-                                        source={{
-                                            uri:
-                                                'https://files.thehandbook.com/uploads/2019/03/ronaldo.jpg',
-                                        }}
-                                    />
-                                )}
-                            />
-                        );
-                    })}
+                {notifications.map((notification, index) => {
+                    return (
+                        <List.Item
+                            key={index}
+                            title={`${notification.username} Liked your post`}
+                            left={() => (
+                                <Avatar.Image
+                                    size={35}
+                                    source={{
+                                        uri:
+                                            'https://files.thehandbook.com/uploads/2019/03/ronaldo.jpg',
+                                    }}
+                                />
+                            )}
+                        />
+                    );
+                })}
             </List.Section>
         </ScrollView>
     );
