@@ -70,3 +70,9 @@ export interface Challenge {
     title: string;
     userCount: number;
 }
+
+export interface SearchResult {
+    username: string;
+    fullName: string;
+    userId: number;
+}

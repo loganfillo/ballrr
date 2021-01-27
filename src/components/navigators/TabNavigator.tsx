@@ -1,19 +1,19 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import ProfileStackNavigator from './ProfileNavigator';
+import ProfileStackNavigator, { ProfileStackParamList } from './ProfileNavigator';
 import HomeScreen from '../../screens/HomeScreen';
-import SearchScreen from '../../screens/SearchScreen';
 import { AntDesign } from '@expo/vector-icons';
 import CreatePostButton from '../buttons/CreatePostButton';
-import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
+import { getFocusedRouteNameFromRoute, NavigatorScreenParams } from '@react-navigation/native';
 import ChallengeNavigator from './ChallengeNavigator';
+import SearchNavigator, { SearchStackParamList } from './SearchNavigator';
 
 export type TabNavigatorParamList = {
     Home: undefined;
-    Search: undefined;
+    Search: NavigatorScreenParams<SearchStackParamList>;
     PostPlaceholder: undefined;
     Challenges: undefined;
-    Profile: undefined;
+    Profile: NavigatorScreenParams<ProfileStackParamList>;
 };
 
 const Tab = createBottomTabNavigator<TabNavigatorParamList>();
@@ -65,7 +65,7 @@ const TabNavigator: React.FC = () => {
             />
             <Tab.Screen
                 name="Search"
-                component={SearchScreen}
+                component={SearchNavigator}
                 options={{
                     tabBarIcon: SearchTab,
                 }}

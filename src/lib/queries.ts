@@ -83,3 +83,47 @@ export const DELETE_POST = gql`
         }
     }
 `;
+
+export const SEARCH_USERS = gql`
+    query searchUsers($search_query: String!) {
+        users(where: { username: { _ilike: $search_query } }) {
+            username
+            full_name
+            id
+        }
+    }
+`;
+
+export const CHECK_IF_FOLLOWING = gql`
+    query checkIfFollowing($user_id: Int!, $user_followed_id: Int!) {
+        followers(
+            where: {
+                user_followed: { id: { _eq: $user_followed_id } }
+                _and: { user_follower: { id: { _eq: $user_id } } }
+            }
+        ) {
+            id
+        }
+    }
+`;
+
+export const FOLLOW_USER = gql`
+    mutation followUser($user_id: Int!, $user_followed_id: Int!) {
+        insert_followers_one(object: { user_id: $user_id, user_followed_id: $user_followed_id }) {
+            id
+        }
+    }
+`;
+
+export const UNFOLLOW_USER = gql`
+    mutation unfollowUser($user_id: Int!, $user_followed_id: Int!) {
+        delete_followers(
+            where: {
+                user_followed: { id: { _eq: $user_followed_id } }
+                _and: { user_follower: { id: { _eq: $user_id } } }
+            }
+        ) {
+            affected_rows
+        }
+    }
+`;
