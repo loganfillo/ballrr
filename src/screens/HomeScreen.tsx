@@ -28,9 +28,11 @@ const HomeScreen: React.FC = () => {
                     fetchedPosts.push({
                         fullName: post.post_user_id.full_name,
                         username: post.post_user_id.username,
-                        url: (await Storage.get(post.post_content.s3_key)) as string,
+                        url: (await Storage.get(post.media.s3_key)) as string,
                         caption: post.caption,
-                        type: post.post_content.type,
+                        type: post.media.type,
+                        id: post.id,
+                        s3_key: post.media.s3_key,
                     });
                 }
                 setPosts(fetchedPosts);

@@ -22,6 +22,7 @@ export interface Localization {
 
 export interface User {
     id: number;
+    username: string;
 }
 
 export enum MediaType {
@@ -54,6 +55,8 @@ export interface Post {
     url: string;
     caption: string;
     type: MediaType;
+    id: number;
+    s3_key: string;
 }
 
 export interface ProfilePost {

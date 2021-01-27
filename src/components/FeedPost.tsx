@@ -3,6 +3,7 @@ import { Body, Card, CardItem, Icon, Left, Right, Text } from 'native-base';
 import { Image, TouchableOpacity } from 'react-native';
 import { MediaType, Post } from '../lib/types';
 import { Video } from 'expo-av';
+import DeletePostButton from '../components/buttons/DeletePostButton';
 
 interface Props {
     post: Post;
@@ -57,6 +58,9 @@ const FeedPost: React.FC<Props> = ({ post, shouldPlay }: Props) => {
                     <TouchableOpacity onPress={() => setLiked(!liked)}>
                         <Icon name={likeIcon} style={{ color: '#ED4A6A' }} />
                     </TouchableOpacity>
+                </Right>
+                <Right>
+                    <DeletePostButton post={post}></DeletePostButton>
                 </Right>
             </CardItem>
         </Card>
