@@ -18,7 +18,7 @@ type CreatePostScreenRouteProp = RouteProp<PostStackParamList, 'CreatePost'>;
 const CreatePostScreen: React.FC = () => {
     const [caption, setCaption] = useState('');
     const [media, setMedia] = useState<Media>({ cancelled: true });
-    const [thumbnailUri, setThumbnailUri] = useState('');
+    const [thumbnail, setThumbnail] = useState<Media>({ cancelled: true });
 
     const apolloClient = useApolloClient();
     const navigation = useNavigation();
@@ -26,9 +26,9 @@ const CreatePostScreen: React.FC = () => {
     const { params } = useRoute<CreatePostScreenRouteProp>();
 
     useEffect(() => {
-        setMedia(params.media);
-        if (params.thumbnail.file) {
-            setThumbnailUri(params.thumbnail.file.uri);
+        if (params.media.file && params.thumbnail.file) {
+            setMedia(params.media);
+            setThumbnail(params.thumbnail);
         }
     }, [params]);
 
@@ -37,7 +37,7 @@ const CreatePostScreen: React.FC = () => {
         media: Media,
         caption: string,
     ) {
-        createPost(user, apolloClient, media, caption);
+        createPost(user, apolloClient, media, thumbnail, caption);
         setMedia({ cancelled: true });
         navigation.navigate('Home');
     }
@@ -73,10 +73,10 @@ const CreatePostScreen: React.FC = () => {
                                         <Image
                                             style={styles.contentPreview}
                                             source={{
-                                                uri: thumbnailUri,
+                                                uri: thumbnail.file?.uri,
                                             }}
                                             resizeMode="cover"
-                                            blurRadius={3}
+                                            blurRadius={1}
                                         />
                                     </View>
                                 </Col>

@@ -22,8 +22,6 @@ const CreatePostButton: React.FC = () => {
         if (!media.cancelled) {
             const thumbnail: Media = await getThumbnail(media);
             if (!thumbnail.cancelled && thumbnail.file) {
-                console.log(thumbnail);
-
                 navigation.navigate('Post', {
                     screen: 'CreatePost',
                     params: { media, thumbnail },

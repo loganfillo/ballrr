@@ -24,9 +24,8 @@ export const GET_USERS_POSTS = gql`
     query getUsersPosts($user_id: Int!) {
         posts(where: { user_id: { _eq: $user_id } }, order_by: { created_at: desc }) {
             id
-            media {
+            thumbnail {
                 s3_key
-                type
             }
         }
     }
@@ -69,8 +68,16 @@ export const GET_USER = gql`
 `;
 
 export const CREATE_POST_MEDIA = gql`
-    mutation createPostMedia($type: media_type_enum!, $s3_key: String!, $postID: Int!) {
-        insert_post_media_one(object: { type: $type, s3_key: $s3_key, post_id: $postID }) {
+    mutation createPostMedia($type: media_type_enum!, $s3_key: String!, $post_id: Int!) {
+        insert_post_media_one(object: { type: $type, s3_key: $s3_key, post_id: $post_id }) {
+            id
+        }
+    }
+`;
+
+export const CREATE_THUMBNAIL_MEDIA = gql`
+    mutation createThumbnailMedia($s3_key: String!, $post_id: Int!) {
+        insert_thumbnail_media_one(object: { s3_key: $s3_key, post_id: $post_id }) {
             id
         }
     }

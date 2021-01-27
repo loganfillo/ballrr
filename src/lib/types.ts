@@ -56,7 +56,7 @@ export interface Post {
     caption: string;
     type: MediaType;
     id: number;
-    s3_key: string;
+    s3Key: string;
 }
 
 export interface ProfilePost {

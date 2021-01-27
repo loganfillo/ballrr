@@ -32,7 +32,7 @@ const HomeScreen: React.FC = () => {
                         caption: post.caption,
                         type: post.media.type,
                         id: post.id,
-                        s3_key: post.media.s3_key,
+                        s3Key: post.media.s3_key,
                     });
                 }
                 setPosts(fetchedPosts);

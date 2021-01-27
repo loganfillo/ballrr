@@ -2,7 +2,7 @@ import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
 import { Storage } from 'aws-amplify';
 import * as ImagePicker from 'expo-image-picker';
 import { Alert, Platform } from 'react-native';
-import { CREATE_POST_MEDIA } from './queries';
+import { CREATE_POST_MEDIA, CREATE_THUMBNAIL_MEDIA } from './queries';
 import { Media, UploadedMedia, MediaFile, MediaType } from './types';
 import uuid from 'uuid-random';
 import * as VideoThumbnails from 'expo-video-thumbnails';
@@ -112,11 +112,11 @@ export async function uploadMediaToS3(media: Media): Promise<UploadedMedia> {
  * Deletes media from AWS S3 and returns a promise
  * Logs error if delete was not successful
  *
- * @param s3_key The key to the S3 media to delete
+ * @param s3Key The key to the S3 media to delete
  */
-export async function deleteFromS3(s3_key: string): Promise<void> {
+export async function deleteFromS3(s3Key: string): Promise<void> {
     try {
-        await Storage.remove(s3_key);
+        await Storage.remove(s3Key);
     } catch (e) {
         console.log('Failed to delete post. Error: \n', e);
     }
@@ -126,21 +126,41 @@ export async function deleteFromS3(s3_key: string): Promise<void> {
  * Creates the media in the database
  *
  * @param apolloClient GraphQL CLient
- * @param s3_key URL to the media
+ * @param s3Key S3 key of the media
  * @param type Type of the media
- * @returns Media table id of created row
+ * @returns Post media id of created row
  */
 export async function createPostMedia(
     apolloClient: ApolloClient<NormalizedCacheObject>,
-    s3_key: string,
+    s3Key: string,
     type: MediaType,
     postID: number,
 ): Promise<number> {
     const res = await apolloClient.mutate({
         mutation: CREATE_POST_MEDIA,
-        variables: { s3_key, type, postID },
+        variables: { s3_key: s3Key, type, post_id: postID },
     });
     return res.data.insert_post_media_one.id;
+}
+
+/**
+ * Creates the thumbnail in the database
+ *
+ * @param apolloClient GraphQL CLient
+ * @param s3Key S3 key of the thumbnail
+ * @param type Type of the media
+ * @returns Thumbnail media id of created row
+ */
+export async function createThumbnailMedia(
+    apolloClient: ApolloClient<NormalizedCacheObject>,
+    s3Key: string,
+    postID: number,
+): Promise<number> {
+    const res = await apolloClient.mutate({
+        mutation: CREATE_THUMBNAIL_MEDIA,
+        variables: { s3_key: s3Key, post_id: postID },
+    });
+    return res.data.insert_thumbnail_media_one.id;
 }
 
 /**
@@ -158,10 +178,10 @@ export async function getThumbnail(media: Media): Promise<Media> {
                 time: 15000,
             });
             if (uri !== undefined) {
-                thumbnailUri = await resizeAndFormatThumbnail(uri, height / 2, width / 2);
+                thumbnailUri = await resizeAndFormatThumbnail(uri, height / 3, width / 3);
             }
         } else if (media.file && media.type === MediaType.IMAGE) {
-            thumbnailUri = await resizeAndFormatThumbnail(media.file.uri, 300, 300);
+            thumbnailUri = await resizeAndFormatThumbnail(media.file.uri, 150, 150);
         }
         if (thumbnailUri !== null) {
             const file: MediaFile | null = await constructMediaFile(thumbnailUri, MediaType.IMAGE);
