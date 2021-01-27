@@ -50,10 +50,10 @@ export const GET_ALL_POSTS = gql`
 `;
 
 export const CREATE_USER = gql`
-    mutation createUser($user_id: String!) {
+    mutation createUser($user_id: String!, $username: String!) {
         insert_users_one(
             on_conflict: { constraint: users_user_id_key, update_columns: [] }
-            object: { user_id: $user_id }
+            object: { user_id: $user_id, username: $username }
         ) {
             id
         }

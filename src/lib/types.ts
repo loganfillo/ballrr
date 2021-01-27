@@ -22,6 +22,7 @@ export interface Localization {
 
 export interface User {
     id: number;
+    username: string;
 }
 
 export enum MediaType {

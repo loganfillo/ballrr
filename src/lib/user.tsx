@@ -8,6 +8,7 @@ import { Alert } from 'react-native';
 
 const UserContext = createContext<User>({
     id: -1,
+    username: '',
 });
 
 /**
@@ -32,6 +33,7 @@ export const UserProvider: React.FC<Props> = ({ children }: Props) => {
     const [loading, setLoading] = useState(true);
     const [user, setUser] = useState<User>({
         id: -1,
+        username: '',
     });
 
     const apolloClient = useApolloClient();
@@ -45,7 +47,7 @@ export const UserProvider: React.FC<Props> = ({ children }: Props) => {
                 const userId = cognitoUser.attributes.sub;
                 const res = await apolloClient.mutate({
                     mutation: CREATE_USER,
-                    variables: { user_id: userId },
+                    variables: { user_id: userId, username: cognitoUser.username },
                 });
                 let id: number;
                 if (res.data.insert_users_one !== null) {
@@ -59,6 +61,7 @@ export const UserProvider: React.FC<Props> = ({ children }: Props) => {
                 }
                 setUser({
                     id,
+                    username: cognitoUser.username,
                 });
                 setLoading(false);
             } catch (e) {
