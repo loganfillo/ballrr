@@ -3,10 +3,13 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import ProfileStackNavigator, { ProfileStackParamList } from './ProfileNavigator';
 import HomeScreen from '../../screens/HomeScreen';
 import { AntDesign } from '@expo/vector-icons';
+import SearchScreen from '../../screens/SearchScreen';
 import CreatePostButton from '../buttons/CreatePostButton';
 import { getFocusedRouteNameFromRoute, NavigatorScreenParams } from '@react-navigation/native';
 import ChallengeNavigator from './ChallengeNavigator';
 import SearchNavigator, { SearchStackParamList } from './SearchNavigator';
+import { IconButton } from 'react-native-paper';
+import NotificationBadge from '../NotificationBadge';
 
 export type TabNavigatorParamList = {
     Home: undefined;
@@ -22,20 +25,26 @@ interface TabBarIconProps {
     color: string;
 }
 
-const HomeTab = ({ color }: TabBarIconProps) => <AntDesign name="home" size={24} color={color} />;
+const HomeTab = ({ color }: TabBarIconProps) => (
+    <IconButton color={color} icon="home" size={30} style={{}} />
+);
 
 const SearchTab = ({ color }: TabBarIconProps) => (
-    <AntDesign name="search1" size={24} color={color} />
+    <IconButton color={color} icon="magnify" size={30} style={{}} />
 );
 
 const PostButton = () => <CreatePostButton />;
 
 const ChallengeTab = ({ color }: TabBarIconProps) => (
-    <AntDesign name="profile" size={24} color={color} />
+    <IconButton color={color} icon="trophy" size={28} style={{}} />
 );
 
 const ProfileTab = ({ color }: TabBarIconProps) => (
-    <AntDesign name="user" size={24} color={color} />
+    <NotificationBadge
+        icon={<IconButton color={color} icon="account" size={36} style={{}} />}
+        top={12}
+        right={14}
+    />
 );
 
 const PostScreenPlaceholder: React.FC = () => null;
@@ -46,7 +55,7 @@ const tabBarOptions = {
     activeBackgroundColor: 'white',
     inactiveBackgroundColor: 'white',
     showIcon: true,
-    showLabel: true,
+    showLabel: false,
     tabStyle: {
         paddingTop: 5,
         paddingBottom: 5,

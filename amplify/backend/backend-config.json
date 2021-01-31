@@ -1,6 +1,6 @@
 {
   "auth": {
-    "ballrre8a3a9cd": {
+    "ballrr10ccebdb": {
       "service": "Cognito",
       "providerPlugin": "awscloudformation",
       "dependsOn": [],

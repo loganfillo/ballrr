@@ -1,19 +1,17 @@
 import { useQuery } from '@apollo/client';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { Storage } from 'aws-amplify';
 import React, { useEffect, useState } from 'react';
 import { Text, StyleSheet, ScrollView, Button, View, Image, Dimensions } from 'react-native';
 import { Grid, Row, Col } from 'react-native-easy-grid';
 import LogoutButton from '../components/buttons/LogoutButton';
 import { GET_USERS_POSTS } from '../lib/queries';
-import { MediaType, ProfilePost } from '../lib/types';
+import { ProfilePost } from '../lib/types';
 import { useUser } from '../lib/user';
 import * as VideoThumbnails from 'expo-video-thumbnails';
 import { SearchStackParamList } from '../components/navigators/SearchNavigator';
 import FollowButton from '../components/buttons/FollowButton';
-
-const PLACEHOLDER_IMAGE =
-    'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Soccerball.svg/1200px-Soccerball.svg.png';
 
 type SearchProfileRouteProp = RouteProp<SearchStackParamList, 'SearchProfile'>;
 
@@ -23,43 +21,28 @@ const ProfileScreen: React.FC = (): JSX.Element => {
     const user = useUser();
     const profileUserId = params !== undefined ? params.userId : user.id;
     const navigation = useNavigation();
-
-    const { loading, error, data } = useQuery(GET_USERS_POSTS, {
+    const isFocused = useIsFocused();
+        
+    const { loading, error, data, refetch } = useQuery(GET_USERS_POSTS, {
         variables: {
             user_id: profileUserId,
         },
+        fetchPolicy: 'cache-and-network',
     });
 
     useEffect(() => {
-        async function getThumbnailUri(url: string): Promise<string> {
-            let thumbnailUri: string = PLACEHOLDER_IMAGE;
-            try {
-                const { uri } = await VideoThumbnails.getThumbnailAsync(url ?? '', {
-                    time: 15000,
-                });
+        refetch();
+    }, [isFocused]);
 
-                if (uri !== undefined) {
-                    thumbnailUri = uri;
-                }
-            } catch (e) {
-                console.log(e);
-            }
-            return thumbnailUri;
-        }
+    useEffect(() => {
         async function fetchPosts() {
             if (!loading && !error) {
                 const fetchedPosts: ProfilePost[] = [];
                 for (const post of data.posts) {
-                    let thumnbailUrl: string;
-                    const url = (await Storage.get(post.media.s3_key)) as string;
-                    if (post.media.type === MediaType.VIDEO) {
-                        thumnbailUrl = await getThumbnailUri(url);
-                    } else {
-                        thumnbailUrl = url;
-                    }
+                    const thumbnailUrl = (await Storage.get(post.thumbnail.s3_key)) as string;
                     fetchedPosts.push({
                         id: post.id,
-                        url: thumnbailUrl,
+                        url: thumbnailUrl,
                     });
                 }
                 setPosts(fetchedPosts);

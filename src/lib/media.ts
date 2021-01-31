@@ -2,9 +2,11 @@ import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
 import { Storage } from 'aws-amplify';
 import * as ImagePicker from 'expo-image-picker';
 import { Alert, Platform } from 'react-native';
-import { CREATE_POST_MEDIA } from './queries';
+import { CREATE_POST_MEDIA, CREATE_THUMBNAIL_MEDIA } from './queries';
 import { Media, UploadedMedia, MediaFile, MediaType } from './types';
 import uuid from 'uuid-random';
+import * as VideoThumbnails from 'expo-video-thumbnails';
+import * as ImageManipulator from 'expo-image-manipulator';
 
 /**
  * Opens camera and allows user to take media to upload. Returns the media
@@ -21,16 +23,20 @@ export async function takeMedia(): Promise<Media> {
         const result = await ImagePicker.launchCameraAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
             allowsEditing: true,
-            aspect: [4, 3],
+            aspect: [4, 4],
             quality: 1,
         });
 
-        const file: MediaFile | null = await mediaResultToFile(result);
-        if (file !== null && !result.cancelled) {
-            media.uri = result.uri;
-            media.cancelled = false;
-            media.file = file;
-            media.type = result.type as MediaType;
+        if (!result.cancelled) {
+            const file: MediaFile | null = await constructMediaFile(
+                result.uri,
+                result.type as MediaType,
+            );
+            if (file !== null) {
+                media.cancelled = false;
+                media.file = file;
+                media.type = result.type as MediaType;
+            }
         }
     }
     return media;
@@ -51,16 +57,20 @@ export async function chooseMedia(): Promise<Media> {
         const result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
             allowsEditing: true,
-            aspect: [4, 3],
+            aspect: [4, 4],
             quality: 1,
         });
 
-        const file: MediaFile | null = await mediaResultToFile(result);
-        if (file !== null && !result.cancelled) {
-            media.uri = result.uri;
-            media.cancelled = false;
-            media.file = file;
-            media.type = result.type as MediaType;
+        if (!result.cancelled) {
+            const file: MediaFile | null = await constructMediaFile(
+                result.uri,
+                result.type as MediaType,
+            );
+            if (file !== null) {
+                media.cancelled = false;
+                media.file = file;
+                media.type = result.type as MediaType;
+            }
         }
     }
 
@@ -102,11 +112,11 @@ export async function uploadMediaToS3(media: Media): Promise<UploadedMedia> {
  * Deletes media from AWS S3 and returns a promise
  * Logs error if delete was not successful
  *
- * @param s3_key The key to the S3 media to delete
+ * @param s3Key The key to the S3 media to delete
  */
-export async function deleteFromS3(s3_key: string): Promise<void> {
+export async function deleteFromS3(s3Key: string): Promise<void> {
     try {
-        await Storage.remove(s3_key);
+        await Storage.remove(s3Key);
     } catch (e) {
         console.log('Failed to delete post. Error: \n', e);
     }
@@ -116,45 +126,117 @@ export async function deleteFromS3(s3_key: string): Promise<void> {
  * Creates the media in the database
  *
  * @param apolloClient GraphQL CLient
- * @param s3_key URL to the media
+ * @param s3Key S3 key of the media
  * @param type Type of the media
- * @returns Media table id of created row
+ * @returns Post media id of created row
  */
 export async function createPostMedia(
     apolloClient: ApolloClient<NormalizedCacheObject>,
-    s3_key: string,
+    s3Key: string,
     type: MediaType,
     postID: number,
 ): Promise<number> {
     const res = await apolloClient.mutate({
         mutation: CREATE_POST_MEDIA,
-        variables: { s3_key, type, postID },
+        variables: { s3_key: s3Key, type, post_id: postID },
     });
     return res.data.insert_post_media_one.id;
 }
 
 /**
- * Parses a image picker result into a File object, returns null if error occured
+ * Creates the thumbnail in the database
  *
- * @param result Image picker result
+ * @param apolloClient GraphQL CLient
+ * @param s3Key S3 key of the thumbnail
+ * @param type Type of the media
+ * @returns Thumbnail media id of created row
  */
-async function mediaResultToFile(result: ImagePicker.ImagePickerResult): Promise<MediaFile | null> {
-    if (!result.cancelled) {
-        const uri = result.uri;
-        const mediaType = result.type;
+export async function createThumbnailMedia(
+    apolloClient: ApolloClient<NormalizedCacheObject>,
+    s3Key: string,
+    postID: number,
+): Promise<number> {
+    const res = await apolloClient.mutate({
+        mutation: CREATE_THUMBNAIL_MEDIA,
+        variables: { s3_key: s3Key, post_id: postID },
+    });
+    return res.data.insert_thumbnail_media_one.id;
+}
 
-        const extension: string | null = extensionFromURI(uri);
-        if (extension === null) {
-            return null;
+/**
+ * Creates a thumbnail image from a media
+ *
+ * @param media The media to create a thumbnail from
+ * @returns The media object for the thumbnail image
+ */
+export async function getThumbnail(media: Media): Promise<Media> {
+    const thumbnailMedia: Media = { cancelled: true };
+    try {
+        let thumbnailUri: string | null = null;
+        if (media.file && media.type === MediaType.VIDEO) {
+            const { uri, height, width } = await VideoThumbnails.getThumbnailAsync(media.file.uri, {
+                time: 15000,
+            });
+            if (uri !== undefined) {
+                thumbnailUri = await resizeAndFormatThumbnail(uri, height / 3, width / 3);
+            }
+        } else if (media.file && media.type === MediaType.IMAGE) {
+            thumbnailUri = await resizeAndFormatThumbnail(media.file.uri, 150, 150);
         }
-        const type: string | null = mimeTypeFromMediaType(mediaType);
-        if (type === null) {
-            return null;
+        if (thumbnailUri !== null) {
+            const file: MediaFile | null = await constructMediaFile(thumbnailUri, MediaType.IMAGE);
+            if (file !== null) {
+                thumbnailMedia.cancelled = false;
+                thumbnailMedia.type = MediaType.IMAGE;
+                thumbnailMedia.file = file;
+            }
         }
-
-        return { type, uri, extension };
+    } catch (e) {
+        console.log(e);
     }
-    return null;
+
+    return thumbnailMedia;
+}
+
+/**
+ * Constructs a media file object from uri and type, returns null if error occured
+ *
+ * @param uri Local file Uri
+ * @param mediaType Media type
+ */
+async function constructMediaFile(uri: string, mediaType: MediaType): Promise<MediaFile | null> {
+    const extension: string | null = extensionFromURI(uri);
+    if (extension === null) {
+        return null;
+    }
+    const type: string | null = mimeTypeFromMediaType(mediaType);
+    if (type === null) {
+        return null;
+    }
+
+    return { type, uri, extension };
+}
+
+/**
+ * Resizes and formats a image to be a small jpeg thumbnail image
+ *
+ * @param imageUri The image uri to resize
+ * @returns The local uri of the resized image
+ */
+async function resizeAndFormatThumbnail(
+    imageUri: string,
+    height: number,
+    width: number,
+): Promise<string> {
+    const { uri } = await ImageManipulator.manipulateAsync(
+        imageUri,
+        [{ resize: { height, width } }],
+        {
+            compress: 1,
+            format: ImageManipulator.SaveFormat.JPEG,
+        },
+    );
+    return uri;
 }
 
 /**

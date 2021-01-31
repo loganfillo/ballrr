@@ -22,6 +22,7 @@ export interface Localization {
 
 export interface User {
     id: number;
+    username: string;
 }
 
 export enum MediaType {
@@ -38,7 +39,6 @@ export interface UploadedMedia {
 
 export interface Media {
     cancelled: boolean;
-    uri?: string;
     file?: MediaFile;
     type?: MediaType;
 }
@@ -56,7 +56,7 @@ export interface Post {
     caption: string;
     type: MediaType;
     id: number;
-    s3_key: string;
+    s3Key: string;
 }
 
 export interface ProfilePost {
@@ -75,4 +75,15 @@ export interface SearchResult {
     username: string;
     fullName: string;
     userId: number;
+}
+
+export enum NotificationType {
+    LIKE = 'like',
+}
+
+export interface Notification {
+    id: number;
+    username: string;
+    type: NotificationType;
+    seen: boolean;
 }
