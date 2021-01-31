@@ -4,7 +4,7 @@ import CreatePostScreen from '../../screens/CreatePostScreen';
 import { Media } from '../../lib/types';
 
 export type PostStackParamList = {
-    CreatePost: { media: Media; thumbnailUri: string };
+    CreatePost: { media: Media; thumbnail: Media };
 };
 
 const PostStack = createStackNavigator<PostStackParamList>();
