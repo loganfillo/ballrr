@@ -39,7 +39,6 @@ export interface UploadedMedia {
 
 export interface Media {
     cancelled: boolean;
-    uri?: string;
     file?: MediaFile;
     type?: MediaType;
 }
@@ -57,7 +56,7 @@ export interface Post {
     caption: string;
     type: MediaType;
     id: number;
-    s3_key: string;
+    s3Key: string;
 }
 
 export interface ProfilePost {
