@@ -52,7 +52,7 @@
     "@babel/core": "~7.9.0",
     "@types/react": "~16.9.35",
     "@types/react-dom": "~16.9.8",
-    "@types/react-native": "~0.63.2",
+    "@types/react-native": "0.63.40",
     "@types/react-native-table-component": "^1.2.0",
     "@types/react-native-uuid": "^1.4.0",
     "@types/uuid": "^8.3.0",

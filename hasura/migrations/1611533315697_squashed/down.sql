@@ -1,4 +1,84 @@
 
+
+ALTER TABLE "public"."users" ADD COLUMN "media_id" int4;
+ALTER TABLE "public"."users" ALTER COLUMN "media_id" DROP NOT NULL;
+ALTER TABLE "public"."users" ADD CONSTRAINT users_media_id_fkey FOREIGN KEY (media_id) REFERENCES "public"."post_media" (id) ON DELETE set default ON UPDATE restrict;
+
+ALTER TABLE "public"."post_media" DROP COLUMN "created_at";
+
+ALTER TABLE "public"."post_media" ALTER COLUMN "post_id" DROP NOT NULL;
+
+alter table "public"."post_media" drop constraint "post_media_post_id_fkey";
+
+ALTER TABLE "public"."posts" ADD COLUMN "media_id" int4;
+ALTER TABLE "public"."posts" ALTER COLUMN "media_id" DROP NOT NULL;
+ALTER TABLE "public"."posts" ADD CONSTRAINT posts_media_id_fkey FOREIGN KEY (media_id) REFERENCES "public"."post_media" (id) ON DELETE restrict ON UPDATE restrict;
+ALTER TABLE "public"."posts" ADD CONSTRAINT media_id_fkey FOREIGN KEY (id) REFERENCES "public"."posts" (media_id) ON DELETE cascade ON UPDATE no action;
+ALTER TABLE "public"."posts" ADD CONSTRAINT posts_media_id_key UNIQUE (media_id);
+
+ALTER TABLE "public"."post_media" DROP COLUMN "post_id";
+
+alter table "public"."post_media" rename to "media";
+
+alter table "public"."posts" drop constraint "posts_media_id_fkey";
+
+alter table "public"."posts" drop constraint "posts_user_id_fkey",
+          add constraint "posts_user_id_fkey"
+          foreign key ("user_id")
+          references "public"."users"
+          ("id")
+          on update restrict
+          on delete cascade;
+
+alter table "public"."media" drop constraint "media_id_fkey",
+          add constraint "media_id_fkey"
+          foreign key ("id")
+          references "public"."posts"
+          ("media_id")
+          on update no action
+          on delete cascade;
+
+alter table "public"."media" drop constraint "media_id_fkey",
+          add constraint "media_id_fkey"
+          foreign key ("id")
+          references "public"."posts"
+          ("media_id")
+          on update restrict
+          on delete cascade;
+
+alter table "public"."media" drop constraint "media_id_fkey";
+
+alter table "public"."posts" add foreign key ("media_id") references "public"."media"("id") on update restrict on delete cascade;
+
+ALTER TABLE "public"."posts" DROP CONSTRAINT "posts_media_id_key";
+
+alter table "public"."posts" drop constraint "posts_media_id_fkey",
+          add constraint "posts_media_id_fkey"
+          foreign key ("media_id")
+          references "public"."media"
+          ("id")
+          on update restrict
+          on delete cascade;
+
+alter table "public"."posts" drop constraint "posts_media_id_fkey",
+          add constraint "posts_media_id_fkey"
+          foreign key ("media_id")
+          references "public"."media"
+          ("id")
+          on update restrict
+          on delete cascade;
+
+alter table "public"."posts" drop constraint "posts_media_id_fkey",
+          add constraint "posts_media_id_fkey"
+          foreign key ("media_id")
+          references "public"."media"
+          ("id")
+          on update restrict
+          on delete set null;
+
+ALTER TABLE "public"."post_likes" DROP COLUMN "notification_seen";
+
+
 alter table "public"."media" rename column "s3_key" to "s3_url";
 
 alter table "public"."media" drop constraint "media_type_fkey";

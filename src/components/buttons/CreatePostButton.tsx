@@ -5,6 +5,7 @@ import { ActionSheet, View } from 'native-base';
 import { Media } from '../../lib/types';
 import { chooseMedia, getThumbnail, takeMedia } from '../../lib/media';
 import { useNavigation } from '@react-navigation/native';
+import { IconButton } from 'react-native-paper';
 
 const OPEN_CAMERA = 'Open Camera';
 const CHOOSE_FROM_LIBRARY = 'Choose From Library';
@@ -59,7 +60,7 @@ const CreatePostButton: React.FC = () => {
                 style={styles.button}
             >
                 <View style={styles.iconContainer}>
-                    <AntDesign name="plus" size={32} color={'green'} />
+                    <IconButton color="green" icon="plus" size={25} />
                 </View>
             </TouchableOpacity>
         </View>
@@ -74,13 +75,12 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderColor: 'green',
         backgroundColor: 'white',
-        padding: 2,
-        marginTop: 4,
-        marginBottom: 4,
-        marginLeft: 6,
-        marginRight: 6,
+        marginTop: 8,
+        marginBottom: 8,
+        marginLeft: 10,
+        marginRight: 10,
     },
-    iconContainer: { justifyContent: 'center', alignSelf: 'center' },
+    iconContainer: { flex: 1, justifyContent: 'center', alignSelf: 'center' },
 });
 
 export default CreatePostButton;

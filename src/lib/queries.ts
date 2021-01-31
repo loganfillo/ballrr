@@ -90,3 +90,77 @@ export const DELETE_POST = gql`
         }
     }
 `;
+
+export const LIKE_POST = gql`
+    mutation likePost($post_id: Int, $user_id: Int = 10) {
+        insert_post_likes_one(
+            object: { user_id: $user_id, liked_post_id: $post_id, notification_seen: false }
+        ) {
+            id
+        }
+    }
+`;
+
+export const GET_LIKES = gql`
+    query getLikes($user_id: Int) {
+        post_likes(
+            where: {
+                liked_post: { post_user_id: { id: { _eq: $user_id } } }
+                _and: { user_id: { _neq: $user_id } }
+            }
+        ) {
+            id
+            user_id
+            notification_seen
+        }
+    }
+`;
+
+export const COUNT_UNSEEN_LIKES = gql`
+    query countUnseenLikes($user_id: Int!) {
+        post_likes_aggregate(
+            where: {
+                notification_seen: { _eq: false }
+                _and: {
+                    liked_post: { post_user_id: { id: { _eq: $user_id } } }
+                    _and: { user_id: { _neq: $user_id } }
+                }
+            }
+        ) {
+            aggregate {
+                count
+            }
+        }
+    }
+`;
+
+export const DELETE_LIKE = gql`
+    mutation deleteLike($user_id: Int, $post_id: Int) {
+        delete_post_likes(
+            where: { user_id: { _eq: $user_id }, _and: { liked_post_id: { _eq: $post_id } } }
+        ) {
+            affected_rows
+        }
+    }
+`;
+
+export const HAS_USER_LIKED_POST = gql`
+    query hasUserLikedPost($user_id: Int, $post_id: Int) {
+        post_likes(
+            where: { user_id: { _eq: $user_id }, _and: { liked_post_id: { _eq: $post_id } } }
+        ) {
+            id
+        }
+    }
+`;
+
+export const UPDATE_LIKES_SEEN = gql`
+    mutation updateLikesSeen($like_ids: [Int!]) {
+        update_post_likes(where: { id: { _in: $like_ids } }, _set: { notification_seen: true }) {
+            returning {
+                id
+            }
+            affected_rows
+        }
+    }
+`;
