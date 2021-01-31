@@ -4,25 +4,25 @@ import { createStackNavigator } from '@react-navigation/stack';
 import TabNavigator, { TabNavigatorParamList } from './TabNavigator';
 import PostNavigator, { PostStackParamList } from './PostNavigator';
 
-export type IndexStackParamList = {
+export type RootStackParamList = {
     Post: NavigatorScreenParams<PostStackParamList>;
     Tab: NavigatorScreenParams<TabNavigatorParamList>;
 };
 
-const IndexStack = createStackNavigator<IndexStackParamList>();
+const RootStack = createStackNavigator<RootStackParamList>();
 
 const RootNavigator: React.FC = () => {
     return (
         <NavigationContainer>
-            <IndexStack.Navigator
+            <RootStack.Navigator
                 initialRouteName="Tab"
                 screenOptions={{
                     headerShown: false,
                 }}
             >
-                <IndexStack.Screen name="Post" component={PostNavigator} />
-                <IndexStack.Screen name="Tab" component={TabNavigator} />
-            </IndexStack.Navigator>
+                <RootStack.Screen name="Post" component={PostNavigator} />
+                <RootStack.Screen name="Tab" component={TabNavigator} />
+            </RootStack.Navigator>
         </NavigationContainer>
     );
 };

@@ -91,10 +91,33 @@ export const DELETE_POST = gql`
     }
 `;
 
+export const SEARCH_USERS = gql`
+    query searchUsers($search_query: String!) {
+        users(where: { username: { _ilike: $search_query } }) {
+            username
+            full_name
+            id
+        }
+    }
+`;
+
 export const LIKE_POST = gql`
     mutation likePost($post_id: Int, $user_id: Int = 10) {
         insert_post_likes_one(
             object: { user_id: $user_id, liked_post_id: $post_id, notification_seen: false }
+        ) {
+            id
+        }
+    }
+`;
+
+export const CHECK_IF_FOLLOWING = gql`
+    query checkIfFollowing($user_id: Int!, $user_followed_id: Int!) {
+        followers(
+            where: {
+                user_followed: { id: { _eq: $user_followed_id } }
+                _and: { user_follower: { id: { _eq: $user_id } } }
+            }
         ) {
             id
         }
@@ -134,6 +157,14 @@ export const COUNT_UNSEEN_LIKES = gql`
     }
 `;
 
+export const FOLLOW_USER = gql`
+    mutation followUser($user_id: Int!, $user_followed_id: Int!) {
+        insert_followers_one(object: { user_id: $user_id, user_followed_id: $user_followed_id }) {
+            id
+        }
+    }
+`;
+          
 export const DELETE_LIKE = gql`
     mutation deleteLike($user_id: Int, $post_id: Int) {
         delete_post_likes(
@@ -150,6 +181,19 @@ export const HAS_USER_LIKED_POST = gql`
             where: { user_id: { _eq: $user_id }, _and: { liked_post_id: { _eq: $post_id } } }
         ) {
             id
+        }
+    }
+`;
+
+export const UNFOLLOW_USER = gql`
+    mutation unfollowUser($user_id: Int!, $user_followed_id: Int!) {
+        delete_followers(
+            where: {
+                user_followed: { id: { _eq: $user_followed_id } }
+                _and: { user_follower: { id: { _eq: $user_id } } }
+            }
+        ) {
+            affected_rows
         }
     }
 `;

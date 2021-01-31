@@ -71,6 +71,12 @@ export interface Challenge {
     userCount: number;
 }
 
+export interface SearchResult {
+    username: string;
+    fullName: string;
+    userId: number;
+}
+
 export enum NotificationType {
     LIKE = 'like',
 }

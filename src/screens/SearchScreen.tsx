@@ -1,79 +1,88 @@
-import React from 'react';
-import { Text, View, StyleSheet, ScrollView, SafeAreaView } from 'react-native';
-import SearchBar from '../components/SearchBar';
-import { Grid, Row, Col } from 'react-native-easy-grid';
+import { useApolloClient } from '@apollo/client';
+import { useNavigation } from '@react-navigation/native';
+import React, { useEffect, useState } from 'react';
+import { SafeAreaView, View, StyleSheet } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { Avatar, List, Searchbar } from 'react-native-paper';
+import { SEARCH_USERS } from '../lib/queries';
+import { SearchResult } from '../lib/types';
 
-const Search: React.FC = () => {
+const SearchScreen: React.FC = () => {
+    const [results, setResults] = useState<SearchResult[]>([]);
+    const [searchQuery, setSearchQuery] = useState('');
+
+    const apolloClient = useApolloClient();
+    const navigation = useNavigation();
+
+    function navigateToProfile(userId: number) {
+        navigation.navigate('SearchProfile', { userId });
+    }
+
+    function updateSearchQuery(query: string) {
+        setSearchQuery(query);
+    }
+
+    useEffect(() => {
+        async function search() {
+            if (searchQuery !== '') {
+                const res = await apolloClient.query({
+                    query: SEARCH_USERS,
+                    variables: { search_query: searchQuery.concat('%') },
+                });
+                const fetchedResults: SearchResult[] = [];
+                for (const user of res.data.users) {
+                    fetchedResults.push({
+                        username: user.username,
+                        fullName: user.full_name,
+                        userId: user.id,
+                    });
+                }
+
+                setResults(fetchedResults);
+            } else {
+                setResults([]);
+            }
+        }
+        search();
+    }, [searchQuery]);
+
     return (
         <SafeAreaView>
-            <SearchBar />
-            <ScrollView>
-                {/* <Grid>
-                    <Row>
-                        <Col>
-                            <View style={styles.content}>
-                                <Text>EXPLORE CONTENT</Text>
-                            </View>
-                        </Col>
-                        <Col>
-                            <View style={styles.content}>
-                                <Text>EXPLORE CONTENT</Text>
-                            </View>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col>
-                            <View style={styles.content}>
-                                <Text>EXPLORE CONTENT</Text>
-                            </View>
-                        </Col>
-                        <Col>
-                            <View style={styles.content}>
-                                <Text>EXPLORE CONTENT</Text>
-                            </View>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col>
-                            <View style={styles.content}>
-                                <Text>EXPLORE CONTENT</Text>
-                            </View>
-                        </Col>
-                        <Col>
-                            <View style={styles.content}>
-                                <Text>EXPLORE CONTENT</Text>
-                            </View>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col>
-                            <View style={styles.content}>
-                                <Text>EXPLORE CONTENT</Text>
-                            </View>
-                        </Col>
-                        <Col>
-                            <View style={styles.content}>
-                                <Text>EXPLORE CONTENT</Text>
-                            </View>
-                        </Col>
-                    </Row>
-                </Grid> */}
-            </ScrollView>
+            <View style={styles.searchContainer}>
+                <Searchbar
+                    placeholder="Search"
+                    onChangeText={updateSearchQuery}
+                    value={searchQuery}
+                />
+                {results.map((result, index) => {
+                    return (
+                        <TouchableOpacity
+                            key={index}
+                            onPress={() => navigateToProfile(result.userId)}
+                        >
+                            <List.Item
+                                description={`@${result.username}`}
+                                title={`${result.fullName}`}
+                                left={() => (
+                                    <Avatar.Image
+                                        size={46}
+                                        source={{
+                                            uri:
+                                                'https://files.thehandbook.com/uploads/2019/03/ronaldo.jpg',
+                                        }}
+                                    />
+                                )}
+                            />
+                        </TouchableOpacity>
+                    );
+                })}
+            </View>
         </SafeAreaView>
     );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        backgroundColor: '#fff',
-    },
-    content: {
-        height: 125,
-        borderColor: 'black',
-        borderWidth: 1,
-        justifyContent: 'center',
-        textAlign: 'center',
-    },
+    searchContainer: { padding: 2, borderRadius: 2, borderColor: 'black' },
 });
 
-export default Search;
+export default SearchScreen;
