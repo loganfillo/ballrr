@@ -42,7 +42,7 @@ const NotificationScreen: React.FC = () => {
                 const seenIds = [];
                 for (const like of data.post_likes) {
                     const likeNotification: Notification = {
-                        username: `User #${like.user_id}`,
+                        username: like.user_id_of_like.username,
                         type: NotificationType.LIKE,
                         id: like.id,
                         seen: like.notification_seen,

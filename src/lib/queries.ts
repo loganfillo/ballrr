@@ -133,8 +133,10 @@ export const GET_LIKES = gql`
             }
         ) {
             id
-            user_id
             notification_seen
+            user_id_of_like {
+                username
+            }
         }
     }
 `;
@@ -164,7 +166,7 @@ export const FOLLOW_USER = gql`
         }
     }
 `;
-          
+
 export const DELETE_LIKE = gql`
     mutation deleteLike($user_id: Int, $post_id: Int) {
         delete_post_likes(

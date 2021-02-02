@@ -1,6 +1,5 @@
 import { useQuery } from '@apollo/client';
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { useIsFocused, useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute, useIsFocused } from '@react-navigation/native';
 import { Storage } from 'aws-amplify';
 import React, { useEffect, useState } from 'react';
 import { Text, StyleSheet, ScrollView, Button, View, Image, Dimensions } from 'react-native';
@@ -9,7 +8,6 @@ import LogoutButton from '../components/buttons/LogoutButton';
 import { GET_USERS_POSTS } from '../lib/queries';
 import { ProfilePost } from '../lib/types';
 import { useUser } from '../lib/user';
-import * as VideoThumbnails from 'expo-video-thumbnails';
 import { SearchStackParamList } from '../components/navigators/SearchNavigator';
 import FollowButton from '../components/buttons/FollowButton';
 
@@ -22,7 +20,7 @@ const ProfileScreen: React.FC = (): JSX.Element => {
     const profileUserId = params !== undefined ? params.userId : user.id;
     const navigation = useNavigation();
     const isFocused = useIsFocused();
-        
+
     const { loading, error, data, refetch } = useQuery(GET_USERS_POSTS, {
         variables: {
             user_id: profileUserId,

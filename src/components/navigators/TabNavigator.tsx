@@ -1,9 +1,7 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import ProfileStackNavigator, { ProfileStackParamList } from './ProfileNavigator';
+import ProfileStackNavigator from './ProfileNavigator';
 import HomeScreen from '../../screens/HomeScreen';
-import { AntDesign } from '@expo/vector-icons';
-import SearchScreen from '../../screens/SearchScreen';
 import CreatePostButton from '../buttons/CreatePostButton';
 import { getFocusedRouteNameFromRoute, NavigatorScreenParams } from '@react-navigation/native';
 import ChallengeNavigator from './ChallengeNavigator';
@@ -16,7 +14,7 @@ export type TabNavigatorParamList = {
     Search: NavigatorScreenParams<SearchStackParamList>;
     PostPlaceholder: undefined;
     Challenges: undefined;
-    Profile: NavigatorScreenParams<ProfileStackParamList>;
+    Profile: undefined;
 };
 
 const Tab = createBottomTabNavigator<TabNavigatorParamList>();
