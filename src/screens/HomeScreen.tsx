@@ -26,6 +26,7 @@ const HomeScreen: React.FC = () => {
                 const fetchedPosts: Post[] = [];
                 for (const post of data.posts) {
                     fetchedPosts.push({
+                        userId: post.user_id,
                         fullName: post.post_user_id.full_name,
                         username: post.post_user_id.username,
                         url: (await Storage.get(post.media.s3_key)) as string,

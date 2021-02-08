@@ -34,6 +34,7 @@ export const GET_USERS_POSTS = gql`
 export const GET_ALL_POSTS = gql`
     query getAllPosts {
         posts(order_by: { created_at: desc }) {
+            user_id
             caption
             post_user_id {
                 username
