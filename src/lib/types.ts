@@ -75,6 +75,7 @@ export interface SearchResult {
     username: string;
     fullName: string;
     userId: number;
+    profPicUrl: string;
 }
 
 export enum NotificationType {
@@ -86,4 +87,10 @@ export interface Notification {
     username: string;
     type: NotificationType;
     seen: boolean;
+}
+
+export interface Flag {
+    name: string;
+    emoji: string;
+    noFlag?: boolean;
 }

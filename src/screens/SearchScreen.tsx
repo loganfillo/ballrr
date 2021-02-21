@@ -6,6 +6,9 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Avatar, List, Searchbar } from 'react-native-paper';
 import { SEARCH_USERS } from '../lib/queries';
 import { SearchResult } from '../lib/types';
+import { Storage } from 'aws-amplify';
+
+const PLACE_HOLDER_IMAGE = 'https://files.thehandbook.com/uploads/2019/03/ronaldo.jpg';
 
 const SearchScreen: React.FC = () => {
     const [results, setResults] = useState<SearchResult[]>([]);
@@ -35,6 +38,10 @@ const SearchScreen: React.FC = () => {
                         username: user.username,
                         fullName: user.full_name,
                         userId: user.id,
+                        profPicUrl:
+                            user.profile_pic === null
+                                ? PLACE_HOLDER_IMAGE
+                                : ((await Storage.get(user.profile_pic.s3_key)) as string),
                     });
                 }
 
@@ -67,8 +74,7 @@ const SearchScreen: React.FC = () => {
                                     <Avatar.Image
                                         size={46}
                                         source={{
-                                            uri:
-                                                'https://files.thehandbook.com/uploads/2019/03/ronaldo.jpg',
+                                            uri: result.profPicUrl,
                                         }}
                                     />
                                 )}

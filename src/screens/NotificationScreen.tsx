@@ -7,6 +7,8 @@ import { GET_LIKES, UPDATE_LIKES_SEEN } from '../lib/queries';
 import { Notification, NotificationType } from '../lib/types';
 import { useUser } from '../lib/user';
 
+const PLACE_HOLDER_IMAGE = 'https://files.thehandbook.com/uploads/2019/03/ronaldo.jpg';
+
 const wait = (timeout: number) => {
     return new Promise((resolve) => {
         setTimeout(resolve, timeout);
@@ -77,8 +79,7 @@ const NotificationScreen: React.FC = () => {
                                 <Avatar.Image
                                     size={35}
                                     source={{
-                                        uri:
-                                            'https://files.thehandbook.com/uploads/2019/03/ronaldo.jpg',
+                                        uri: PLACE_HOLDER_IMAGE,
                                     }}
                                 />
                             )}

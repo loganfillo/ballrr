@@ -100,6 +100,13 @@
           name: post_likes
 - table:
     schema: public
+    name: profile_pic_media
+  object_relationships:
+  - name: user
+    using:
+      foreign_key_constraint_on: user_id
+- table:
+    schema: public
     name: thumbnail_media
   object_relationships:
   - name: post
@@ -108,6 +115,15 @@
 - table:
     schema: public
     name: users
+  object_relationships:
+  - name: profile_pic
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: profile_pic_media
+        column_mapping:
+          id: user_id
   array_relationships:
   - name: comment_likes
     using:
