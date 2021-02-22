@@ -50,6 +50,7 @@ export interface MediaFile {
 }
 
 export interface Post {
+    userId: number;
     fullName: string;
     username: string;
     url: string;

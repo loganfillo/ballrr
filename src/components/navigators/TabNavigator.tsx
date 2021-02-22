@@ -1,7 +1,7 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import ProfileStackNavigator from './ProfileNavigator';
-import HomeScreen from '../../screens/HomeScreen';
+import HomeFeedNavigator from './HomeFeedNavigator';
 import CreatePostButton from '../buttons/CreatePostButton';
 import { getFocusedRouteNameFromRoute, NavigatorScreenParams } from '@react-navigation/native';
 import ChallengeNavigator from './ChallengeNavigator';
@@ -65,7 +65,7 @@ const TabNavigator: React.FC = () => {
         <Tab.Navigator initialRouteName="Home" tabBarOptions={tabBarOptions}>
             <Tab.Screen
                 name="Home"
-                component={HomeScreen}
+                component={HomeFeedNavigator}
                 options={{
                     tabBarIcon: HomeTab,
                 }}
