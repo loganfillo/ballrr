@@ -1,1 +1,0 @@
-CREATE TABLE "public"."profile_pic_media"("id" serial NOT NULL, "created_at" timestamptz NOT NULL DEFAULT now(), "s3_key" text NOT NULL, "user_id" integer NOT NULL, PRIMARY KEY ("id") , FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON UPDATE restrict ON DELETE cascade, UNIQUE ("user_id"));

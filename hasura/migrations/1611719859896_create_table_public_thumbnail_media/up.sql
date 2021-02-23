@@ -1,1 +1,0 @@
-CREATE TABLE "public"."thumbnail_media"("id" serial NOT NULL, "created_at" timestamptz NOT NULL DEFAULT now(), "s3_key" text NOT NULL, "post_id" integer NOT NULL, PRIMARY KEY ("id") , FOREIGN KEY ("post_id") REFERENCES "public"."posts"("id") ON UPDATE restrict ON DELETE cascade);
