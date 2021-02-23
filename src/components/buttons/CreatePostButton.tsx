@@ -1,9 +1,8 @@
 import { TouchableOpacity, StyleSheet } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { AntDesign } from '@expo/vector-icons';
 import { ActionSheet, View } from 'native-base';
 import { Media } from '../../lib/types';
-import { chooseMedia, getThumbnail, takeMedia } from '../../lib/media';
+import { chooseMedia, createThumbnail, takeMedia } from '../../lib/media';
 import { useNavigation } from '@react-navigation/native';
 import { IconButton } from 'react-native-paper';
 
@@ -21,7 +20,7 @@ const CreatePostButton: React.FC = () => {
     async function handleMedia(pickFunc: () => Promise<Media>) {
         const media: Media = await pickFunc();
         if (!media.cancelled) {
-            const thumbnail: Media = await getThumbnail(media);
+            const thumbnail: Media = await createThumbnail(media);
             if (!thumbnail.cancelled && thumbnail.file) {
                 navigation.navigate('Post', {
                     screen: 'CreatePost',

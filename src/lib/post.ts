@@ -1,29 +1,9 @@
-import { CREATE_POST } from './queries';
-import { uploadMediaToS3, createPostMedia, createThumbnailMedia } from './media';
+import { CREATE_POST, CREATE_POST_MEDIA, CREATE_THUMBNAIL_MEDIA } from './queries';
+import { uploadMediaToS3 } from './media';
 import { Alert } from 'react-native';
-import { Media, UploadedMedia, User } from './types';
+import { Media, MediaType, UploadedMedia, User } from './types';
 import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
 
-/**
- * Creates the post in the databse
-
- * @param apolloClient GraphQL client
- * @param userId The posting user's ID
- * @param caption The post's caption
- * @returns
- */
-async function createPostEntry(
-    apolloClient: ApolloClient<NormalizedCacheObject>,
-    userId: number,
-    caption: string,
-): Promise<number> {
-    const res = await apolloClient.mutate({
-        mutation: CREATE_POST,
-        variables: { user_id: userId, caption },
-    });
-
-    return res.data.insert_posts_one.id;
-}
 /**
  * Creates a post. Uploads media file to s3 then creates the media and post entries
  * in the database. Alerts of success or failiure if something happened
@@ -52,11 +32,80 @@ export async function createPost(
     ) {
         try {
             const postId = await createPostEntry(apolloClient, user.id, caption);
-            await createPostMedia(apolloClient, uploadedMedia.name, uploadedMedia.type, postId);
-            await createThumbnailMedia(apolloClient, uploadedThumbnail.name, postId);
+            await createPostMediaEntry(
+                apolloClient,
+                uploadedMedia.name,
+                uploadedMedia.type,
+                postId,
+            );
+            await createThumbnailMediaEntry(apolloClient, uploadedThumbnail.name, postId);
             Alert.alert('Post Uploaded!');
         } catch (e) {
-            Alert.alert('Could Not Upload Post');
+            Alert.alert('Could Not Upload Post to DB');
         }
+    } else {
+        Alert.alert('Could Not Upload Post to S3');
     }
+}
+
+/**
+ * Creates the post in the databse
+
+ * @param apolloClient GraphQL client
+ * @param userId The posting user's ID
+ * @param caption The post's caption
+ * @returns
+ */
+async function createPostEntry(
+    apolloClient: ApolloClient<NormalizedCacheObject>,
+    userId: number,
+    caption: string,
+): Promise<number> {
+    const res = await apolloClient.mutate({
+        mutation: CREATE_POST,
+        variables: { user_id: userId, caption },
+    });
+
+    return res.data.insert_posts_one.id;
+}
+
+/**
+ * Creates the media in the database
+ *
+ * @param apolloClient GraphQL CLient
+ * @param s3Key S3 key of the media
+ * @param type Type of the media
+ * @returns Post media id of created row
+ */
+export async function createPostMediaEntry(
+    apolloClient: ApolloClient<NormalizedCacheObject>,
+    s3Key: string,
+    type: MediaType,
+    postID: number,
+): Promise<number> {
+    const res = await apolloClient.mutate({
+        mutation: CREATE_POST_MEDIA,
+        variables: { s3_key: s3Key, type, post_id: postID },
+    });
+    return res.data.insert_post_media_one.id;
+}
+
+/**
+ * Creates the thumbnail in the database
+ *
+ * @param apolloClient GraphQL CLient
+ * @param s3Key S3 key of the thumbnail
+ * @param type Type of the media
+ * @returns Thumbnail media id of created row
+ */
+export async function createThumbnailMediaEntry(
+    apolloClient: ApolloClient<NormalizedCacheObject>,
+    s3Key: string,
+    postID: number,
+): Promise<number> {
+    const res = await apolloClient.mutate({
+        mutation: CREATE_THUMBNAIL_MEDIA,
+        variables: { s3_key: s3Key, post_id: postID },
+    });
+    return res.data.insert_thumbnail_media_one.id;
 }

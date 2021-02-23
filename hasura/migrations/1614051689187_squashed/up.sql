@@ -1,5 +1,6 @@
 
 
+
 CREATE TABLE "public"."users"("id" text NOT NULL DEFAULT gen_random_uuid(), "name" text NOT NULL, PRIMARY KEY ("id") , UNIQUE ("id"));
 
 CREATE TABLE "public"."files"("name" text NOT NULL, "url" text NOT NULL, "id" serial NOT NULL, PRIMARY KEY ("id") );
@@ -225,3 +226,37 @@ ALTER TABLE "public"."post_media" ALTER COLUMN "post_id" SET NOT NULL;
 ALTER TABLE "public"."post_media" ADD COLUMN "created_at" timestamptz NULL DEFAULT now();
 
 ALTER TABLE "public"."users" DROP COLUMN "media_id" CASCADE;
+
+alter table "public"."followers" rename column "user_id" to "user_followed_id";
+
+alter table "public"."followers" rename column "follower_id" to "user_id";
+
+CREATE TABLE "public"."thumbnail_media"("id" serial NOT NULL, "created_at" timestamptz NOT NULL DEFAULT now(), "s3_key" text NOT NULL, "post_id" integer NOT NULL, PRIMARY KEY ("id") , FOREIGN KEY ("post_id") REFERENCES "public"."posts"("id") ON UPDATE restrict ON DELETE cascade);
+
+ALTER TABLE "public"."thumbnail_media" ADD CONSTRAINT "thumbnail_media_post_id_key" UNIQUE ("post_id");
+
+ALTER TABLE "public"."users" ADD COLUMN "flag" text NULL;
+
+ALTER TABLE ONLY "public"."users" ALTER COLUMN "flag" SET DEFAULT '''';
+
+ALTER TABLE "public"."users" ALTER COLUMN "flag" DROP DEFAULT;
+
+CREATE TABLE "public"."profile_pic_media"("id" serial NOT NULL, "created_at" timestamptz NOT NULL DEFAULT now(), "s3_key" text NOT NULL, "user_id" integer NOT NULL, PRIMARY KEY ("id") , FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON UPDATE restrict ON DELETE cascade, UNIQUE ("user_id"));
+
+alter table "public"."profile_pic_media" drop constraint "profile_pic_media_user_id_fkey",
+             add constraint "profile_pic_media_user_id_fkey"
+             foreign key ("user_id")
+             references "public"."users"
+             ("id") on update set null on delete restrict;
+
+alter table "public"."profile_pic_media" drop constraint "profile_pic_media_user_id_fkey",
+             add constraint "profile_pic_media_user_id_fkey"
+             foreign key ("user_id")
+             references "public"."users"
+             ("id") on update restrict on delete set null;
+
+alter table "public"."profile_pic_media" drop constraint "profile_pic_media_user_id_fkey",
+             add constraint "profile_pic_media_user_id_fkey"
+             foreign key ("user_id")
+             references "public"."users"
+             ("id") on update restrict on delete set null;

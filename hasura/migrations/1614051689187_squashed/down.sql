@@ -1,4 +1,45 @@
 
+alter table "public"."profile_pic_media" drop constraint "profile_pic_media_user_id_fkey",
+          add constraint "profile_pic_media_user_id_fkey"
+          foreign key ("user_id")
+          references "public"."users"
+          ("id")
+          on update restrict
+          on delete set null;
+
+alter table "public"."profile_pic_media" drop constraint "profile_pic_media_user_id_fkey",
+          add constraint "profile_pic_media_user_id_fkey"
+          foreign key ("user_id")
+          references "public"."users"
+          ("id")
+          on update restrict
+          on delete cascade;
+
+alter table "public"."profile_pic_media" drop constraint "profile_pic_media_user_id_fkey",
+          add constraint "profile_pic_media_user_id_fkey"
+          foreign key ("user_id")
+          references "public"."users"
+          ("id")
+          on update restrict
+          on delete cascade;
+
+DROP TABLE "public"."profile_pic_media";
+
+ALTER TABLE ONLY "public"."users" ALTER COLUMN "flag" SET DEFAULT '''''::text';
+
+ALTER TABLE ONLY "public"."users" ALTER COLUMN "flag" DROP DEFAULT;
+
+ALTER TABLE "public"."users" DROP COLUMN "flag";
+
+ALTER TABLE "public"."thumbnail_media" DROP CONSTRAINT "thumbnail_media_post_id_key";
+
+DROP TABLE "public"."thumbnail_media";
+
+alter table "public"."followers" rename column "user_id" to "follower_id";
+
+alter table "public"."followers" rename column "user_followed_id" to "user_id";
+
+
 
 ALTER TABLE "public"."users" ADD COLUMN "media_id" int4;
 ALTER TABLE "public"."users" ALTER COLUMN "media_id" DROP NOT NULL;

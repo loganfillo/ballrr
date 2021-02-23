@@ -1,13 +1,15 @@
-import { Button, View, StyleSheet } from 'react-native';
+import { View, StyleProp, ViewStyle } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useApolloClient, useQuery } from '@apollo/client';
 import { CHECK_IF_FOLLOWING, FOLLOW_USER, UNFOLLOW_USER } from '../../lib/queries';
+import ProfileButton from './ProfileButton';
 
 interface Props {
     userId: number;
     profileUserId: number;
+    style: StyleProp<ViewStyle>;
 }
-const FollowButton: React.FC<Props> = ({ userId, profileUserId }: Props) => {
+const FollowButton: React.FC<Props> = ({ userId, profileUserId, style }: Props) => {
     const [following, setFollowing] = useState(false);
     const [followingVisible, setFollowingVisible] = useState(false);
     const [followingLoading, setFollowingLoading] = useState(true);
@@ -50,31 +52,17 @@ const FollowButton: React.FC<Props> = ({ userId, profileUserId }: Props) => {
     return (
         <>
             {followingVisible && (
-                <View style={styles.buttonContainer}>
-                    <Button
+                <View style={style}>
+                    <ProfileButton
                         title={following ? 'Unfollow' : 'Follow'}
-                        onPress={followOrUnfollowUser}
-                        color={following ? 'red' : 'blue'}
                         disabled={followingLoading}
+                        color={following ? 'red' : 'black'}
+                        onPress={followOrUnfollowUser}
                     />
                 </View>
             )}
         </>
     );
 };
-
-const styles = StyleSheet.create({
-    buttonContainer: {
-        padding: 1,
-        borderColor: 'darkgrey',
-        borderWidth: 2,
-        borderRadius: 10,
-        justifyContent: 'center',
-        textAlign: 'center',
-        marginLeft: 10,
-        marginRight: 10,
-        marginBottom: 8,
-    },
-});
 
 export default FollowButton;

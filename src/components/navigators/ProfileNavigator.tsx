@@ -12,7 +12,7 @@ import { useNavigation } from '@react-navigation/native';
 
 const Stack = createStackNavigator();
 
-const InboxButton = ({}) => {
+const InboxButton = () => {
     const navigation = useNavigation();
     return (
         <NotificationBadge
@@ -38,7 +38,13 @@ const ProfileStackNavigator: React.FC = () => {
                 component={ProfileScreen}
                 options={{ headerRight: InboxButton }}
             />
-            <Stack.Screen name="Edit" component={EditProfileScreen} />
+            <Stack.Screen
+                name="Edit"
+                component={EditProfileScreen}
+                options={{
+                    headerBackTitleVisible: false,
+                }}
+            />
             <Stack.Screen name="Menu" component={ProfileMenuScreen} />
             <Stack.Screen name="Settings" component={AccountSettingsScreen} />
             <Stack.Screen name="Policy" component={UserPolicyScreen} />
