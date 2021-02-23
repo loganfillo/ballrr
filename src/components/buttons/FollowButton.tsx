@@ -1,8 +1,8 @@
-import { View, StyleProp, ViewStyle, Text } from 'react-native';
+import { View, StyleProp, ViewStyle } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useApolloClient, useQuery } from '@apollo/client';
 import { CHECK_IF_FOLLOWING, FOLLOW_USER, UNFOLLOW_USER } from '../../lib/queries';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import ProfileButton from './ProfileButton';
 
 interface Props {
     userId: number;
@@ -53,24 +53,12 @@ const FollowButton: React.FC<Props> = ({ userId, profileUserId, style }: Props) 
         <>
             {followingVisible && (
                 <View style={style}>
-                    <View style={{ borderColor: 'black', borderWidth: 1, borderRadius: 8 }}>
-                        <TouchableOpacity
-                            style={{ padding: 5 }}
-                            disabled={followingLoading}
-                            onPress={followOrUnfollowUser}
-                        >
-                            <Text
-                                style={{
-                                    textAlign: 'center',
-                                    fontSize: 14,
-                                    fontWeight: '400',
-                                    color: following ? 'red' : 'black',
-                                }}
-                            >
-                                {following ? 'Unfollow' : 'Follow'}
-                            </Text>
-                        </TouchableOpacity>
-                    </View>
+                    <ProfileButton
+                        title={following ? 'Unfollow' : 'Follow'}
+                        disabled={followingLoading}
+                        color={following ? 'red' : 'black'}
+                        onPress={followOrUnfollowUser}
+                    />
                 </View>
             )}
         </>

@@ -1,17 +1,42 @@
-import React from 'react';
-import { Text, SafeAreaView, View, FlatList, TouchableOpacity, Modal, Button } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import {
+    Text,
+    SafeAreaView,
+    View,
+    TouchableOpacity,
+    Modal,
+    Button,
+    VirtualizedList,
+} from 'react-native';
 import { Flag } from '../lib/types';
 import flags from '../lib/flags';
 import { StatusBar } from 'expo-status-bar';
+import { Searchbar } from 'react-native-paper';
 
 interface PickerProps {
+    searchQuery: string;
     onSelect: (item: Flag) => void;
 }
 
-const FlagPicker: React.FC<PickerProps> = ({ onSelect }: PickerProps) => {
+const FlagPicker: React.FC<PickerProps> = ({ searchQuery, onSelect }: PickerProps) => {
+    const [flagList, setFlagList] = useState<Flag[]>(flags);
+
     function selectFlag(item: Flag) {
         onSelect(item);
     }
+
+    useEffect(() => {
+        console.log(
+            flags.filter((flag) => {
+                return flag.name.toUpperCase().startsWith(searchQuery.toUpperCase());
+            }),
+        );
+        setFlagList(
+            flags.filter((flag) => {
+                return flag.name.toUpperCase().startsWith(searchQuery.toUpperCase());
+            }),
+        );
+    }, [searchQuery]);
 
     function renderItem({ item }: { item: Flag }) {
         return (
@@ -32,7 +57,16 @@ const FlagPicker: React.FC<PickerProps> = ({ onSelect }: PickerProps) => {
         );
     }
 
-    return <FlatList data={flags} renderItem={renderItem} keyExtractor={(item) => item.name} />;
+    return (
+        <VirtualizedList
+            getItemCount={() => flagList.length}
+            initialNumToRender={10}
+            getItem={(data, index) => data[index]}
+            data={flagList}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.name}
+        />
+    );
 };
 
 interface ModalProps {
@@ -46,6 +80,12 @@ export const FlagPickerModal: React.FC<ModalProps> = ({
     onClose,
     onFlagChange,
 }: ModalProps) => {
+    const [searchQuery, setSearchQuery] = useState('');
+
+    function updateSearchQuery(query: string) {
+        setSearchQuery(query);
+    }
+
     return (
         <Modal visible={visible}>
             <SafeAreaView>
@@ -53,11 +93,19 @@ export const FlagPickerModal: React.FC<ModalProps> = ({
                 <View
                     style={{
                         backgroundColor: 'ghostwhite',
-                        padding: 5,
-                        alignItems: 'flex-end',
+                        padding: 10,
+                        flexDirection: 'row',
                     }}
                 >
-                    <Button title={'Cancel'} onPress={onClose} />
+                    <Searchbar
+                        style={{ flex: 6 }}
+                        placeholder="Search"
+                        onChangeText={updateSearchQuery}
+                        value={searchQuery}
+                    />
+                    <View style={{ flex: 2, justifyContent: 'center', alignItems: 'center' }}>
+                        <Button title={'Cancel'} onPress={onClose} />
+                    </View>
                 </View>
 
                 <View
@@ -66,7 +114,7 @@ export const FlagPickerModal: React.FC<ModalProps> = ({
                         borderBottomColor: 'lightgrey',
                     }}
                 ></View>
-                <FlagPicker onSelect={onFlagChange} />
+                <FlagPicker onSelect={onFlagChange} searchQuery={searchQuery} />
             </SafeAreaView>
         </Modal>
     );
