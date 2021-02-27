@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
-import { useUser } from '../lib/user';
-import FollowButton from './buttons/FollowButton';
-import EditProfileButton from './buttons/EditProfileButton';
-import MessageButton from './buttons/MessageButton';
+import { useUser } from '../../lib/user';
+import FollowButton from './/FollowButton';
+import EditProfileButton from './EditProfileButton';
+import MessageButton from './MessageButton';
 import ProfileHighlights from './ProfileHighlights';
 import ProfileAttributes from './ProfileAttributes';
 import ProfileCounts from './ProfileCounts';
 import ProfilePic from './ProfilePic';
 import { useQuery } from '@apollo/client';
-import { COUNT_FOLLOWERS, COUNT_FOLLOWING, COUNT_USERS_POST, GET_PROFILE } from '../lib/queries';
-import { Flag } from '../lib/types';
+import { COUNT_FOLLOWERS, COUNT_FOLLOWING, COUNT_USERS_POST, GET_PROFILE } from '../../lib/queries';
+import { Flag } from '../../lib/types';
 import { Storage } from 'aws-amplify';
-import LogoutButton from './buttons/LogoutButton';
+import LogoutButton from './LogoutButton';
 
 interface Props {
     profileUserId: number;
@@ -104,38 +104,27 @@ const ProfileInfo: React.FC<Props> = ({ profileUserId, refreshing }: Props) => {
                 ) : (
                     <View
                         style={{
-                            padding: 5,
-                            flexDirection: 'column',
+                            flexDirection: 'row',
+                            alignItems: 'center',
                             justifyContent: 'center',
+                            paddingHorizontal: 5,
                         }}
                     >
-                        <View
+                        <Text
                             style={{
-                                flexDirection: 'row',
-                                paddingVertical: 5,
-                                paddingHorizontal: 8,
-                                borderRadius: 10,
-                                backgroundColor: 'green',
+                                fontSize: 14,
+                                fontWeight: '100',
+                                textAlign: 'center',
+                                color: 'black',
                             }}
                         >
-                            <Text
-                                style={{
-                                    margin: 0,
-                                    padding: 0,
-                                    textAlign: 'center',
-                                    fontSize: 12,
-                                    fontWeight: '500',
-                                    color: 'white',
-                                }}
-                            >
-                                @{username}
-                            </Text>
-                        </View>
+                            @{username}
+                        </Text>
                     </View>
                 )}
             </View>
             <View style={{ flexDirection: 'row', paddingTop: 10, paddingLeft: 10 }}>
-                <Text style={{ textAlign: 'left', fontSize: 14, fontWeight: '200' }}>{bio}</Text>
+                <Text style={{ textAlign: 'left', fontSize: 14, fontWeight: '400' }}>{bio}</Text>
             </View>
             <View style={{ flexDirection: 'row', paddingTop: 5 }}>
                 {user.id === profileUserId ? (

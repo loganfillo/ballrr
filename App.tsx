@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { ApolloProvider } from '@apollo/client';
-import RootNavigator from './src/components/navigators/RootNavigator';
+import RootNavigator from './src/navigators/RootNavigator';
 import createApolloClient from './src/lib/apollo';
 import { UserProvider } from './src/lib/user';
 import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
-import Loading from './src/components/Loading';
+import Loading from './src/components/misc/Loading';
 import { Audio } from 'expo-av';
 import { Root } from 'native-base';
 import Amplify from 'aws-amplify';
@@ -13,7 +13,7 @@ import Amplify from 'aws-amplify';
 import config from './aws-exports';
 //@ts-ignore
 import { withAuthenticator } from 'aws-amplify-react-native';
-import { StatusBar } from 'expo-status-bar';
+import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 
 Amplify.configure({
     ...config,
@@ -50,18 +50,17 @@ function App(): React.ReactNode {
     const apolloClient = createApolloClient();
 
     if (loading) {
-        console.log();
-
         return <Loading />;
     }
     return (
         <Root>
-            <StatusBar style="dark" />
-            <ApolloProvider client={apolloClient}>
-                <UserProvider>
-                    <RootNavigator />
-                </UserProvider>
-            </ApolloProvider>
+            <ActionSheetProvider>
+                <ApolloProvider client={apolloClient}>
+                    <UserProvider>
+                        <RootNavigator />
+                    </UserProvider>
+                </ApolloProvider>
+            </ActionSheetProvider>
         </Root>
     );
 }

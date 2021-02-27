@@ -1,6 +1,6 @@
 import React from 'react';
 import { Image, Text, View } from 'react-native';
-import { Flag } from '../lib/types';
+import { Flag } from '../../lib/types';
 
 interface Props {
     image: string;

@@ -1,7 +1,7 @@
 import { DocumentNode, useQuery } from '@apollo/client';
 import React, { useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
-import { COUNT_FOLLOWERS, COUNT_FOLLOWING, COUNT_USERS_POST } from '../lib/queries';
+import { COUNT_FOLLOWERS, COUNT_FOLLOWING, COUNT_USERS_POST } from '../../lib/queries';
 
 interface Props {
     name: string;

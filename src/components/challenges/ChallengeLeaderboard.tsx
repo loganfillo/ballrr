@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, View } from 'native-base';
 import { Row, Rows, Table } from 'react-native-table-component';
 import { StyleSheet, Image } from 'react-native';
-import { Challenge } from '../lib/types';
+import { Challenge } from '../../lib/types';
 
 interface Props {
     challenge: Challenge;

@@ -1,8 +1,8 @@
 import React from 'react';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { SafeAreaView } from 'react-native';
-import SavedChallengeScreen from '../../screens/SavedChallengesScreen';
-import BrowseChallengeScreen from '../../screens/BrowseChallengeScreen';
+import SavedChallengeScreen from '../screens/SavedChallengesScreen';
+import BrowseChallengeScreen from '../screens/BrowseChallengeScreen';
 
 const Tab = createMaterialTopTabNavigator();
 

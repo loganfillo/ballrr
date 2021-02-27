@@ -1,7 +1,7 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import CreatePostScreen from '../../screens/CreatePostScreen';
-import { Media } from '../../lib/types';
+import CreatePostScreen from '../screens/CreatePostScreen';
+import { Media } from '../lib/types';
 
 export type PostStackParamList = {
     CreatePost: { media: Media; thumbnail: Media };

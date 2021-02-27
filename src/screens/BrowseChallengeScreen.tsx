@@ -2,7 +2,7 @@ import ViewPager from '@react-native-community/viewpager';
 import { View } from 'native-base';
 import React from 'react';
 import { SafeAreaView } from 'react-native';
-import FeedChallenge from '../components/FeedChallenge';
+import FeedChallenge from '../components/challenges/FeedChallenge';
 
 const BrowseChallengeScreen: React.FC = () => {
     const challenges = [

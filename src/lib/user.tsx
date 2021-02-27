@@ -3,7 +3,7 @@ import { User } from './types';
 import { useApolloClient } from '@apollo/client';
 import { CREATE_USER, GET_USER } from './queries';
 import { Auth } from 'aws-amplify';
-import Loading from '../components/Loading';
+import Loading from '../components/misc/Loading';
 import { Alert } from 'react-native';
 
 const UserContext = createContext<User>({

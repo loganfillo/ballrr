@@ -2,13 +2,14 @@ import { useQuery } from '@apollo/client';
 import React, { useEffect, useState } from 'react';
 import { GET_ALL_POSTS } from '../lib/queries';
 import { Post } from '../lib/types';
-import FeedPost from '../components/FeedPost';
+import FeedPost from '../components/feed/FeedPost';
 import ViewPager from '@react-native-community/viewpager';
 import { useIsFocused } from '@react-navigation/native';
-import { SafeAreaView, View } from 'react-native';
+import { View } from 'react-native';
 import { Storage } from 'aws-amplify';
+import { StatusBar } from 'expo-status-bar';
 
-const HomeScreen: React.FC = () => {
+const FeedScreen: React.FC = () => {
     const [posts, setPosts] = useState<Post[]>([]);
     const [selected, setSelected] = useState(0);
 
@@ -27,6 +28,9 @@ const HomeScreen: React.FC = () => {
                 for (const post of data.posts) {
                     fetchedPosts.push({
                         userId: post.user_id,
+                        profPicUrl: (await Storage.get(
+                            post.post_user_id.profile_pic.s3_key,
+                        )) as string,
                         fullName: post.post_user_id.full_name,
                         username: post.post_user_id.username,
                         url: (await Storage.get(post.media.s3_key)) as string,
@@ -43,29 +47,32 @@ const HomeScreen: React.FC = () => {
     }, [data]);
 
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: 'whitesmoke' }}>
-            <ViewPager
-                style={{ flex: 1 }}
-                initialPage={0}
-                orientation="vertical"
-                onPageSelected={(e) => {
-                    setSelected(e.nativeEvent.position);
-                }}
-            >
-                {posts.map((post, id) => {
-                    return (
-                        <View key={id}>
-                            <FeedPost
-                                key={id}
-                                post={post}
-                                shouldPlay={selected === id && isFocused}
-                            />
-                        </View>
-                    );
-                })}
-            </ViewPager>
-        </SafeAreaView>
+        <>
+            {isFocused ? <StatusBar style={'light'} /> : null}
+            <View style={{ flex: 1, backgroundColor: 'black' }}>
+                <ViewPager
+                    style={{ flex: 1 }}
+                    initialPage={0}
+                    orientation="vertical"
+                    onPageSelected={(e) => {
+                        setSelected(e.nativeEvent.position);
+                    }}
+                >
+                    {posts.map((post, id) => {
+                        return (
+                            <View key={id}>
+                                <FeedPost
+                                    key={id}
+                                    post={post}
+                                    shouldPlay={selected === id && isFocused}
+                                />
+                            </View>
+                        );
+                    })}
+                </ViewPager>
+            </View>
+        </>
     );
 };
 
-export default HomeScreen;
+export default FeedScreen;

@@ -1,8 +1,8 @@
 import { Card, CardItem, Left, Right, Text } from 'native-base';
 import React, { Fragment, useState } from 'react';
 import { ScrollView, View, Button, Modal, StyleSheet, Image } from 'react-native';
-import { Challenge } from '../lib/types';
-import SaveChallengeButton from './buttons/SaveChallengeButton';
+import { Challenge } from '../../lib/types';
+import SaveChallengeButton from './SaveChallengeButton';
 import LeaderBoard from './ChallengeLeaderboard';
 import { FontAwesome5 } from '@expo/vector-icons';
 

@@ -3,15 +3,15 @@ import { View, StyleSheet, ScrollView, TextInput, Image } from 'react-native';
 import { Grid, Row, Col } from 'react-native-easy-grid';
 import { createPost } from '../lib/post';
 import { Media } from '../lib/types';
-import Loading from '../components/Loading';
+import Loading from '../components/misc/Loading';
 import { ApolloClient, NormalizedCacheObject, useApolloClient } from '@apollo/client';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import PostButton from '../components/buttons/PostButton';
-import AddChallengeButton from '../components/buttons/AddChallengeButton';
-import ChallengeOthersButton from '../components/buttons/ChallengeOthersButton';
+import PostButton from '../components/misc/PostButton';
+import AddChallengeButton from '../components/challenges/AddChallengeButton';
+import ChallengeOthersButton from '../components/challenges/ChallengeOthersButton';
 import { useUser } from '../lib/user';
 import { RouteProp } from '@react-navigation/native';
-import { PostStackParamList } from '../components/navigators/PostNavigator';
+import { PostStackParamList } from '../navigators/PostNavigator';
 
 type CreatePostScreenRouteProp = RouteProp<PostStackParamList, 'CreatePost'>;
 
