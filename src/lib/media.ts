@@ -23,6 +23,7 @@ export async function takeMedia(): Promise<Media> {
             allowsEditing: true,
             aspect: [4, 4],
             quality: 1,
+            videoMaxDuration: 30,
         });
 
         if (!result.cancelled) {
@@ -57,6 +58,7 @@ export async function chooseMedia(): Promise<Media> {
             allowsEditing: true,
             aspect: [4, 4],
             quality: 1,
+            videoMaxDuration: 30,
         });
 
         if (!result.cancelled) {
