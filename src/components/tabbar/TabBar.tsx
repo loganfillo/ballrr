@@ -56,7 +56,7 @@ const TabBar: React.FC<TabBarProps> = ({ navigation }: TabBarProps) => {
                     height: 0.14 * width,
                     backgroundColor: 'white',
                     borderRadius: 100,
-                    bottom: 0.02 * height,
+                    bottom: 0.025 * height,
                     position: 'absolute',
                     alignSelf: 'center',
                     flexDirection: 'row',

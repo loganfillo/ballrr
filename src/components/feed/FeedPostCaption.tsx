@@ -15,11 +15,11 @@ const FeedPostCaption: React.FC<Props> = ({ username, caption }: Props) => {
 
     return (
         <>
-            <Text style={{ color: 'white', fontSize: 13, fontWeight: 'bold' }}>
+            <Text style={{ color: 'white', fontSize: 15, fontWeight: 'bold' }}>
                 {'@' + username}
             </Text>
             {finalCaption.length > 0 ? (
-                <Text style={{ fontSize: 11, color: 'white', fontWeight: 'normal' }}>
+                <Text style={{ fontSize: 13, color: 'white', fontWeight: 'normal' }}>
                     {finalCaption}
                 </Text>
             ) : (

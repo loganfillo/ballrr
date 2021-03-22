@@ -30,7 +30,7 @@ const FeedPost: React.FC<Props> = ({ post, shouldPlay }: Props) => {
             <View
                 style={{
                     position: 'absolute',
-                    bottom: 0.11 * height,
+                    bottom: 0.1 * height,
                     width: '75%',
                     alignSelf: 'center',
                     justifyContent: 'space-evenly',
@@ -42,12 +42,12 @@ const FeedPost: React.FC<Props> = ({ post, shouldPlay }: Props) => {
             <View
                 style={{
                     position: 'absolute',
-                    width: 0.12 * width,
-                    height: '100%',
+                    width: 0.14 * width,
+                    height: 0.4 * height,
                     alignSelf: 'flex-end',
                     alignItems: 'center',
-                    justifyContent: 'center',
-                    top: 0.2 * height,
+                    justifyContent: 'space-evenly',
+                    bottom: 0.1 * height,
                 }}
             >
                 <FeedPostIconBar post={post} />

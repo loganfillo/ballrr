@@ -9,7 +9,7 @@ interface Props {
 }
 const FeedPostHeader: React.FC<Props> = ({ post }: Props) => {
     const navigation = useNavigation();
-    const { width, height } = Dimensions.get('window');
+    const { width } = Dimensions.get('window');
 
     function navigateToProfile(userId: number) {
         navigation.navigate('Profile', { userId });
@@ -28,7 +28,6 @@ const FeedPostHeader: React.FC<Props> = ({ post }: Props) => {
             <View
                 style={{
                     flex: 1,
-                    padding: 1,
                     justifyContent: 'center',
                     alignItems: 'center',
                 }}
@@ -61,7 +60,7 @@ const FeedPostHeader: React.FC<Props> = ({ post }: Props) => {
                     paddingRight: 5,
                 }}
             >
-                <MaterialCommunityIcons name={'account-plus'} size={0.1 * width} color={'white'} />
+                <MaterialCommunityIcons name={'account-plus'} size={0.08 * width} color={'white'} />
             </View>
         </TouchableOpacity>
     );

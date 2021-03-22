@@ -27,7 +27,9 @@ const LikeCount: React.FC<Props> = ({ postId, likeChanged }: Props) => {
         refetch();
     }, [likeChanged]);
 
-    return <>{countVisible ? <Text style={{ color: 'white' }}>{count}</Text> : <></>}</>;
+    return (
+        <>{countVisible ? <Text style={{ color: 'white', fontSize: 20 }}>{count}</Text> : <></>}</>
+    );
 };
 
 export default LikeCount;
