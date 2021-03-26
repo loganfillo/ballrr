@@ -34,6 +34,7 @@ const HomeScreen: React.FC = () => {
                         type: post.media.type,
                         id: post.id,
                         s3Key: post.media.s3_key,
+                        thumbnailS3Key: post.thumbnail.s3_key,
                     });
                 }
                 setPosts(fetchedPosts);
