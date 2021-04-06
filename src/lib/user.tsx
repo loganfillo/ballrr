@@ -9,6 +9,7 @@ import { Alert } from 'react-native';
 const UserContext = createContext<User>({
     id: -1,
     username: '',
+    isLoggedIn: false,
 });
 
 /**
@@ -16,9 +17,9 @@ const UserContext = createContext<User>({
  */
 export const useUser = (): User => {
     const user = useContext(UserContext);
-    if (user.id < 0) {
-        Alert.alert('Something went wrong, please close the app and try again.');
-    }
+    // if (user.id < 0) {
+    //     Alert.alert('Something went wrong, please close the app and try again.');
+    // }
     return user;
 };
 
@@ -34,6 +35,7 @@ export const UserProvider: React.FC<Props> = ({ children }: Props) => {
     const [user, setUser] = useState<User>({
         id: -1,
         username: '',
+        isLoggedIn: false,
     });
 
     const apolloClient = useApolloClient();
@@ -62,11 +64,11 @@ export const UserProvider: React.FC<Props> = ({ children }: Props) => {
                 setUser({
                     id,
                     username: cognitoUser.username,
+                    isLoggedIn: true,
                 });
                 setLoading(false);
             } catch (e) {
                 console.log(e);
-                console.log('FAILURE IN USER');
                 Alert.alert('Something went wrong, please close the app and try again.');
             }
         }

@@ -8,11 +8,7 @@ import ConfirmSignUp from '../../screens/ConfirmSignUp';
 
 const AuthenticationStack = createStackNavigator();
 
-interface Props {
-    updateAuthState: (arg0: string) => void;
-}
-
-const AuthenticationNavigator: React.FC<Props> = ({ updateAuthState }: Props) => {
+const AuthenticationNavigator: React.FC = () => {
     return (
         <NavigationContainer>
             <AuthenticationStack.Navigator headerMode="none" initialRouteName="SignIn">

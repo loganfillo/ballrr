@@ -1,6 +1,8 @@
 import { Auth } from 'aws-amplify';
+import { refreshAsync } from 'expo-auth-session';
 import React from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
+import { useUser } from '../../lib/user';
 import ProfileButton from './ProfileButton';
 
 interface Props {
@@ -8,9 +10,10 @@ interface Props {
 }
 
 const LogoutButton: React.FC<Props> = ({ style }: Props) => {
+    const user = useUser();
     async function logout() {
         await Auth.signOut();
-        // updateAuthState('loggedOut');
+        user.isLoggedIn = false;
     }
     return (
         <View style={style}>

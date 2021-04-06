@@ -12,11 +12,7 @@ export type RootStackParamList = {
 
 const RootStack = createStackNavigator<RootStackParamList>();
 
-interface Props {
-    updateAuthState: (arg0: string) => void;
-}
-
-const RootNavigator: React.FC<Props> = ({ updateAuthState }: Props) => {
+const RootNavigator: React.FC = () => {
     return (
         <NavigationContainer>
             <RootStack.Navigator

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { ApolloProvider } from '@apollo/client';
 import RootNavigator from './src/components/navigators/RootNavigator';
 import createApolloClient from './src/lib/apollo';
-import { UserProvider } from './src/lib/user';
+import { UserProvider, useUser } from './src/lib/user';
 import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
 import Loading from './src/components/Loading';
@@ -25,7 +25,9 @@ Amplify.configure({
 
 function App(): React.ReactNode {
     const [loading, setLoading] = useState(true);
-    const [isUserLoggedIn, setUserLoggedIn] = useState('initializing');
+    const user = useUser();
+    console.log('IN MAIN APP');
+    console.log(user.isLoggedIn);
 
     useEffect(() => {
         setLoading(true);
@@ -53,18 +55,16 @@ function App(): React.ReactNode {
         checkAuthState();
     }, []);
     async function checkAuthState() {
+        setLoading(true);
         try {
             await Auth.currentAuthenticatedUser();
-            setUserLoggedIn('loggedIn');
+            user.isLoggedIn = true;
+            console.log('logging in');
         } catch (err) {
             console.log(err);
-            console.log('FAILURE IN APP');
-            setUserLoggedIn('loggedOut');
+            user.isLoggedIn = false;
         }
-    }
-
-    function updateAuthState(isUserLoggedIn: React.SetStateAction<string>) {
-        setUserLoggedIn(isUserLoggedIn);
+        setLoading(false);
     }
 
     const apolloClient = createApolloClient();
@@ -79,17 +79,12 @@ function App(): React.ReactNode {
         <Root>
             <StatusBar style="dark" />
             <ApolloProvider client={apolloClient}>
-                <UserProvider>
-                    <NavigationContainer>
-                        {isUserLoggedIn === 'initializing' && <Loading />}
-                        {isUserLoggedIn === 'loggedIn' && (
-                            <RootNavigator updateAuthState={updateAuthState} />
-                        )}
-                        {isUserLoggedIn === 'loggedOut' && (
-                            <AuthenticationNavigator updateAuthState={updateAuthState} />
-                        )}
-                    </NavigationContainer>
-                </UserProvider>
+                {user.isLoggedIn === true && (
+                    <UserProvider>
+                        <RootNavigator />
+                    </UserProvider>
+                )}
+                {user.isLoggedIn === false && <AuthenticationNavigator />}
             </ApolloProvider>
         </Root>
     );

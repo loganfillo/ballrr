@@ -5,20 +5,20 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import AuthTextInput from '../components/AuthTextInput';
 import AuthButton from '../components/buttons/AuthButton';
 import { useNavigation } from '@react-navigation/native';
+import { useUser } from '../lib/user';
+import { refreshAsync } from 'expo-auth-session';
 
-interface Props {
-    updateAuthState: (arg0: string) => void;
-}
-
-const SignIn: React.FC<Props> = ({ updateAuthState }: Props) => {
+const SignIn: React.FC = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const user = useUser();
+
     const navigation = useNavigation();
 
     async function signIn() {
         try {
             await Auth.signIn(username, password);
-            updateAuthState('loggedIn');
+            user.isLoggedIn = true;
         } catch (error) {
             console.log(error);
         }
