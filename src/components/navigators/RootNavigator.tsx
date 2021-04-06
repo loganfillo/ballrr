@@ -7,11 +7,16 @@ import PostNavigator, { PostStackParamList } from './PostNavigator';
 export type RootStackParamList = {
     Post: NavigatorScreenParams<PostStackParamList>;
     Tab: NavigatorScreenParams<TabNavigatorParamList>;
+    // updateAuthState: (arg0: string) => void;
 };
 
 const RootStack = createStackNavigator<RootStackParamList>();
 
-const RootNavigator: React.FC = () => {
+interface Props {
+    updateAuthState: (arg0: string) => void;
+}
+
+const RootNavigator: React.FC<Props> = ({ updateAuthState }: Props) => {
     return (
         <NavigationContainer>
             <RootStack.Navigator

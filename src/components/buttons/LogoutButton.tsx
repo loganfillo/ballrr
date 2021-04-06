@@ -6,9 +6,11 @@ import ProfileButton from './ProfileButton';
 interface Props {
     style: StyleProp<ViewStyle>;
 }
+
 const LogoutButton: React.FC<Props> = ({ style }: Props) => {
     async function logout() {
         await Auth.signOut();
+        // updateAuthState('loggedOut');
     }
     return (
         <View style={style}>

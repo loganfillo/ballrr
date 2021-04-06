@@ -66,6 +66,7 @@ export const UserProvider: React.FC<Props> = ({ children }: Props) => {
                 setLoading(false);
             } catch (e) {
                 console.log(e);
+                console.log('FAILURE IN USER');
                 Alert.alert('Something went wrong, please close the app and try again.');
             }
         }

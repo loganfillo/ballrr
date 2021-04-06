@@ -8,12 +8,13 @@ import { Ionicons } from '@expo/vector-icons';
 import Loading from './src/components/Loading';
 import { Audio } from 'expo-av';
 import { Root } from 'native-base';
-import Amplify from 'aws-amplify';
+import Amplify, { Auth } from 'aws-amplify';
 //@ts-ignore
 import config from './aws-exports';
 //@ts-ignore
-import { withAuthenticator } from 'aws-amplify-react-native';
 import { StatusBar } from 'expo-status-bar';
+import { NavigationContainer } from '@react-navigation/native';
+import AuthenticationNavigator from './src/components/navigators/AuthenticationNavigator';
 
 Amplify.configure({
     ...config,
@@ -24,6 +25,7 @@ Amplify.configure({
 
 function App(): React.ReactNode {
     const [loading, setLoading] = useState(true);
+    const [isUserLoggedIn, setUserLoggedIn] = useState('initializing');
 
     useEffect(() => {
         setLoading(true);
@@ -47,6 +49,24 @@ function App(): React.ReactNode {
         setup();
     }, []);
 
+    useEffect(() => {
+        checkAuthState();
+    }, []);
+    async function checkAuthState() {
+        try {
+            await Auth.currentAuthenticatedUser();
+            setUserLoggedIn('loggedIn');
+        } catch (err) {
+            console.log(err);
+            console.log('FAILURE IN APP');
+            setUserLoggedIn('loggedOut');
+        }
+    }
+
+    function updateAuthState(isUserLoggedIn: React.SetStateAction<string>) {
+        setUserLoggedIn(isUserLoggedIn);
+    }
+
     const apolloClient = createApolloClient();
 
     if (loading) {
@@ -54,16 +74,25 @@ function App(): React.ReactNode {
 
         return <Loading />;
     }
+
     return (
         <Root>
             <StatusBar style="dark" />
             <ApolloProvider client={apolloClient}>
                 <UserProvider>
-                    <RootNavigator />
+                    <NavigationContainer>
+                        {isUserLoggedIn === 'initializing' && <Loading />}
+                        {isUserLoggedIn === 'loggedIn' && (
+                            <RootNavigator updateAuthState={updateAuthState} />
+                        )}
+                        {isUserLoggedIn === 'loggedOut' && (
+                            <AuthenticationNavigator updateAuthState={updateAuthState} />
+                        )}
+                    </NavigationContainer>
                 </UserProvider>
             </ApolloProvider>
         </Root>
     );
 }
 
-export default withAuthenticator(App);
+export default App;
