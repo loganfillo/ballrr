@@ -46,6 +46,9 @@ export const GET_ALL_POSTS = gql`
                 type
             }
             id
+            thumbnail {
+                s3_key
+            }
         }
     }
 `;
