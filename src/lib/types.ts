@@ -51,6 +51,7 @@ export interface MediaFile {
 
 export interface Post {
     userId: number;
+    profPicUrl: string;
     fullName: string;
     username: string;
     url: string;

@@ -13,7 +13,7 @@ import Amplify from 'aws-amplify';
 import config from './aws-exports';
 //@ts-ignore
 import { withAuthenticator } from 'aws-amplify-react-native';
-import { StatusBar } from 'expo-status-bar';
+import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 
 Amplify.configure({
     ...config,
@@ -50,18 +50,17 @@ function App(): React.ReactNode {
     const apolloClient = createApolloClient();
 
     if (loading) {
-        console.log();
-
         return <Loading />;
     }
     return (
         <Root>
-            <StatusBar style="dark" />
-            <ApolloProvider client={apolloClient}>
-                <UserProvider>
-                    <RootNavigator />
-                </UserProvider>
-            </ApolloProvider>
+            <ActionSheetProvider>
+                <ApolloProvider client={apolloClient}>
+                    <UserProvider>
+                        <RootNavigator />
+                    </UserProvider>
+                </ApolloProvider>
+            </ActionSheetProvider>
         </Root>
     );
 }

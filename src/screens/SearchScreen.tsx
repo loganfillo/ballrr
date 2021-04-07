@@ -1,7 +1,7 @@
 import { useApolloClient } from '@apollo/client';
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, View, StyleSheet } from 'react-native';
+import { SafeAreaView, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Avatar, List, Searchbar } from 'react-native-paper';
 import { SEARCH_USERS } from '../lib/queries';
@@ -18,7 +18,7 @@ const SearchScreen: React.FC = () => {
     const navigation = useNavigation();
 
     function navigateToProfile(userId: number) {
-        navigation.navigate('SearchProfile', { userId });
+        navigation.navigate('Profile', { userId });
     }
 
     function updateSearchQuery(query: string) {
@@ -55,7 +55,7 @@ const SearchScreen: React.FC = () => {
 
     return (
         <SafeAreaView>
-            <View style={styles.searchContainer}>
+            <View style={{ padding: 2, borderRadius: 2, borderColor: 'black' }}>
                 <Searchbar
                     placeholder="Search"
                     onChangeText={updateSearchQuery}
@@ -86,9 +86,5 @@ const SearchScreen: React.FC = () => {
         </SafeAreaView>
     );
 };
-
-const styles = StyleSheet.create({
-    searchContainer: { padding: 2, borderRadius: 2, borderColor: 'black' },
-});
 
 export default SearchScreen;
