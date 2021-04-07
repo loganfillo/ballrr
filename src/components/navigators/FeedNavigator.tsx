@@ -1,30 +1,25 @@
 import React from 'react';
 import { createStackNavigator, StackNavigationOptions } from '@react-navigation/stack';
-import SearchScreen from '../../screens/SearchScreen';
+import FeedScreen from '../../screens/FeedScreen';
 import ProfileScreen from '../../screens/ProfileScreen';
-import InboxButton from '../buttons/InboxButton';
 import { useUser } from '../../lib/user';
+import InboxButton from '../buttons/InboxButton';
 
-export type SearchStackParamList = {
-    Search: undefined;
+export type FeedStackParamList = {
+    Home: undefined;
     Profile: { userId: number } | undefined;
 };
 
-const SearchStack = createStackNavigator<SearchStackParamList>();
+const FeedStack = createStackNavigator<FeedStackParamList>();
 
 const RightHeaderButton = () => <InboxButton />;
 
-const SearchNavigator: React.FC = () => {
+const FeedNavigator: React.FC = () => {
     const user = useUser();
-
     return (
-        <SearchStack.Navigator initialRouteName="Search">
-            <SearchStack.Screen
-                name="Search"
-                component={SearchScreen}
-                options={{ headerShown: false }}
-            />
-            <SearchStack.Screen
+        <FeedStack.Navigator initialRouteName="Home">
+            <FeedStack.Screen name="Home" component={FeedScreen} options={{ headerShown: false }} />
+            <FeedStack.Screen
                 name="Profile"
                 component={ProfileScreen}
                 options={({ route }) =>
@@ -34,8 +29,8 @@ const SearchNavigator: React.FC = () => {
                     } as StackNavigationOptions)
                 }
             />
-        </SearchStack.Navigator>
+        </FeedStack.Navigator>
     );
 };
 
-export default SearchNavigator;
+export default FeedNavigator;

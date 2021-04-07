@@ -16,7 +16,7 @@ const ProfilePic: React.FC<Props> = ({ flag, image }: Props) => {
                         style={{
                             borderRadius: 100,
                             height: undefined,
-                            width: '90%',
+                            width: '80%',
                             aspectRatio: 1,
                             alignSelf: 'center',
                         }}
@@ -44,8 +44,8 @@ const ProfilePic: React.FC<Props> = ({ flag, image }: Props) => {
                 )}
             </View>
             {flag !== undefined && flag.noFlag !== true ? (
-                <View style={{ position: 'absolute', top: 68, right: -5 }}>
-                    <Text style={{ fontSize: 35 }}>{flag.emoji}</Text>
+                <View style={{ position: 'absolute', bottom: 0, right: 0 }}>
+                    <Text style={{ fontSize: 40 }}>{flag.emoji}</Text>
                 </View>
             ) : (
                 <></>

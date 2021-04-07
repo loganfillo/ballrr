@@ -213,7 +213,7 @@ const EditProfile: React.FC = () => {
                             alignItems: 'center',
                         }}
                     >
-                        <Text style={{ paddingRight: 5, color: 'grey' }}>Attributes</Text>
+                        <Text style={{ color: 'grey' }}>Attributes</Text>
                         <Button
                             title={'+'}
                             onPress={() => setAttrModalVisible(true)}

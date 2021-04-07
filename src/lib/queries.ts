@@ -37,6 +37,9 @@ export const GET_ALL_POSTS = gql`
             post_user_id {
                 username
                 full_name
+                profile_pic {
+                    s3_key
+                }
             }
             media {
                 s3_key
@@ -123,6 +126,16 @@ export const LIKE_POST = gql`
             object: { user_id: $user_id, liked_post_id: $post_id, notification_seen: false }
         ) {
             id
+        }
+    }
+`;
+
+export const COUNT_LIKES = gql`
+    query countLikes($post_id: Int) {
+        post_likes_aggregate(where: { liked_post_id: { _eq: $post_id } }) {
+            aggregate {
+                count
+            }
         }
     }
 `;

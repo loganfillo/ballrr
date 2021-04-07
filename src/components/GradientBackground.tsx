@@ -9,7 +9,7 @@ interface Props {
 const GradientBackground: React.FC<Props> = ({ children }: Props) => {
     return (
         <LinearGradient
-            colors={['green', 'silver']}
+            colors={['#1bb51d', 'white']}
             start={[0, 0]}
             end={[1, 1]}
             style={styles.gradientContainer}
