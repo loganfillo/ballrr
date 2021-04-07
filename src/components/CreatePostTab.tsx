@@ -4,7 +4,7 @@ import { Media } from '../lib/types';
 import { chooseMedia, createThumbnail, takeMedia } from '../lib/media';
 import { useNavigation } from '@react-navigation/native';
 import TabIcon from './TabIcon';
-import { View } from 'native-base';
+import { View } from 'react-native';
 
 const OPEN_CAMERA = 'Open Camera';
 const CHOOSE_FROM_LIBRARY = 'Choose From Library';

@@ -1,6 +1,6 @@
 import React from 'react';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { TouchableOpacity } from 'react-native';
 
 interface Props {
     name: string;
