@@ -1,9 +1,9 @@
 import React from 'react';
 import { createStackNavigator, StackNavigationOptions } from '@react-navigation/stack';
-import SearchScreen from '../screens/SearchScreen';
-import ProfileScreen from '../screens/ProfileScreen';
-import InboxButton from '../components/profile/InboxButton';
-import { useUser } from '../lib/user';
+import SearchScreen from '../../screens/SearchScreen';
+import ProfileScreen from '../../screens/ProfileScreen';
+import InboxButton from '../buttons/InboxButton';
+import { useUser } from '../../lib/user';
 
 export type SearchStackParamList = {
     Search: undefined;

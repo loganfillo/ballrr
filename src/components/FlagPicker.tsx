@@ -8,8 +8,8 @@ import {
     Button,
     VirtualizedList,
 } from 'react-native';
-import { Flag } from '../../lib/types';
-import flags from '../../lib/flags';
+import { Flag } from '../lib/types';
+import flags from '../lib/flags';
 import { StatusBar } from 'expo-status-bar';
 import { Searchbar } from 'react-native-paper';
 

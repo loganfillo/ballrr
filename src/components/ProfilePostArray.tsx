@@ -1,8 +1,8 @@
 import { useQuery } from '@apollo/client';
 import React, { useEffect, useState } from 'react';
 import { Dimensions, Image, View } from 'react-native';
-import { GET_USERS_POSTS } from '../../lib/queries';
-import { ProfilePost } from '../../lib/types';
+import { GET_USERS_POSTS } from '../lib/queries';
+import { ProfilePost } from '../lib/types';
 import { Storage } from 'aws-amplify';
 
 interface Props {

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useActionSheet } from '@expo/react-native-action-sheet';
-import { Media } from '../../lib/types';
-import { chooseMedia, createThumbnail, takeMedia } from '../../lib/media';
+import { Media } from '../lib/types';
+import { chooseMedia, createThumbnail, takeMedia } from '../lib/media';
 import { useNavigation } from '@react-navigation/native';
 import TabIcon from './TabIcon';
 import { View } from 'native-base';

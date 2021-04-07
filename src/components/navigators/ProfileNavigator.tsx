@@ -1,7 +1,7 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import ProfileScreen from '../screens/ProfileScreen';
-import InboxButton from '../components/profile/InboxButton';
+import ProfileScreen from '../../screens/ProfileScreen';
+import InboxButton from '../buttons/InboxButton';
 
 export type ProfileStackParamList = {
     Profile: { userId: number } | undefined;

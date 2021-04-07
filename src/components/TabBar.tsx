@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import CreatePostTab from './CreatePostTab';
-import NotificationBadge from '../misc/NotificationBadge';
+import NotificationBadge from './NotificationBadge';
 import { View, Animated, Dimensions } from 'react-native';
 import { NavigationHelpers, ParamListBase } from '@react-navigation/core';
 import { BottomTabNavigationEventMap } from '@react-navigation/bottom-tabs/lib/typescript/src/types';
@@ -53,7 +53,7 @@ const TabBar: React.FC<TabBarProps> = ({ navigation }: TabBarProps) => {
             <View
                 style={{
                     width: `${TAB_BAR_PERCENT}%`,
-                    height: 0.14 * width,
+                    height: 60,
                     backgroundColor: 'white',
                     borderRadius: 100,
                     bottom: 0.025 * height,

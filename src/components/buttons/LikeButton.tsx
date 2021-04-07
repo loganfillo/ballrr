@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Dimensions, TouchableOpacity } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import { DocumentNode, useApolloClient, useQuery } from '@apollo/client';
 import { DELETE_LIKE, HAS_USER_LIKED_POST, LIKE_POST } from '../../lib/queries';
 import { useUser } from '../../lib/user';
@@ -7,10 +7,11 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 interface Props {
     postId: number;
+    size: number;
     onChange: () => void;
 }
 
-const LikeButton: React.FC<Props> = ({ postId, onChange }: Props) => {
+const LikeButton: React.FC<Props> = ({ postId, size, onChange }: Props) => {
     const [liked, setLiked] = useState(false);
     const [likeLoading, setLikeLoading] = useState(true);
     const [likeVisible, setLikeVisible] = useState(false);
@@ -18,7 +19,6 @@ const LikeButton: React.FC<Props> = ({ postId, onChange }: Props) => {
 
     const apolloClient = useApolloClient();
     const user = useUser();
-    const { width } = Dimensions.get('window');
 
     const { loading, error, data } = useQuery(HAS_USER_LIKED_POST, {
         variables: { post_id: postId, user_id: user.id },
@@ -58,7 +58,7 @@ const LikeButton: React.FC<Props> = ({ postId, onChange }: Props) => {
         <>
             {likeVisible ? (
                 <TouchableOpacity disabled={likeLoading} onPress={() => likeAndUnlikePost(!liked)}>
-                    <MaterialCommunityIcons name={'fire'} size={0.14 * width} color={likeColor} />
+                    <MaterialCommunityIcons name={'fire'} size={size} color={likeColor} />
                 </TouchableOpacity>
             ) : (
                 <></>

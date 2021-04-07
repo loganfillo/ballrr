@@ -2,9 +2,9 @@ import { RouteProp, useRoute } from '@react-navigation/native';
 import React, { useCallback, useState } from 'react';
 import { RefreshControl, ScrollView } from 'react-native';
 import { useUser } from '../lib/user';
-import ProfilePostArray from '../components/profile/ProfilePostArray';
-import ProfileInfo from '../components/profile/ProfileInfo';
-import { ProfileStackParamList } from '../navigators/ProfileNavigator';
+import ProfilePostArray from '../components/ProfilePostArray';
+import ProfileInfo from '../components/ProfileInfo';
+import { ProfileStackParamList } from '../components/navigators/ProfileNavigator';
 
 const wait = (timeout: number) => {
     return new Promise((resolve) => {

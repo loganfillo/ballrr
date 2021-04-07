@@ -1,8 +1,8 @@
 import { useQuery } from '@apollo/client';
 import React, { useEffect, useState } from 'react';
 import { View, Dimensions } from 'react-native';
-import { COUNT_UNSEEN_LIKES } from '../../lib/queries';
-import { useUser } from '../../lib/user';
+import { COUNT_UNSEEN_LIKES } from '../lib/queries';
+import { useUser } from '../lib/user';
 
 interface Props {
     icon: React.ReactNode;

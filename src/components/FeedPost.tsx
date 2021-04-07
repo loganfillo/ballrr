@@ -1,10 +1,8 @@
 import React from 'react';
 import { Dimensions, Image, View } from 'react-native';
-import { MediaType, Post } from '../../lib/types';
+import { MediaType, Post } from '../lib/types';
 import { Video } from 'expo-av';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import FeedPostIconBar from './FeedPostIconBar';
-import FeedPostHeader from './FeedPostHeader';
 import FeedPostCaption from './FeedPostCaption';
 
 interface Props {
@@ -17,16 +15,6 @@ const FeedPost: React.FC<Props> = ({ post, shouldPlay }: Props) => {
 
     return (
         <>
-            <SafeAreaView
-                style={{
-                    paddingHorizontal: 4,
-                    paddingVertical: 2,
-                    flex: 1,
-                    alignItems: 'center',
-                }}
-            >
-                <FeedPostHeader post={post} />
-            </SafeAreaView>
             <View
                 style={{
                     position: 'absolute',
@@ -42,12 +30,12 @@ const FeedPost: React.FC<Props> = ({ post, shouldPlay }: Props) => {
             <View
                 style={{
                     position: 'absolute',
-                    width: 0.14 * width,
-                    height: 0.4 * height,
+                    width: 0.15 * width,
+                    height: (1 / 3) * height,
                     alignSelf: 'flex-end',
                     alignItems: 'center',
                     justifyContent: 'space-evenly',
-                    bottom: 0.1 * height,
+                    bottom: 0.11 * height,
                 }}
             >
                 <FeedPostIconBar post={post} />

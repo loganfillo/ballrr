@@ -3,9 +3,9 @@ import { Text, ScrollView, SafeAreaView, TextInput, View, Button, Image } from '
 import { chooseMedia, createThumbnail } from '../lib/media';
 import { Flag, Media } from '../lib/types';
 import { useUser } from '../lib/user';
-import { FlagPickerModal } from '../components/profile/FlagPicker';
-import ProfileAttributes from '../components/profile/ProfileAttributes';
-import { AttributePickerModal } from '../components/profile/AttributePicker';
+import { FlagPickerModal } from '../components/FlagPicker';
+import ProfileAttributes from '../components/ProfileAttributes';
+import { AttributePickerModal } from '../components/AttributePicker';
 import { useNavigation } from '@react-navigation/core';
 import { ApolloClient, NormalizedCacheObject, useApolloClient, useQuery } from '@apollo/client';
 import { GET_PROFILE } from '../lib/queries';

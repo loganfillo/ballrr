@@ -5,7 +5,7 @@ import FeedNavigator from './FeedNavigator';
 import { NavigatorScreenParams } from '@react-navigation/native';
 import ChallengeNavigator from './ChallengeNavigator';
 import SearchNavigator, { SearchStackParamList } from './SearchNavigator';
-import TabBar from '../components/tabbar/TabBar';
+import TabBar from '../TabBar';
 
 export type TabNavigatorParamList = {
     HomeTab: undefined;

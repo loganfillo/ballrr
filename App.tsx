@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { ApolloProvider } from '@apollo/client';
-import RootNavigator from './src/navigators/RootNavigator';
+import RootNavigator from './src/components/navigators/RootNavigator';
 import createApolloClient from './src/lib/apollo';
 import { UserProvider } from './src/lib/user';
 import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
-import Loading from './src/components/misc/Loading';
+import Loading from './src/components/Loading';
 import { Audio } from 'expo-av';
 import { Root } from 'native-base';
 import Amplify from 'aws-amplify';

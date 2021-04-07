@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
-import { useUser } from '../../lib/user';
-import FollowButton from './/FollowButton';
-import EditProfileButton from './EditProfileButton';
-import MessageButton from './MessageButton';
+import { useUser } from '../lib/user';
+import FollowButton from './buttons/FollowButton';
+import EditProfileButton from './buttons/EditProfileButton';
+import MessageButton from './buttons/MessageButton';
 import ProfileHighlights from './ProfileHighlights';
 import ProfileAttributes from './ProfileAttributes';
 import ProfileCounts from './ProfileCounts';
 import ProfilePic from './ProfilePic';
 import { useQuery } from '@apollo/client';
-import { COUNT_FOLLOWERS, COUNT_FOLLOWING, COUNT_USERS_POST, GET_PROFILE } from '../../lib/queries';
-import { Flag } from '../../lib/types';
+import { COUNT_FOLLOWERS, COUNT_FOLLOWING, COUNT_USERS_POST, GET_PROFILE } from '../lib/queries';
+import { Flag } from '../lib/types';
 import { Storage } from 'aws-amplify';
-import LogoutButton from './LogoutButton';
+import LogoutButton from './buttons/LogoutButton';
 
 interface Props {
     profileUserId: number;

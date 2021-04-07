@@ -1,6 +1,6 @@
 import React from 'react';
 import { Image, TouchableOpacity, View, Text, Dimensions } from 'react-native';
-import { Post } from '../../lib/types';
+import { Post } from '../lib/types';
 import { useNavigation } from '@react-navigation/native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 

@@ -2,7 +2,7 @@ import { useQuery } from '@apollo/client';
 import React, { useEffect, useState } from 'react';
 import { GET_ALL_POSTS } from '../lib/queries';
 import { Post } from '../lib/types';
-import FeedPost from '../components/feed/FeedPost';
+import FeedPost from '../components/FeedPost';
 import ViewPager from '@react-native-community/viewpager';
 import { useIsFocused } from '@react-navigation/native';
 import { View } from 'react-native';
@@ -26,11 +26,16 @@ const FeedScreen: React.FC = () => {
             if (!loading && !error) {
                 const fetchedPosts: Post[] = [];
                 for (const post of data.posts) {
+                    console.log(post.post_user_id);
+
                     fetchedPosts.push({
                         userId: post.user_id,
-                        profPicUrl: (await Storage.get(
-                            post.post_user_id.profile_pic.s3_key,
-                        )) as string,
+                        profPicUrl:
+                            post.post_user_id.profile_pic == null
+                                ? 'https://www.macmillandictionary.com/external/slideshow/full/Grey_full.png'
+                                : ((await Storage.get(
+                                      post.post_user_id.profile_pic.s3_key,
+                                  )) as string),
                         fullName: post.post_user_id.full_name,
                         username: post.post_user_id.username,
                         url: (await Storage.get(post.media.s3_key)) as string,

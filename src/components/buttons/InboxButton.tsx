@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigation } from '@react-navigation/core';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import NotificationBadge from '../misc/NotificationBadge';
+import NotificationBadge from '../NotificationBadge';
 import { Dimensions, TouchableOpacity } from 'react-native';
 
 const InboxButton: React.FC = () => {

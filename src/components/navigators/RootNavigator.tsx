@@ -3,11 +3,11 @@ import { NavigationContainer, NavigatorScreenParams } from '@react-navigation/na
 import { createStackNavigator } from '@react-navigation/stack';
 import TabNavigator, { TabNavigatorParamList } from './TabNavigator';
 import PostNavigator, { PostStackParamList } from './PostNavigator';
-import EditProfileScreen from '../screens/EditProfileScreen';
-import ProfileMenuScreen from '../screens/ProfileMenuScreen';
-import AccountSettingsScreen from '../screens/AccountSettingsScreen';
-import UserPolicyScreen from '../screens/UserPolicyScreen';
-import NotificationScreen from '../screens/NotificationScreen';
+import EditProfileScreen from '../../screens/EditProfileScreen';
+import ProfileMenuScreen from '../../screens/ProfileMenuScreen';
+import AccountSettingsScreen from '../../screens/AccountSettingsScreen';
+import UserPolicyScreen from '../../screens/UserPolicyScreen';
+import NotificationScreen from '../../screens/NotificationScreen';
 
 export type RootStackParamList = {
     Post: NavigatorScreenParams<PostStackParamList>;

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Text } from 'react-native';
 import { useQuery } from '@apollo/client';
-import { COUNT_LIKES } from '../../lib/queries';
+import { COUNT_LIKES } from '../lib/queries';
 
 interface Props {
     postId: number;

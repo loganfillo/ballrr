@@ -1,9 +1,9 @@
 import React from 'react';
 import { createStackNavigator, StackNavigationOptions } from '@react-navigation/stack';
-import FeedScreen from '../screens/FeedScreen';
-import ProfileScreen from '../screens/ProfileScreen';
-import { useUser } from '../lib/user';
-import InboxButton from '../components/profile/InboxButton';
+import FeedScreen from '../../screens/FeedScreen';
+import ProfileScreen from '../../screens/ProfileScreen';
+import { useUser } from '../../lib/user';
+import InboxButton from '../buttons/InboxButton';
 
 export type FeedStackParamList = {
     Home: undefined;

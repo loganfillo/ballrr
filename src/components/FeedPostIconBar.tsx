@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Post } from '../../lib/types';
-import LikeButton from './LikeButton';
+import { Post } from '../lib/types';
+import LikeButton from './buttons/LikeButton';
 import LikeCount from './LikeCount';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Dimensions } from 'react-native';
@@ -20,11 +20,11 @@ const FeedPostIconBar: React.FC<Props> = ({ post }: Props) => {
 
     return (
         <>
-            <LikeButton postId={post.id} onChange={changeLike} />
+            <LikeButton postId={post.id} size={ICON_SIZE} onChange={changeLike} />
             <LikeCount postId={post.id} likeChanged={likeChanged} />
-            <MaterialCommunityIcons name={'plus-box-multiple'} size={ICON_SIZE} color={'white'} />
             <MaterialCommunityIcons name={'comment'} size={ICON_SIZE} color={'white'} />
             <MaterialCommunityIcons name={'send'} size={ICON_SIZE} color={'white'} />
+            <MaterialCommunityIcons name={'plus-box-multiple'} size={ICON_SIZE} color={'white'} />
         </>
     );
 };
