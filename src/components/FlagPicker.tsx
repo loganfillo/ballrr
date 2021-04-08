@@ -83,11 +83,11 @@ export const FlagPickerModal: React.FC<ModalProps> = ({
 
     return (
         <Modal visible={visible}>
-            <SafeAreaView>
+            <SafeAreaView style={{ backgroundColor: 'whitesmoke' }}>
                 <StatusBar hidden />
                 <View
                     style={{
-                        backgroundColor: 'ghostwhite',
+                        backgroundColor: 'whitesmoke',
                         padding: 10,
                         flexDirection: 'row',
                     }}
