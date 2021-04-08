@@ -26,11 +26,6 @@ const FlagPicker: React.FC<PickerProps> = ({ searchQuery, onSelect }: PickerProp
     }
 
     useEffect(() => {
-        console.log(
-            flags.filter((flag) => {
-                return flag.name.toUpperCase().startsWith(searchQuery.toUpperCase());
-            }),
-        );
         setFlagList(
             flags.filter((flag) => {
                 return flag.name.toUpperCase().startsWith(searchQuery.toUpperCase());

@@ -29,9 +29,9 @@ export const COUNT_USERS_POST = gql`
     }
 `;
 
-export const GET_ALL_POSTS = gql`
-    query getAllPosts {
-        posts(order_by: { created_at: desc }) {
+export const GET_POSTS = gql`
+    query getPosts($user_id: Int = null) {
+        posts(order_by: { created_at: desc }, where: { user_id: { _eq: $user_id } }) {
             user_id
             caption
             post_user_id {

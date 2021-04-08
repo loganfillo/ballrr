@@ -1,6 +1,6 @@
 import { RouteProp, useRoute } from '@react-navigation/native';
 import React, { useCallback, useState } from 'react';
-import { RefreshControl, ScrollView } from 'react-native';
+import { RefreshControl, ScrollView, View } from 'react-native';
 import { useUser } from '../lib/user';
 import ProfilePostArray from '../components/ProfilePostArray';
 import ProfileInfo from '../components/ProfileInfo';
@@ -28,11 +28,13 @@ const ProfileScreen: React.FC = (): JSX.Element => {
     return (
         <>
             <ScrollView
-                style={{ flex: 1, backgroundColor: 'white' }}
+                style={{ flex: 1 }}
                 refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
             >
                 <ProfileInfo profileUserId={profileUserId} refreshing={refreshing} />
-                <ProfilePostArray profileUserId={profileUserId} refreshing={refreshing} />
+                <View style={{ backgroundColor: 'whitesmoke' }}>
+                    <ProfilePostArray profileUserId={profileUserId} refreshing={refreshing} />
+                </View>
             </ScrollView>
         </>
     );
