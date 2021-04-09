@@ -15,16 +15,16 @@ const ProfilePostArray: React.FC<Props> = ({ profileUserId, refreshing }: Props)
 
     const { width } = Dimensions.get('window');
 
-    useEffect(() => {
-        refetch();
-    }, [refreshing]);
-
     const { loading, error, data, refetch } = useQuery(GET_USERS_POSTS, {
         variables: {
             user_id: profileUserId,
         },
         fetchPolicy: 'cache-and-network',
     });
+
+    useEffect(() => {
+        refetch();
+    }, [refreshing]);
 
     useEffect(() => {
         async function fetchPosts() {
