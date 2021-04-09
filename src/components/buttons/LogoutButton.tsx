@@ -13,7 +13,7 @@ const LogoutButton: React.FC<Props> = ({ style }: Props) => {
     const user = useUser();
     async function logout() {
         await Auth.signOut();
-        user.isLoggedIn = false;
+        user.updateLoginStatus(false);
     }
     return (
         <View style={style}>

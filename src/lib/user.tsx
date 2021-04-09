@@ -9,7 +9,7 @@ import { Alert } from 'react-native';
 const UserContext = createContext<User>({
     id: -1,
     username: '',
-    isLoggedIn: false,
+    updateLoginStatus: (isUserLoggedIn: boolean) => false,
 });
 
 /**
@@ -25,17 +25,18 @@ export const useUser = (): User => {
 
 interface Props {
     children: React.ReactNode;
+    updateAuthState: (isUserLoggedIn: boolean) => void;
 }
 
 /**
  * A provider for the User context
  */
-export const UserProvider: React.FC<Props> = ({ children }: Props) => {
+export const UserProvider: React.FC<Props> = ({ children, updateAuthState }: Props) => {
     const [loading, setLoading] = useState(true);
     const [user, setUser] = useState<User>({
         id: -1,
         username: '',
-        isLoggedIn: false,
+        updateLoginStatus: updateAuthState,
     });
 
     const apolloClient = useApolloClient();
@@ -64,7 +65,7 @@ export const UserProvider: React.FC<Props> = ({ children }: Props) => {
                 setUser({
                     id,
                     username: cognitoUser.username,
-                    isLoggedIn: true,
+                    updateLoginStatus: updateAuthState,
                 });
                 setLoading(false);
             } catch (e) {

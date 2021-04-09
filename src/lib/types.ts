@@ -23,7 +23,7 @@ export interface Localization {
 export interface User {
     id: number;
     username: string;
-    isLoggedIn: boolean;
+    updateLoginStatus: (isUserLoggedIn: boolean) => void;
 }
 
 export enum MediaType {

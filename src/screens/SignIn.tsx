@@ -18,7 +18,8 @@ const SignIn: React.FC = () => {
     async function signIn() {
         try {
             await Auth.signIn(username, password);
-            user.isLoggedIn = true;
+            user.updateLoginStatus(true);
+            console.log('Signing In');
         } catch (error) {
             console.log(error);
         }

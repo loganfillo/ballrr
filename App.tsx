@@ -25,9 +25,8 @@ Amplify.configure({
 
 function App(): React.ReactNode {
     const [loading, setLoading] = useState(true);
-    const user = useUser();
-    console.log('IN MAIN APP');
-    console.log(user.isLoggedIn);
+    const [isUserLoggedIn, setUserLoggedIn] = useState(false);
+    console.log(isUserLoggedIn);
 
     useEffect(() => {
         setLoading(true);
@@ -58,13 +57,17 @@ function App(): React.ReactNode {
         setLoading(true);
         try {
             await Auth.currentAuthenticatedUser();
-            user.isLoggedIn = true;
-            console.log('logging in');
+            updateAuthState(true);
         } catch (err) {
+            updateAuthState(false);
             console.log(err);
-            user.isLoggedIn = false;
         }
         setLoading(false);
+    }
+
+    function updateAuthState(isUserLoggedIn: boolean | ((prevState: boolean) => boolean)) {
+        console.log('HIT UPDATE AUTH STATE');
+        setUserLoggedIn(isUserLoggedIn);
     }
 
     const apolloClient = createApolloClient();
@@ -79,12 +82,12 @@ function App(): React.ReactNode {
         <Root>
             <StatusBar style="dark" />
             <ApolloProvider client={apolloClient}>
-                {user.isLoggedIn === true && (
-                    <UserProvider>
+                {isUserLoggedIn === true && (
+                    <UserProvider updateAuthState={updateAuthState}>
                         <RootNavigator />
                     </UserProvider>
                 )}
-                {user.isLoggedIn === false && <AuthenticationNavigator />}
+                {isUserLoggedIn === false && <AuthenticationNavigator />}
             </ApolloProvider>
         </Root>
     );
