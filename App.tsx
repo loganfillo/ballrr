@@ -13,7 +13,6 @@ import Amplify, { Auth } from 'aws-amplify';
 import config from './aws-exports';
 //@ts-ignore
 import { StatusBar } from 'expo-status-bar';
-import { NavigationContainer } from '@react-navigation/native';
 import AuthenticationNavigator from './src/components/navigators/AuthenticationNavigator';
 
 Amplify.configure({
@@ -26,7 +25,6 @@ Amplify.configure({
 function App(): React.ReactNode {
     const [loading, setLoading] = useState(true);
     const [isUserLoggedIn, setUserLoggedIn] = useState(false);
-    console.log(isUserLoggedIn);
 
     useEffect(() => {
         setLoading(true);
@@ -66,7 +64,6 @@ function App(): React.ReactNode {
     }
 
     function updateAuthState(isUserLoggedIn: boolean | ((prevState: boolean) => boolean)) {
-        console.log('HIT UPDATE AUTH STATE');
         setUserLoggedIn(isUserLoggedIn);
     }
 
@@ -87,7 +84,9 @@ function App(): React.ReactNode {
                         <RootNavigator />
                     </UserProvider>
                 )}
-                {isUserLoggedIn === false && <AuthenticationNavigator />}
+                {isUserLoggedIn === false && (
+                    <AuthenticationNavigator updateAuthState={updateAuthState} />
+                )}
             </ApolloProvider>
         </Root>
     );

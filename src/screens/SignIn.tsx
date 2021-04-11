@@ -4,13 +4,16 @@ import { Auth } from 'aws-amplify';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AuthTextInput from '../components/AuthTextInput';
 import AuthButton from '../components/buttons/AuthButton';
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useUser } from '../lib/user';
-import { refreshAsync } from 'expo-auth-session';
+import { AuthenticationStackParamList } from '../components/navigators/AuthenticationNavigator';
+
+type SignInRouteProp = RouteProp<AuthenticationStackParamList, 'SignIn'>;
 
 const SignIn: React.FC = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const { params } = useRoute<SignInRouteProp>();
     const user = useUser();
 
     const navigation = useNavigation();
@@ -19,7 +22,7 @@ const SignIn: React.FC = () => {
         try {
             await Auth.signIn(username, password);
             user.updateLoginStatus(true);
-            console.log('Signing In');
+            params.updateAuthState(true);
         } catch (error) {
             console.log(error);
         }

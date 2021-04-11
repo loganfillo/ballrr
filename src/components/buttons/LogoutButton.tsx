@@ -1,5 +1,4 @@
 import { Auth } from 'aws-amplify';
-import { refreshAsync } from 'expo-auth-session';
 import React from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
 import { useUser } from '../../lib/user';
