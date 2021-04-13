@@ -14,6 +14,7 @@ import config from './aws-exports';
 //@ts-ignore
 import { StatusBar } from 'expo-status-bar';
 import AuthenticationNavigator from './src/components/navigators/AuthenticationNavigator';
+import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 
 Amplify.configure({
     ...config,
@@ -70,24 +71,24 @@ function App(): React.ReactNode {
     const apolloClient = createApolloClient();
 
     if (loading) {
-        console.log();
-
         return <Loading />;
     }
 
     return (
         <Root>
             <StatusBar style="dark" />
-            <ApolloProvider client={apolloClient}>
-                {isUserLoggedIn === true && (
-                    <UserProvider updateAuthState={updateAuthState}>
-                        <RootNavigator />
-                    </UserProvider>
-                )}
-                {isUserLoggedIn === false && (
-                    <AuthenticationNavigator updateAuthState={updateAuthState} />
-                )}
-            </ApolloProvider>
+            <ActionSheetProvider>
+                <ApolloProvider client={apolloClient}>
+                    {isUserLoggedIn === true && (
+                        <UserProvider updateAuthState={updateAuthState}>
+                            <RootNavigator />
+                        </UserProvider>
+                    )}
+                    {isUserLoggedIn === false && (
+                        <AuthenticationNavigator updateAuthState={updateAuthState} />
+                    )}
+                </ApolloProvider>
+            </ActionSheetProvider>
         </Root>
     );
 }

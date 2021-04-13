@@ -9,6 +9,7 @@ export default {
     slug: 'ballrr',
     version: '1.0.0',
     scheme: 'ballrr',
+    owner: 'ballrr',
     orientation: 'portrait',
     icon: './assets/icon.png',
     splash: {

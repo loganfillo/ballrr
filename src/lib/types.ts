@@ -52,6 +52,7 @@ export interface MediaFile {
 
 export interface Post {
     userId: number;
+    profPicUrl: string;
     fullName: string;
     username: string;
     url: string;
@@ -59,6 +60,7 @@ export interface Post {
     type: MediaType;
     id: number;
     s3Key: string;
+    thumbnailS3Key: string;
 }
 
 export interface ProfilePost {

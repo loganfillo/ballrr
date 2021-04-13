@@ -12,14 +12,16 @@ interface Props {
 
 const DeletePostButton: React.FC<Props> = ({ post }: Props) => {
     const [confirmDelete, setConfirmDelete] = useState<boolean>();
-    const [deletePost, { data }] = useMutation(DELETE_POST, {
+    const [deletePost] = useMutation(DELETE_POST, {
         variables: { id: post.id },
     });
 
     useEffect(() => {
         if (confirmDelete) {
             deletePost();
+            deleteFromS3(post.thumbnailS3Key);
             deleteFromS3(post.s3Key);
+
             Alert.alert('Post Deleted');
         }
     }, [confirmDelete]);

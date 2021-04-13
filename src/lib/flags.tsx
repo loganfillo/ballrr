@@ -246,7 +246,6 @@ const flags: Flag[] = [
     { name: 'Ukraine', emoji: '🇺🇦' },
     { name: 'United Arab Emirates', emoji: '🇦🇪' },
     { name: 'United Kingdom', emoji: '🇬🇧' },
-    { name: 'United Nations', emoji: '🇺🇳' },
     { name: 'United States', emoji: '🇺🇸' },
     { name: 'Uruguay', emoji: '🇺🇾' },
     { name: 'Uzbekistan', emoji: '🇺🇿' },

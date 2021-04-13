@@ -10,7 +10,7 @@ const EditProfileButton: React.FC<Props> = ({ style }: Props) => {
     const navigation = useNavigation();
 
     function navigateToEdit() {
-        navigation.navigate('Edit');
+        navigation.navigate('EditProfile');
     }
 
     return (
