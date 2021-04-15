@@ -1,33 +1,21 @@
 import React from 'react';
-import { createStackNavigator, StackNavigationOptions } from '@react-navigation/stack';
+import { createStackNavigator } from '@react-navigation/stack';
 import FeedScreen from '../../screens/FeedScreen';
-import ProfileScreen from '../../screens/ProfileScreen';
-import { useUser } from '../../lib/user';
-import InboxButton from '../buttons/InboxButton';
 
 export type FeedStackParamList = {
-    Home: undefined;
-    Profile: { userId: number } | undefined;
+    Feed: { userId: number; listId: number } | undefined;
 };
 
 const FeedStack = createStackNavigator<FeedStackParamList>();
 
-const RightHeaderButton = () => <InboxButton />;
-
 const FeedNavigator: React.FC = () => {
-    const user = useUser();
     return (
-        <FeedStack.Navigator initialRouteName="Home">
-            <FeedStack.Screen name="Home" component={FeedScreen} options={{ headerShown: false }} />
+        <FeedStack.Navigator initialRouteName="Feed">
             <FeedStack.Screen
-                name="Profile"
-                component={ProfileScreen}
-                options={({ route }) =>
-                    ({
-                        headerRight: route.params?.userId == user.id ? RightHeaderButton : null,
-                        headerBackTitleVisible: false,
-                    } as StackNavigationOptions)
-                }
+                name="Feed"
+                component={FeedScreen}
+                options={{ headerShown: false }}
+                initialParams={{ listId: 0 }}
             />
         </FeedStack.Navigator>
     );

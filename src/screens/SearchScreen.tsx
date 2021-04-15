@@ -18,7 +18,7 @@ const SearchScreen: React.FC = () => {
     const navigation = useNavigation();
 
     function navigateToProfile(userId: number) {
-        navigation.navigate('Profile', { userId });
+        navigation.navigate('ProfileNavigator', { screen: 'Profile', params: { userId } });
     }
 
     function updateSearchQuery(query: string) {

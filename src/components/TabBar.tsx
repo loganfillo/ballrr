@@ -5,13 +5,14 @@ import { View, Animated, Dimensions } from 'react-native';
 import { NavigationHelpers, ParamListBase } from '@react-navigation/core';
 import { BottomTabNavigationEventMap } from '@react-navigation/bottom-tabs/lib/typescript/src/types';
 import TabIcon from './TabIcon';
+import { useUser } from '../lib/user';
 
-const HOME_TAB = 'HomeTab';
+const FEED_TAB = 'FeedTab';
 const SEARCH_TAB = 'SearchTab';
 const POST_TAB = 'PostTab';
 const CHALLENGES_TAB = 'ChallengesTab';
 const PROFILE_TAB = 'ProfileTab';
-const TAB_NAMES = [HOME_TAB, SEARCH_TAB, POST_TAB, CHALLENGES_TAB, PROFILE_TAB];
+const TAB_NAMES = [FEED_TAB, SEARCH_TAB, POST_TAB, CHALLENGES_TAB, PROFILE_TAB];
 
 const { width } = Dimensions.get('window');
 const TAB_BAR_PERCENT = 85;
@@ -30,6 +31,7 @@ interface TabBarProps {
 const TabBar: React.FC<TabBarProps> = ({ navigation }: TabBarProps) => {
     const [index, setIndex] = useState(0);
     const { width, height } = Dimensions.get('window');
+    const user = useUser();
 
     const newSpacing = (newIndex: number) =>
         EDGE_WIDTH + (newIndex + 1) * TAB_SPACING + newIndex * ICON_SIZE + TAB_MARGIN;
@@ -65,21 +67,21 @@ const TabBar: React.FC<TabBarProps> = ({ navigation }: TabBarProps) => {
                 }}
             >
                 <TabIcon
-                    name={'home-outline'}
+                    name={index === 0 ? 'home' : 'home-outline'}
                     size={ICON_SIZE}
-                    onPress={() => navigate(HOME_TAB)}
+                    onPress={() => navigate(FEED_TAB)}
                 />
                 <TabIcon name={'magnify'} size={ICON_SIZE} onPress={() => navigate(SEARCH_TAB)} />
                 <CreatePostTab size={ICON_SIZE} />
                 <TabIcon
-                    name={'trophy-outline'}
+                    name={index === 3 ? 'trophy' : 'trophy-outline'}
                     size={ICON_SIZE}
                     onPress={() => navigate(CHALLENGES_TAB)}
                 />
                 <NotificationBadge
                     icon={
                         <TabIcon
-                            name={'account-outline'}
+                            name={index === 4 ? 'account' : 'account-outline'}
                             size={ICON_SIZE}
                             onPress={() => navigate(PROFILE_TAB)}
                         />
