@@ -275,6 +275,15 @@ export const GET_PROFILE = gql`
     }
 `;
 
+export const GET_FOLLOWERS = gql`
+    query getFollowers($user_id: Int!) {
+        followers(where: { user_id: { _eq: $user_id } }) {
+            username
+            profile_pic
+        }
+    }
+`;
+
 export const CREATE_PROFILE_PIC_MEDIA = gql`
     mutation createProfilePicMedia($s3_key: String!, $user_id: Int!) {
         insert_profile_pic_media_one(object: { s3_key: $s3_key, user_id: $user_id }) {
