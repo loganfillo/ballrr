@@ -5,14 +5,14 @@ import { GET_USERS_POSTS } from '../lib/queries';
 import { ProfilePost } from '../lib/types';
 import { Storage } from 'aws-amplify';
 import { useNavigation } from '@react-navigation/native';
-import { useUser } from '../lib/user';
 
 interface Props {
     profileUserId: number;
     refreshing: boolean;
+    onLoad: (height: number) => void;
 }
 
-const ProfilePostArray: React.FC<Props> = ({ profileUserId, refreshing }: Props) => {
+const ProfilePostArray: React.FC<Props> = ({ profileUserId, refreshing, onLoad }: Props) => {
     const [posts, setPosts] = useState<ProfilePost[]>([]);
 
     const { width } = Dimensions.get('window');
@@ -41,6 +41,8 @@ const ProfilePostArray: React.FC<Props> = ({ profileUserId, refreshing }: Props)
                     });
                 }
                 setPosts(fetchedPosts);
+                const rows = Math.ceil(fetchedPosts.length / 3) + 1;
+                onLoad((rows * width) / 3);
             }
         }
         fetchPosts();
