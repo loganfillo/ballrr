@@ -3,7 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import ProfileNavigator, { ProfileStackParamList } from './ProfileNavigator';
 import FeedNavigator from './FeedNavigator';
 import { NavigatorScreenParams } from '@react-navigation/native';
-import ChallengeNavigator from './ChallengeNavigator';
+import CompetitionNavigator from './CompetitionNavigator';
 import SearchNavigator, { SearchStackParamList } from './SearchNavigator';
 import TabBar from '../TabBar';
 
@@ -11,7 +11,7 @@ export type TabNavigatorParamList = {
     FeedTab: undefined;
     SearchTab: NavigatorScreenParams<SearchStackParamList>;
     PostPlaceholder: undefined;
-    ChallengesTab: undefined;
+    CompetitionTab: undefined;
     ProfileTab: NavigatorScreenParams<ProfileStackParamList>;
 };
 
@@ -25,7 +25,7 @@ const TabNavigator: React.FC = () => {
         >
             <Tab.Screen name="FeedTab" component={FeedNavigator} />
             <Tab.Screen name="SearchTab" component={SearchNavigator} />
-            <Tab.Screen name="ChallengesTab" component={ChallengeNavigator} />
+            <Tab.Screen name="CompetitionTab" component={CompetitionNavigator} />
             <Tab.Screen name="ProfileTab" component={ProfileNavigator} />
         </Tab.Navigator>
     );

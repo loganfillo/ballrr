@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
-import CreatePostTab from './CreatePostTab';
+import CreatePostButton from './buttons/CreatePostButton';
 import NotificationBadge from './NotificationBadge';
 import { View, Animated, Dimensions } from 'react-native';
 import { NavigationHelpers, ParamListBase } from '@react-navigation/core';
 import { BottomTabNavigationEventMap } from '@react-navigation/bottom-tabs/lib/typescript/src/types';
 import TabIcon from './TabIcon';
-import { useUser } from '../lib/user';
 
 const FEED_TAB = 'FeedTab';
 const SEARCH_TAB = 'SearchTab';
 const POST_TAB = 'PostTab';
-const CHALLENGES_TAB = 'ChallengesTab';
+const CHALLENGES_TAB = 'CompetitionTab';
 const PROFILE_TAB = 'ProfileTab';
 const TAB_NAMES = [FEED_TAB, SEARCH_TAB, POST_TAB, CHALLENGES_TAB, PROFILE_TAB];
 
@@ -31,7 +30,6 @@ interface TabBarProps {
 const TabBar: React.FC<TabBarProps> = ({ navigation }: TabBarProps) => {
     const [index, setIndex] = useState(0);
     const { width, height } = Dimensions.get('window');
-    const user = useUser();
 
     const newSpacing = (newIndex: number) =>
         EDGE_WIDTH + (newIndex + 1) * TAB_SPACING + newIndex * ICON_SIZE + TAB_MARGIN;
@@ -72,7 +70,7 @@ const TabBar: React.FC<TabBarProps> = ({ navigation }: TabBarProps) => {
                     onPress={() => navigate(FEED_TAB)}
                 />
                 <TabIcon name={'magnify'} size={ICON_SIZE} onPress={() => navigate(SEARCH_TAB)} />
-                <CreatePostTab size={ICON_SIZE} />
+                <CreatePostButton size={ICON_SIZE} icon={'plus'} iconColor={'black'} />
                 <TabIcon
                     name={index === 3 ? 'trophy' : 'trophy-outline'}
                     size={ICON_SIZE}

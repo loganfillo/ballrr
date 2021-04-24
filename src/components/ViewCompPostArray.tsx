@@ -1,38 +1,34 @@
 import { useQuery } from '@apollo/client';
 import React, { useEffect, useState } from 'react';
 import { Dimensions, Image, View, TouchableOpacity } from 'react-native';
-import { GET_USERS_POSTS } from '../lib/queries';
+import { GET_COMPETITION_SUBMISSIONS } from '../lib/queries';
 import { ThumbnailPost } from '../lib/types';
 import { Storage } from 'aws-amplify';
-import { useNavigation } from '@react-navigation/native';
 
 interface Props {
-    profileUserId: number;
-    refreshing: boolean;
+    compId: number;
 }
 
-const ProfilePostArray: React.FC<Props> = ({ profileUserId, refreshing }: Props) => {
+const ViewCompPostArray: React.FC<Props> = ({ compId }: Props) => {
     const [posts, setPosts] = useState<ThumbnailPost[]>([]);
 
     const { width } = Dimensions.get('window');
-    const navigation = useNavigation();
 
-    useEffect(() => {
-        refetch();
-    }, [refreshing]);
-
-    const { loading, error, data, refetch } = useQuery(GET_USERS_POSTS, {
+    const { loading, error, data } = useQuery(GET_COMPETITION_SUBMISSIONS, {
         variables: {
-            user_id: profileUserId,
+            comp_id: compId,
         },
         fetchPolicy: 'cache-and-network',
     });
+
+    console.log(error);
 
     useEffect(() => {
         async function fetchPosts() {
             if (!loading && !error) {
                 const fetchedPosts: ThumbnailPost[] = [];
-                for (const post of data.posts) {
+                for (const submission of data.competition_submission) {
+                    const post = submission.post;
                     const thumbnailUrl = (await Storage.get(post.thumbnail.s3_key)) as string;
                     fetchedPosts.push({
                         id: post.id,
@@ -45,12 +41,6 @@ const ProfilePostArray: React.FC<Props> = ({ profileUserId, refreshing }: Props)
         fetchPosts();
     }, [data]);
 
-    function navigateToProfileFeed(listId: number) {
-        navigation.navigate('FeedNavigator', {
-            screen: 'Feed',
-            params: { userId: profileUserId, listId: listId },
-        });
-    }
     return (
         <View
             style={{
@@ -62,10 +52,7 @@ const ProfilePostArray: React.FC<Props> = ({ profileUserId, refreshing }: Props)
             {posts.map((post, id) => {
                 return (
                     <View key={id} style={{ padding: 1 }}>
-                        <TouchableOpacity
-                            activeOpacity={0.5}
-                            onPress={() => navigateToProfileFeed(id)}
-                        >
+                        <TouchableOpacity activeOpacity={0.5}>
                             <Image
                                 style={{ width: width / 3 - 2, height: width / 3 - 2 }}
                                 source={{
@@ -80,4 +67,4 @@ const ProfilePostArray: React.FC<Props> = ({ profileUserId, refreshing }: Props)
     );
 };
 
-export default ProfilePostArray;
+export default ViewCompPostArray;
