@@ -82,6 +82,20 @@ export interface SearchResult {
     profPicUrl: string;
 }
 
+export interface Follower {
+    username: string;
+    fullName: string;
+    userId: number;
+    profPicUrl: string;
+}
+
+export interface Following {
+    username: string;
+    fullName: string;
+    userId: number;
+    profPicUrl: string;
+}
+
 export enum NotificationType {
     LIKE = 'like',
 }

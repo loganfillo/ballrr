@@ -277,9 +277,30 @@ export const GET_PROFILE = gql`
 
 export const GET_FOLLOWERS = gql`
     query getFollowers($user_id: Int!) {
+        followers(where: { user_followed_id: { _eq: $user_id } }) {
+            user_follower {
+                id
+                username
+                full_name
+                profile_pic {
+                    s3_key
+                }
+            }
+        }
+    }
+`;
+
+export const GET_FOLLOWING = gql`
+    query getFollowing($user_id: Int!) {
         followers(where: { user_id: { _eq: $user_id } }) {
-            username
-            profile_pic
+            user_followed {
+                id
+                username
+                full_name
+                profile_pic {
+                    s3_key
+                }
+            }
         }
     }
 `;

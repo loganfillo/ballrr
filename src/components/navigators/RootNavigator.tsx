@@ -8,15 +8,11 @@ import ProfileMenuScreen from '../../screens/ProfileMenuScreen';
 import AccountSettingsScreen from '../../screens/AccountSettingsScreen';
 import UserPolicyScreen from '../../screens/UserPolicyScreen';
 import NotificationScreen from '../../screens/NotificationScreen';
+import FollowersListScreen from '../../screens/FollowersListScreen';
 
 export type RootStackParamList = {
     Post: NavigatorScreenParams<PostStackParamList>;
     Tab: NavigatorScreenParams<TabNavigatorParamList>;
-    EditProfile: undefined;
-    ProfileMenu: undefined;
-    UserPolicy: undefined;
-    AccountSettings: undefined;
-    Notifications: undefined;
 };
 
 const RootStack = createStackNavigator<RootStackParamList>();
@@ -34,22 +30,6 @@ const RootNavigator: React.FC = () => {
                     name="Tab"
                     options={{ headerShown: false }}
                     component={TabNavigator}
-                />
-                <RootStack.Screen
-                    name="EditProfile"
-                    component={EditProfileScreen}
-                    options={{
-                        title: 'Edit',
-                        headerBackTitleVisible: false,
-                    }}
-                />
-                <RootStack.Screen name="ProfileMenu" component={ProfileMenuScreen} />
-                <RootStack.Screen name="AccountSettings" component={AccountSettingsScreen} />
-                <RootStack.Screen name="UserPolicy" component={UserPolicyScreen} />
-                <RootStack.Screen
-                    name="Notifications"
-                    component={NotificationScreen}
-                    options={{ headerBackTitleVisible: false }}
                 />
             </RootStack.Navigator>
         </NavigationContainer>
