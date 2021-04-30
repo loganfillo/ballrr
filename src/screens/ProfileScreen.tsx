@@ -16,6 +16,7 @@ type ProfileRouteProp = RouteProp<ProfileStackParamList, 'Profile'>;
 
 const ProfileScreen: React.FC = (): JSX.Element => {
     const [refreshing, setRefreshing] = useState(false);
+    const [postArrayHeight, setPostArrayHeight] = useState(0);
     const { params } = useRoute<ProfileRouteProp>();
     const user = useUser();
     const profileUserId = params !== undefined ? params.userId : user.id;
@@ -25,18 +26,24 @@ const ProfileScreen: React.FC = (): JSX.Element => {
         wait(1000).then(() => setRefreshing(false));
     }, []);
 
+    function onPostArrayLoad(height: number) {
+        setPostArrayHeight(height);
+    }
+
     return (
-        <>
-            <ScrollView
-                style={{ flex: 1 }}
-                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-            >
-                <ProfileInfo profileUserId={profileUserId} refreshing={refreshing} />
-                <View style={{ backgroundColor: 'whitesmoke' }}>
-                    <ProfilePostArray profileUserId={profileUserId} refreshing={refreshing} />
-                </View>
-            </ScrollView>
-        </>
+        <ScrollView
+            style={{ flex: 1 }}
+            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+        >
+            <ProfileInfo profileUserId={profileUserId} refreshing={refreshing} />
+            <View style={{ height: postArrayHeight }}>
+                <ProfilePostArray
+                    profileUserId={profileUserId}
+                    refreshing={refreshing}
+                    onLoad={onPostArrayLoad}
+                />
+            </View>
+        </ScrollView>
     );
 };
 

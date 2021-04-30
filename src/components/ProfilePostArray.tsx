@@ -9,6 +9,7 @@ import { useNavigation } from '@react-navigation/native';
 interface Props {
     profileUserId: number;
     refreshing: boolean;
+    onLoad: (height: number) => void;
 }
 
 const ProfilePostArray: React.FC<Props> = ({ profileUserId, refreshing }: Props) => {
@@ -40,6 +41,8 @@ const ProfilePostArray: React.FC<Props> = ({ profileUserId, refreshing }: Props)
                     });
                 }
                 setPosts(fetchedPosts);
+                const rows = Math.ceil(fetchedPosts.length / 3) + 1;
+                onLoad((rows * width) / 3);
             }
         }
         fetchPosts();
