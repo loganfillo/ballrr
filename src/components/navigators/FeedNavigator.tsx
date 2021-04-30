@@ -4,7 +4,7 @@ import FeedScreen from '../../screens/FeedScreen';
 import CompetitionNavigator from './CompetitionNavigator';
 
 export type FeedStackParamList = {
-    Feed: { userId: number; listId: number } | undefined;
+    Feed: { postIds: number[]; listId: number } | undefined;
     Competition: undefined;
 };
 

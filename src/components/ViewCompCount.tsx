@@ -6,14 +6,19 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 interface Props {
     compId: number;
+    refreshing: boolean;
 }
-const ViewCompCount: React.FC<Props> = ({ compId }: Props) => {
+const ViewCompCount: React.FC<Props> = ({ compId, refreshing }: Props) => {
     const [counter, setCounter] = useState(0);
     const { height } = Dimensions.get('window');
 
-    const { loading, error, data } = useQuery(GET_COMPETITION_SUBMISSION_COUNT, {
+    const { loading, error, data, refetch } = useQuery(GET_COMPETITION_SUBMISSION_COUNT, {
         variables: { comp_id: compId },
     });
+
+    useEffect(() => {
+        refetch();
+    }, [refreshing]);
 
     useEffect(() => {
         async function getCompThumpnail() {

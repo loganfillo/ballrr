@@ -53,10 +53,10 @@ const TabBar: React.FC<TabBarProps> = ({ navigation }: TabBarProps) => {
             <View
                 style={{
                     width: `${TAB_BAR_PERCENT}%`,
-                    height: 60,
+                    height: 0.06 * height,
                     backgroundColor: 'white',
                     borderRadius: 100,
-                    bottom: 0.025 * height,
+                    bottom: 0.03 * height,
                     position: 'absolute',
                     alignSelf: 'center',
                     flexDirection: 'row',
@@ -93,7 +93,7 @@ const TabBar: React.FC<TabBarProps> = ({ navigation }: TabBarProps) => {
                     borderBottomWidth: 2,
                     borderColor: 'black',
                     transform: [{ translateX: translateValue }],
-                    bottom: 0.032 * height,
+                    bottom: 0.036 * height,
                     width: ICON_SIZE - 2 * TAB_MARGIN,
                     position: 'absolute',
                 }}

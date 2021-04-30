@@ -7,49 +7,48 @@ import CreatePostInput from '../components/CreatePostInput';
 interface Props {
     onCompetitionChange: (comp: Competition) => void;
     isSubmission: boolean;
-    competition: Competition | undefined;
+    subName?: string;
+    subDescription?: string;
+    subLeaderboardType?: LeaderBoard;
+    subTimeLimit?: number;
 }
 const CreatePostCompSettings: React.FC<Props> = ({
     onCompetitionChange,
     isSubmission,
-    competition,
+    subName,
+    subDescription,
+    subLeaderboardType,
+    subTimeLimit,
 }: Props) => {
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [leaderboardType, setLeaderboardType] = useState<LeaderBoard>(LeaderBoard.LIKES);
     const [timeLimit, setTimeLimit] = useState('');
-    const [creatorScore, setCreatorScore] = useState('');
+    const [score, setScore] = useState('');
 
     const { width } = Dimensions.get('window');
 
     useEffect(() => {
-        if (!isSubmission) {
-            const comp: Competition = {
-                name,
-                description,
-                leaderboardType,
-                timeLimit: Number.parseInt(timeLimit, 10) || 0,
-                creatorScore: Number.parseInt(creatorScore, 10) || 0,
-            };
-            onCompetitionChange(comp);
-        }
-    }, [name, description, timeLimit, creatorScore, leaderboardType]);
+        const comp: Competition = {
+            name,
+            description,
+            leaderboardType,
+            timeLimit: Number.parseInt(timeLimit, 10) || 0,
+            score: Number.parseInt(score, 10) || 0,
+        };
+        onCompetitionChange(comp);
+    }, [name, description, timeLimit, score, leaderboardType]);
 
     useEffect(() => {
-        if (competition !== undefined && isSubmission) {
-            setName(competition.name);
-            setDescription(competition.description);
-            setLeaderboardType(competition.leaderboardType);
-            if (
-                competition.leaderboardType === LeaderBoard.TIMED &&
-                competition.timeLimit &&
-                competition.creatorScore
-            ) {
-                setTimeLimit(competition.timeLimit.toString());
-                setCreatorScore(competition.creatorScore.toString());
+        if (isSubmission && subName && subDescription && subLeaderboardType) {
+            setName(subName);
+            setDescription(subDescription);
+            setLeaderboardType(subLeaderboardType);
+            if (subLeaderboardType === LeaderBoard.TIMED && subTimeLimit) {
+                setTimeLimit(subTimeLimit.toString());
             }
         }
-    }, [competition]);
+    }, [subName, subDescription, subLeaderboardType, subTimeLimit]);
 
     function capitalizeFirstLetter(s: string): string {
         return s && s[0].toUpperCase() + s.slice(1);
@@ -158,9 +157,8 @@ const CreatePostCompSettings: React.FC<Props> = ({
                             />
                         </View>
                         <TextInput
-                            editable={!isSubmission}
-                            value={creatorScore}
-                            onChangeText={setCreatorScore}
+                            value={score}
+                            onChangeText={setScore}
                             placeholder="Enter score"
                             keyboardType="number-pad"
                         />

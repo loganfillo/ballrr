@@ -1,17 +1,34 @@
 import { useQuery } from '@apollo/client';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import React, { useEffect, useLayoutEffect, useState } from 'react';
-import { Dimensions, Image, Text, View, ScrollView, TouchableOpacity } from 'react-native';
+import React, { useCallback, useEffect, useLayoutEffect, useState } from 'react';
+import {
+    Dimensions,
+    Image,
+    Text,
+    View,
+    ScrollView,
+    TouchableOpacity,
+    Alert,
+    RefreshControl,
+} from 'react-native';
 import { CompStackParamList } from '../components/navigators/CompetitionNavigator';
 import { GET_COMPETITION } from '../lib/queries';
-import { Competition } from '../lib/types';
+import { Competition, LeaderBoard } from '../lib/types';
 import CreatePostButton from '../components/buttons/CreatePostButton';
 import ViewCompCount from '../components/ViewCompCount';
 import ViewCompPostArray from '../components/ViewCompPostArray';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+
+const wait = (timeout: number) => {
+    return new Promise((resolve) => {
+        setTimeout(resolve, timeout);
+    });
+};
 
 type ViewCompScreenRouteProp = RouteProp<CompStackParamList, 'ViewCompetition'>;
 
 const BrowseChallengeScreen: React.FC = () => {
+    const [refreshing, setRefreshing] = useState(false);
     const [competition, setCompetition] = useState<Competition>();
     const { params } = useRoute<ViewCompScreenRouteProp>();
     const { height } = Dimensions.get('window');
@@ -45,7 +62,7 @@ const BrowseChallengeScreen: React.FC = () => {
                 setCompetition({
                     name: comp.name,
                     description: comp.description,
-                    creatorScore: comp.creator_score,
+                    score: comp.creator_score,
                     timeLimit: comp.time_limit,
                     leaderboardType: comp.leaderboard_type,
                 });
@@ -53,10 +70,18 @@ const BrowseChallengeScreen: React.FC = () => {
         }
     }, [data]);
 
+    const onRefresh = useCallback(() => {
+        setRefreshing(true);
+        wait(1000).then(() => setRefreshing(false));
+    }, []);
+
     return (
-        <ScrollView>
+        <ScrollView
+            style={{ flex: 1 }}
+            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+        >
             <View style={{ alignItems: 'center', justifyContent: 'center', paddingVertical: 15 }}>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => Alert.alert('Should this go to original post??')}>
                     <Image
                         resizeMode="cover"
                         style={{
@@ -80,8 +105,21 @@ const BrowseChallengeScreen: React.FC = () => {
                 <View style={{ paddingRight: 10 }}>
                     <Text style={{ fontSize: 22, fontWeight: '400' }}>{competition?.name}</Text>
                 </View>
-                <ViewCompCount compId={params.compId} />
+                <ViewCompCount compId={params.compId} refreshing={refreshing} />
             </View>
+            {competition?.leaderboardType === LeaderBoard.TIMED && (
+                <View
+                    style={{
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        padding: 10,
+                        flexDirection: 'row',
+                    }}
+                >
+                    <MaterialCommunityIcons name={'timer'} size={0.02 * height} color={'black'} />
+                    <Text style={{ fontSize: 18, fontWeight: '400' }}>{competition.timeLimit}</Text>
+                </View>
+            )}
             <View style={{ justifyContent: 'center', alignItems: 'center', paddingVertical: 5 }}>
                 <Text style={{ fontSize: 15, color: 'grey' }}>{competition?.description}</Text>
             </View>
@@ -98,13 +136,14 @@ const BrowseChallengeScreen: React.FC = () => {
                         borderRadius: 10,
                         paddingVertical: 10,
                     }}
+                    onPress={() => Alert.alert('Not implemented yet!')}
                 >
                     <Text
                         style={{
                             textAlign: 'center',
                             color: 'orange',
                             fontWeight: '400',
-                            fontSize: 20,
+                            fontSize: 15,
                         }}
                     >
                         View Leaderboard
@@ -113,7 +152,7 @@ const BrowseChallengeScreen: React.FC = () => {
             </View>
 
             <View>
-                <ViewCompPostArray compId={params.compId} />
+                <ViewCompPostArray compId={params.compId} refreshing={refreshing} />
             </View>
         </ScrollView>
     );

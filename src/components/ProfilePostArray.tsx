@@ -48,7 +48,7 @@ const ProfilePostArray: React.FC<Props> = ({ profileUserId, refreshing }: Props)
     function navigateToProfileFeed(listId: number) {
         navigation.navigate('FeedNavigator', {
             screen: 'Feed',
-            params: { userId: profileUserId, listId: listId },
+            params: { postIds: posts.map((post) => post.id), listId: listId },
         });
     }
     return (

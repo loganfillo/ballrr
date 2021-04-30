@@ -108,5 +108,5 @@ export interface Competition {
     description: string;
     leaderboardType: LeaderBoard;
     timeLimit?: number;
-    creatorScore?: number;
+    score?: number;
 }

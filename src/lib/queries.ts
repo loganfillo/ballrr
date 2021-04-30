@@ -30,8 +30,8 @@ export const COUNT_USERS_POST = gql`
 `;
 
 export const GET_POSTS = gql`
-    query getPosts($user_id: Int = null) {
-        posts(order_by: { created_at: desc }, where: { user_id: { _eq: $user_id } }) {
+    query getPosts($post_ids: [Int!] = null) {
+        posts(order_by: { created_at: desc }, where: { id: { _in: $post_ids } }) {
             user_id
             caption
             post_user_id {
@@ -318,8 +318,10 @@ export const CREATE_COMPETITION = gql`
 `;
 
 export const CREATE_COMPETITION_SUBMISSION = gql`
-    mutation createCompSubmission($comp_id: Int!, $post_id: Int!) {
-        insert_competition_submission_one(object: { comp_id: $comp_id, post_id: $post_id }) {
+    mutation createCompSubmission($comp_id: Int!, $post_id: Int!, $score: Int!) {
+        insert_competition_submission_one(
+            object: { comp_id: $comp_id, post_id: $post_id, score: $score }
+        ) {
             id
         }
     }

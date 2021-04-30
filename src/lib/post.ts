@@ -26,6 +26,7 @@ export async function createCompetitionSubmissionPost(
     thumbnail: Media,
     caption: string,
     compId: number,
+    score: number,
 ): Promise<void> {
     const postId = await createPost(
         user,
@@ -35,7 +36,7 @@ export async function createCompetitionSubmissionPost(
         caption,
     );
     if (postId > 0) {
-        await createCompetitionSubmissionEntry(apolloClient, compId, postId);
+        await createCompetitionSubmissionEntry(apolloClient, compId, postId, score);
     }
 }
 
@@ -65,7 +66,12 @@ export async function createCompetitionPost(
     );
     if (postId > 0) {
         const compId = await createCompetitionEntry(apolloClient, competition, postId, user.id);
-        await createCompetitionSubmissionEntry(apolloClient, compId, postId);
+        await createCompetitionSubmissionEntry(
+            apolloClient,
+            compId,
+            postId,
+            competition.score || 0,
+        );
     }
 }
 
@@ -199,7 +205,7 @@ async function createCompetitionEntry(
             post_id: postId,
             user_id: userId,
             time_limit: competition.timeLimit,
-            creator_score: competition.creatorScore,
+            creator_score: competition.score,
             leaderboard_type: competition.leaderboardType,
         },
     });
@@ -217,10 +223,11 @@ async function createCompetitionSubmissionEntry(
     apolloClient: ApolloClient<NormalizedCacheObject>,
     compId: number,
     postId: number,
+    score: number,
 ): Promise<number> {
     const res = await apolloClient.mutate({
         mutation: CREATE_COMPETITION_SUBMISSION,
-        variables: { post_id: postId, comp_id: compId },
+        variables: { post_id: postId, comp_id: compId, score: score },
     });
     return res.data.insert_competition_submission_one.id;
 }

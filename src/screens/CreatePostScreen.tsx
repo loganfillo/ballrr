@@ -1,10 +1,6 @@
 import React, { useState, useEffect, useLayoutEffect } from 'react';
 import { View, TextInput, Image, Dimensions, TouchableOpacity, Button } from 'react-native';
-import {
-    createPost,
-    createCompetitionPost as createCompetitionPost,
-    createCompetitionSubmissionPost,
-} from '../lib/post';
+import { createPost, createCompetitionPost, createCompetitionSubmissionPost } from '../lib/post';
 import { Competition, LeaderBoard, Media } from '../lib/types';
 import Loading from '../components/Loading';
 import { ApolloClient, NormalizedCacheObject, useApolloClient, useQuery } from '@apollo/client';
@@ -51,7 +47,7 @@ const CreatePostScreen: React.FC = () => {
                 setCompetition({
                     name: comp.name,
                     description: comp.description,
-                    creatorScore: comp.creator_score,
+                    score: 0,
                     timeLimit: comp.time_limit,
                     leaderboardType: comp.leaderboard_type,
                 });
@@ -67,7 +63,7 @@ const CreatePostScreen: React.FC = () => {
 
     useEffect(() => {
         if (
-            !hasCompetition ||
+            (!hasCompetition && isSubmission) ||
             (competition &&
                 competition?.name.length > 0 &&
                 competition?.description.length > 0 &&
@@ -75,8 +71,8 @@ const CreatePostScreen: React.FC = () => {
                     (competition.leaderboardType === LeaderBoard.TIMED &&
                         competition.timeLimit &&
                         competition?.timeLimit > 0 &&
-                        competition.creatorScore &&
-                        competition?.creatorScore > 0)))
+                        competition.score &&
+                        competition?.score > 0)))
         ) {
             setShareButtonDisable(false);
         } else {
@@ -95,7 +91,16 @@ const CreatePostScreen: React.FC = () => {
         navigation.setOptions({
             headerRight: DoneButton,
         });
-    }, [shareButtonDisable, user, media, thumbnail, caption, navigation, apolloClient]);
+    }, [
+        shareButtonDisable,
+        user,
+        media,
+        thumbnail,
+        caption,
+        navigation,
+        apolloClient,
+        competition,
+    ]);
 
     function onCompetitionChange(comp: Competition) {
         setCompetition(comp);
@@ -110,6 +115,7 @@ const CreatePostScreen: React.FC = () => {
                 thumbnail,
                 caption,
                 params.competitionId,
+                competition?.score || 0,
             );
         } else if (hasCompetition && competition) {
             createCompetitionPost(
@@ -261,7 +267,10 @@ const CreatePostScreen: React.FC = () => {
                             <CreatePostCompSettings
                                 onCompetitionChange={onCompetitionChange}
                                 isSubmission={isSubmission}
-                                competition={competition}
+                                subName={competition?.name}
+                                subDescription={competition?.description}
+                                subLeaderboardType={competition?.leaderboardType}
+                                subTimeLimit={competition?.timeLimit}
                             />
                         </View>
                     )}

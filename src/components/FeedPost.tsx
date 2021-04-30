@@ -7,6 +7,7 @@ import FeedPostCaption from './FeedPostCaption';
 import FeedPostCompThumnbail from './FeedPostCompThumbnail';
 import { GET_POST_COMPETITION } from '../lib/queries';
 import { useQuery } from '@apollo/client';
+import DeletePostButton from './buttons/DeletePostButton';
 
 interface Props {
     post: Post;
