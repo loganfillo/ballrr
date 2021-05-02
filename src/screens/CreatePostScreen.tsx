@@ -62,9 +62,21 @@ const CreatePostScreen: React.FC = () => {
     );
 
     useEffect(() => {
+        console.log(
+            competition !== undefined &&
+                competition?.name.length > 0 &&
+                competition?.description.length > 0 &&
+                (competition.leaderboardType === LeaderBoard.LIKES ||
+                    (competition.leaderboardType === LeaderBoard.TIMED &&
+                        competition.timeLimit &&
+                        competition?.timeLimit > 0 &&
+                        competition.score &&
+                        competition?.score > 0)),
+        );
+
         if (
-            (!hasCompetition && isSubmission) ||
-            (competition &&
+            !hasCompetition ||
+            (competition !== undefined &&
                 competition?.name.length > 0 &&
                 competition?.description.length > 0 &&
                 (competition.leaderboardType === LeaderBoard.LIKES ||
