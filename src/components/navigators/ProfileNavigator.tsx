@@ -33,9 +33,10 @@ const ProfileNavigator: React.FC = () => {
                 name="FeedNavigator"
                 component={FeedNavigator}
                 options={{
-                    headerTitle: '',
-                    headerTransparent: true,
-                    headerBackTitleVisible: false,
+                    gestureEnabled: true,
+                    gestureDirection: 'horizontal',
+                    gestureResponseDistance: { horizontal: 200 },
+                    headerShown: false,
                 }}
             />
         </Stack.Navigator>
