@@ -12,7 +12,7 @@ interface Props {
     onLoad: (height: number) => void;
 }
 
-const ProfilePostArray: React.FC<Props> = ({ profileUserId, refreshing }: Props) => {
+const ProfilePostArray: React.FC<Props> = ({ profileUserId, refreshing, onLoad }: Props) => {
     const [posts, setPosts] = useState<ThumbnailPost[]>([]);
 
     const { width } = Dimensions.get('window');
