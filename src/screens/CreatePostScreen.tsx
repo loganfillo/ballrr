@@ -1,5 +1,14 @@
 import React, { useState, useEffect, useLayoutEffect } from 'react';
-import { View, TextInput, Image, Dimensions, TouchableOpacity, Button } from 'react-native';
+import {
+    View,
+    TextInput,
+    Image,
+    Dimensions,
+    TouchableOpacity,
+    Button,
+    Modal,
+    ActivityIndicator,
+} from 'react-native';
 import { createPost, createCompetitionPost, createCompetitionSubmissionPost } from '../lib/post';
 import { Competition, LeaderBoard, Media } from '../lib/types';
 import Loading from '../components/Loading';
@@ -13,6 +22,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import CreatePostCompSettings from '../components/CreatePostCompSettings';
 import CreatePostInput from '../components/CreatePostInput';
 import { GET_COMPETITION } from '../lib/queries';
+import GradientBackground from '../components/GradientBackground';
 
 type CreatePostScreenRouteProp = RouteProp<PostStackParamList, 'CreatePost'>;
 
@@ -29,6 +39,8 @@ const CreatePostScreen: React.FC = () => {
     const [isSubmission, setIsSubmission] = useState(false);
     const [competition, setCompetition] = useState<Competition>();
     const [hasCompetition, setHasCompetition] = useState(false);
+
+    const [modalVisible, setModalVisible] = useState(false);
 
     const apolloClient = useApolloClient();
     const navigation = useNavigation();
@@ -62,18 +74,6 @@ const CreatePostScreen: React.FC = () => {
     );
 
     useEffect(() => {
-        console.log(
-            competition !== undefined &&
-                competition?.name.length > 0 &&
-                competition?.description.length > 0 &&
-                (competition.leaderboardType === LeaderBoard.LIKES ||
-                    (competition.leaderboardType === LeaderBoard.TIMED &&
-                        competition.timeLimit &&
-                        competition?.timeLimit > 0 &&
-                        competition.score &&
-                        competition?.score > 0)),
-        );
-
         if (
             !hasCompetition ||
             (competition !== undefined &&
@@ -118,9 +118,10 @@ const CreatePostScreen: React.FC = () => {
         setCompetition(comp);
     }
 
-    function createPostAndReturnHome() {
+    async function createPostAndReturnHome() {
+        setModalVisible(true);
         if (isSubmission) {
-            createCompetitionSubmissionPost(
+            await createCompetitionSubmissionPost(
                 user,
                 apolloClient as ApolloClient<NormalizedCacheObject>,
                 media,
@@ -130,7 +131,7 @@ const CreatePostScreen: React.FC = () => {
                 competition?.score || 0,
             );
         } else if (hasCompetition && competition) {
-            createCompetitionPost(
+            await createCompetitionPost(
                 user,
                 apolloClient as ApolloClient<NormalizedCacheObject>,
                 media,
@@ -139,7 +140,7 @@ const CreatePostScreen: React.FC = () => {
                 competition,
             );
         } else {
-            createPost(
+            await createPost(
                 user,
                 apolloClient as ApolloClient<NormalizedCacheObject>,
                 media,
@@ -147,8 +148,8 @@ const CreatePostScreen: React.FC = () => {
                 caption,
             );
         }
-
         setMedia({ cancelled: true });
+        setModalVisible(false);
         navigation.navigate('Feed');
     }
 
@@ -157,6 +158,48 @@ const CreatePostScreen: React.FC = () => {
             style={{ backgroundColor: 'white' }}
             resetScrollToCoords={{ x: 0, y: 0 }}
         >
+            <Modal animationType="slide" visible={true}>
+                <GradientBackground>
+                    <View
+                        style={{
+                            flex: 1,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            backgroundColor: 'transparent',
+                        }}
+                    >
+                        <View
+                            style={{
+                                backgroundColor: 'white',
+                                borderColor: 'black',
+                                borderRadius: 10,
+                                padding: 20,
+                                alignItems: 'center',
+                                shadowColor: '#000',
+                                shadowOffset: {
+                                    width: 0,
+                                    height: 2,
+                                },
+                                shadowOpacity: 0.25,
+                                shadowRadius: 4,
+                                elevation: 5,
+                            }}
+                        >
+                            <Text
+                                style={{
+                                    marginBottom: 15,
+                                    textAlign: 'center',
+                                    fontSize: 18,
+                                    color: 'slategrey',
+                                }}
+                            >
+                                Your post is uploading
+                            </Text>
+                            <ActivityIndicator size="large" />
+                        </View>
+                    </View>
+                </GradientBackground>
+            </Modal>
             {media.cancelled || loading ? (
                 <Loading></Loading>
             ) : (

@@ -111,7 +111,6 @@ export async function createPost(
                 postId,
             );
             await createThumbnailMediaEntry(apolloClient, uploadedThumbnail.name, postId);
-            Alert.alert('Post Uploaded!');
         } catch (e) {
             Alert.alert('Could Not Upload Post to DB');
         }
