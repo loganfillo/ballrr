@@ -43,7 +43,9 @@ const SignUp: React.FC = () => {
                     onChangeText={(text) => setPassword(text)}
                     placeholder="Confirm Password"
                 />
-                <AuthButton title="Sign Up" onPress={signUp} />
+                <View style={{ marginTop: 25 }}>
+                    <AuthButton title="Sign Up" onPress={signUp} />
+                </View>
                 <View style={styles.footerButtonContainer}>
                     <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
                         <Text style={styles.forgotPasswordButtonText}>

@@ -41,7 +41,9 @@ const SignIn: React.FC = () => {
                     onChangeText={(text: React.SetStateAction<string>) => setPassword(text)}
                     placeholder="Password"
                 />
-                <AuthButton title="Login" onPress={signIn} />
+                <View style={{ marginTop: 25 }}>
+                    <AuthButton title="Login" onPress={signIn} />
+                </View>
                 <View style={styles.footerButtonContainer}>
                     <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
                         <Text style={styles.forgotPasswordButtonText}>Don't have an Account? Register</Text>
