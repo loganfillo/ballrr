@@ -22,21 +22,26 @@ const SignUp: React.FC = () => {
     return (
         <SafeAreaView style={styles.safeAreaContainer}>
             <View style={styles.container}>
-                <Text style={styles.title}>Create a new account</Text>
+                <Text style={styles.title}>Sign Up</Text>
+                <AuthTextInput
+                    value={email}
+                    onChangeText={(text) => setEmail(text)}
+                    placeholder="Email"
+                />
                 <AuthTextInput
                     value={username}
                     onChangeText={(text) => setUsername(text)}
-                    placeholder="Enter username"
+                    placeholder="Username"
                 />
                 <AuthTextInput
                     value={password}
                     onChangeText={(text) => setPassword(text)}
-                    placeholder="Enter password"
+                    placeholder="Password"
                 />
                 <AuthTextInput
-                    value={email}
-                    onChangeText={(text) => setEmail(text)}
-                    placeholder="Enter email"
+                    value={password}
+                    onChangeText={(text) => setPassword(text)}
+                    placeholder="Confirm Password"
                 />
                 <AuthButton title="Sign Up" onPress={signUp} />
                 <View style={styles.footerButtonContainer}>
@@ -54,17 +59,19 @@ const SignUp: React.FC = () => {
 const styles = StyleSheet.create({
     safeAreaContainer: {
         flex: 1,
-        backgroundColor: 'white',
+        backgroundColor: '#44B244',
     },
     container: {
         flex: 1,
-        alignItems: 'center',
     },
     title: {
-        fontSize: 20,
-        color: '#202020',
+        fontSize: 40,
+        color: 'white',
         fontWeight: '500',
-        marginVertical: 15,
+        marginTop: 80,
+        marginBottom: 15,
+        marginLeft: 30,
+        textAlign: 'left',
     },
     footerButtonContainer: {
         marginVertical: 15,
@@ -72,7 +79,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     forgotPasswordButtonText: {
-        color: 'tomato',
+        color: 'white',
         fontSize: 18,
         fontWeight: '600',
     },

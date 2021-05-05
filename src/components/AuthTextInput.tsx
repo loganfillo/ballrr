@@ -16,18 +16,22 @@ const AuthTextInput: React.FC<Props> = ({ value, onChangeText, placeholder }: Pr
                 value={value}
                 onChangeText={onChangeText}
                 placeholder={placeholder}
-                placeholderTextColor="#6e6869"
+                placeholderTextColor="white"
             />
         </View>
     );
 };
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#f9f9f9',
+        backgroundColor: '#44B244',
+        borderColor: '#EEEADE',
+        borderWidth: 1,
         borderRadius: 25,
         flexDirection: 'row',
         padding: 15,
         marginVertical: 10,
+        width: '85%',
+        alignSelf: 'center',
     },
     icon: {
         marginRight: 10,
@@ -35,7 +39,7 @@ const styles = StyleSheet.create({
     input: {
         width: '80%',
         fontSize: 18,
-        color: '#101010',
+        color: '#EEEADE',
     },
 });
 

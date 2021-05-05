@@ -30,23 +30,21 @@ const SignIn: React.FC = () => {
     return (
         <SafeAreaView style={styles.safeAreaContainer}>
             <View style={styles.container}>
-                <Text style={styles.title}>Sign in to your account</Text>
+                <Text style={styles.title}>Login</Text>
                 <AuthTextInput
                     value={username}
                     onChangeText={(text: React.SetStateAction<string>) => setUsername(text)}
-                    placeholder="Enter username"
+                    placeholder="Username"
                 />
                 <AuthTextInput
                     value={password}
                     onChangeText={(text: React.SetStateAction<string>) => setPassword(text)}
-                    placeholder="Enter password"
+                    placeholder="Password"
                 />
                 <AuthButton title="Login" onPress={signIn} />
                 <View style={styles.footerButtonContainer}>
                     <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
-                        <Text style={styles.forgotPasswordButtonText}>
-                            Don't have an account? Sign Up
-                        </Text>
+                        <Text style={styles.forgotPasswordButtonText}>Don't have an Account? Register</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -57,17 +55,19 @@ const SignIn: React.FC = () => {
 const styles = StyleSheet.create({
     safeAreaContainer: {
         flex: 1,
-        backgroundColor: 'white',
+        backgroundColor: '#44B244',
     },
     container: {
         flex: 1,
-        alignItems: 'center',
     },
     title: {
-        fontSize: 20,
-        color: '#202020',
+        fontSize: 40,
+        color: 'white',
         fontWeight: '500',
-        marginVertical: 15,
+        marginTop: 80,
+        marginBottom: 15,
+        marginLeft: 30,
+        textAlign: 'left',
     },
     footerButtonContainer: {
         marginVertical: 15,
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     forgotPasswordButtonText: {
-        color: 'tomato',
+        color: 'white',
         fontSize: 18,
         fontWeight: '600',
     },
