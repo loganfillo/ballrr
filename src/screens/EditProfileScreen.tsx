@@ -121,7 +121,7 @@ const EditProfile: React.FC = () => {
             />
             <ScrollView
                 style={{
-                    backgroundColor: '#fff',
+                    backgroundColor: 'whitesmoke',
                 }}
             >
                 <View style={{ flexDirection: 'row' }}>
@@ -185,7 +185,7 @@ const EditProfile: React.FC = () => {
                     <Text style={{ paddingBottom: 8, color: 'grey' }}>Name</Text>
                     <TextInput
                         style={{
-                            borderBottomColor: 'grey',
+                            borderBottomColor: 'green',
                             borderBottomWidth: 1,
                             paddingVertical: 4,
                         }}
@@ -196,7 +196,7 @@ const EditProfile: React.FC = () => {
                     <Text style={{ paddingBottom: 8, paddingTop: 15, color: 'grey' }}>Bio</Text>
                     <TextInput
                         style={{
-                            borderBottomColor: 'grey',
+                            borderBottomColor: 'green',
                             borderBottomWidth: 1,
                             paddingVertical: 4,
                         }}

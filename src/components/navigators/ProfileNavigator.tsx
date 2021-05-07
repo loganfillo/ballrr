@@ -1,5 +1,5 @@
 import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createStackNavigator, StackNavigationOptions } from '@react-navigation/stack';
 import ProfileScreen from '../../screens/ProfileScreen';
 import InboxButton from '../buttons/InboxButton';
 import FollowersListScreen from '../../screens/FollowersListScreen';
@@ -9,11 +9,14 @@ import UserPolicyScreen from '../../screens/UserPolicyScreen';
 import NotificationScreen from '../../screens/NotificationScreen';
 import EditProfileScreen from '../../screens/EditProfileScreen';
 import FollowingListScreen from '../../screens/FollowingListScreen';
+import { useUser } from '../../lib/user';
+import FeedNavigator from './FeedNavigator';
+import { useUser } from '../../lib/user';
 
 export type ProfileStackParamList = {
     Profile: { userId: number } | undefined;
-    EditProfile: { userId: number } | undefined;
-    FollowersList: { userId: number } | undefined;
+    FeedNavigator: undefined;
+   FollowersList: { userId: number } | undefined;
     FollowingList: { userId: number } | undefined;
     ProfileMenu: { userId: number } | undefined;
     AccountSettings: { userId: number } | undefined;
@@ -25,13 +28,30 @@ const Stack = createStackNavigator<ProfileStackParamList>();
 
 const RightHeaderButton = () => <InboxButton />;
 
-const ProfileStackNavigator: React.FC = () => {
+const ProfileNavigator: React.FC = () => {
+    const user = useUser();
     return (
         <Stack.Navigator initialRouteName="Profile">
             <Stack.Screen
                 name="Profile"
+                initialParams={{ userId: user.id }}
                 component={ProfileScreen}
-                options={{ headerRight: RightHeaderButton }}
+                options={({ route }) =>
+                    ({
+                        headerRight: route.params?.userId === user.id ? RightHeaderButton : null,
+                        headerBackTitleVisible: false,
+                    } as StackNavigationOptions)
+                }
+            />
+            <Stack.Screen
+                name="FeedNavigator"
+                component={FeedNavigator}
+                options={{
+                    gestureEnabled: true,
+                    gestureDirection: 'horizontal',
+                    gestureResponseDistance: { horizontal: 200 },
+                    headerShown: false,
+                }}
             />
             <Stack.Screen
                 name="EditProfile"
@@ -69,4 +89,4 @@ const ProfileStackNavigator: React.FC = () => {
     );
 };
 
-export default ProfileStackNavigator;
+export default ProfileNavigator;

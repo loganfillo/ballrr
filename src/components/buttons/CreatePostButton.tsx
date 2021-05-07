@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useActionSheet } from '@expo/react-native-action-sheet';
-import { Media } from '../lib/types';
-import { chooseMedia, createThumbnail, takeMedia } from '../lib/media';
+import { Media } from '../../lib/types';
+import { chooseMedia, createThumbnail, takeMedia } from '../../lib/media';
 import { useNavigation } from '@react-navigation/native';
-import TabIcon from './TabIcon';
-import { View } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { TouchableOpacity } from 'react-native';
 
 const OPEN_CAMERA = 'Open Camera';
 const CHOOSE_FROM_LIBRARY = 'Choose From Library';
@@ -14,9 +14,12 @@ const BUTTONS = [OPEN_CAMERA, CHOOSE_FROM_LIBRARY, CANCEL];
 
 interface Props {
     size: number;
+    icon: string;
+    iconColor: string;
+    compId?: number;
 }
 
-const CreatePostButton: React.FC<Props> = ({ size }: Props) => {
+const CreatePostButton: React.FC<Props> = ({ size, icon, iconColor, compId }: Props) => {
     const [clicked, setClicked] = useState<string>();
 
     const navigation = useNavigation();
@@ -27,9 +30,10 @@ const CreatePostButton: React.FC<Props> = ({ size }: Props) => {
         if (!media.cancelled) {
             const thumbnail: Media = await createThumbnail(media);
             if (!thumbnail.cancelled && thumbnail.file) {
+                const competitionId = compId === undefined ? 0 : compId;
                 navigation.navigate('Post', {
                     screen: 'CreatePost',
-                    params: { media, thumbnail },
+                    params: { media, thumbnail, competitionId },
                 });
             }
         }
@@ -48,38 +52,22 @@ const CreatePostButton: React.FC<Props> = ({ size }: Props) => {
     }, [clicked]);
 
     return (
-        <View
-            style={{
-                backgroundColor: 'white',
-                borderTopWidth: 1,
-                borderBottomWidth: 1,
-                borderLeftWidth: 7,
-                borderLeftColor: '#1bb51d',
-                borderRightColor: '#1bb51d',
-                borderRightWidth: 7,
-                borderRadius: 10,
-                borderTopColor: '#1bb51d',
-                borderBottomColor: '#1bb51d',
-                margin: -7,
+        <TouchableOpacity
+            onPress={() => {
+                showActionSheetWithOptions(
+                    {
+                        destructiveColor: 'red',
+                        options: BUTTONS,
+                        cancelButtonIndex: BUTTONS.length - 1,
+                    },
+                    (buttonIndex) => {
+                        setClicked(BUTTONS[buttonIndex]);
+                    },
+                );
             }}
         >
-            <TabIcon
-                name={'plus'}
-                size={size}
-                color={'#1bb51d'}
-                onPress={() => {
-                    showActionSheetWithOptions(
-                        {
-                            options: BUTTONS,
-                            cancelButtonIndex: BUTTONS.length,
-                        },
-                        (buttonIndex) => {
-                            setClicked(BUTTONS[buttonIndex]);
-                        },
-                    );
-                }}
-            />
-        </View>
+            <MaterialCommunityIcons name={icon} size={size} color={iconColor} />
+        </TouchableOpacity>
     );
 };
 

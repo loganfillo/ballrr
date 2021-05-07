@@ -63,7 +63,7 @@ export interface Post {
     thumbnailS3Key: string;
 }
 
-export interface ProfilePost {
+export interface ThumbnailPost {
     url: string;
     id: number;
 }
@@ -111,4 +111,17 @@ export interface Flag {
     name: string;
     emoji: string;
     noFlag?: boolean;
+}
+
+export enum LeaderBoard {
+    LIKES = 'likes',
+    TIMED = 'timed',
+}
+
+export interface Competition {
+    name: string;
+    description: string;
+    leaderboardType: LeaderBoard;
+    timeLimit?: number;
+    score?: number;
 }

@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
-import CreatePostTab from './CreatePostTab';
+import CreatePostButton from './buttons/CreatePostButton';
 import NotificationBadge from './NotificationBadge';
 import { View, Animated, Dimensions } from 'react-native';
 import { NavigationHelpers, ParamListBase } from '@react-navigation/core';
 import { BottomTabNavigationEventMap } from '@react-navigation/bottom-tabs/lib/typescript/src/types';
 import TabIcon from './TabIcon';
 
-const HOME_TAB = 'HomeTab';
+const FEED_TAB = 'FeedTab';
 const SEARCH_TAB = 'SearchTab';
 const POST_TAB = 'PostTab';
-const CHALLENGES_TAB = 'ChallengesTab';
+const CHALLENGES_TAB = 'CompetitionTab';
 const PROFILE_TAB = 'ProfileTab';
-const TAB_NAMES = [HOME_TAB, SEARCH_TAB, POST_TAB, CHALLENGES_TAB, PROFILE_TAB];
+const TAB_NAMES = [FEED_TAB, SEARCH_TAB, POST_TAB, CHALLENGES_TAB, PROFILE_TAB];
 
 const { width } = Dimensions.get('window');
 const TAB_BAR_PERCENT = 85;
@@ -53,10 +53,10 @@ const TabBar: React.FC<TabBarProps> = ({ navigation }: TabBarProps) => {
             <View
                 style={{
                     width: `${TAB_BAR_PERCENT}%`,
-                    height: 60,
+                    height: 0.06 * height,
                     backgroundColor: 'white',
                     borderRadius: 100,
-                    bottom: 0.025 * height,
+                    bottom: 0.03 * height,
                     position: 'absolute',
                     alignSelf: 'center',
                     flexDirection: 'row',
@@ -65,21 +65,21 @@ const TabBar: React.FC<TabBarProps> = ({ navigation }: TabBarProps) => {
                 }}
             >
                 <TabIcon
-                    name={'home-outline'}
+                    name={index === 0 ? 'home' : 'home-outline'}
                     size={ICON_SIZE}
-                    onPress={() => navigate(HOME_TAB)}
+                    onPress={() => navigate(FEED_TAB)}
                 />
                 <TabIcon name={'magnify'} size={ICON_SIZE} onPress={() => navigate(SEARCH_TAB)} />
-                <CreatePostTab size={ICON_SIZE} />
+                <CreatePostButton size={ICON_SIZE} icon={'plus'} iconColor={'black'} />
                 <TabIcon
-                    name={'trophy-outline'}
+                    name={index === 3 ? 'trophy' : 'trophy-outline'}
                     size={ICON_SIZE}
                     onPress={() => navigate(CHALLENGES_TAB)}
                 />
                 <NotificationBadge
                     icon={
                         <TabIcon
-                            name={'account-outline'}
+                            name={index === 4 ? 'account' : 'account-outline'}
                             size={ICON_SIZE}
                             onPress={() => navigate(PROFILE_TAB)}
                         />
@@ -93,7 +93,7 @@ const TabBar: React.FC<TabBarProps> = ({ navigation }: TabBarProps) => {
                     borderBottomWidth: 2,
                     borderColor: 'black',
                     transform: [{ translateX: translateValue }],
-                    bottom: 0.032 * height,
+                    bottom: 0.036 * height,
                     width: ICON_SIZE - 2 * TAB_MARGIN,
                     position: 'absolute',
                 }}
