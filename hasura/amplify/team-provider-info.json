@@ -1,0 +1,20 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-ballrr-dev-210841-authRole",
+      "UnauthRoleArn": "arn:aws:iam::648016379812:role/amplify-ballrr-dev-210841-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::648016379812:role/amplify-ballrr-dev-210841-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-ballrr-dev-210841-deployment",
+      "UnauthRoleName": "amplify-ballrr-dev-210841-unauthRole",
+      "StackName": "amplify-ballrr-dev-210841",
+      "StackId": "arn:aws:cloudformation:us-east-1:648016379812:stack/amplify-ballrr-dev-210841/95a952a0-5626-11eb-aa3c-0a086119f71b",
+      "AmplifyAppId": "d705iu3jxiep7"
+    },
+    "categories": {
+      "auth": {
+        "ballrr10ccebdb": {}
+      }
+    }
+  }
+}

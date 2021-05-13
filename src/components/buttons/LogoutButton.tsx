@@ -12,7 +12,7 @@ const LogoutButton: React.FC<Props> = ({ style }: Props) => {
     }
     return (
         <View style={style}>
-            <ProfileButton title={'Logout'} onPress={logout} color={'red'} />
+            <ProfileButton title={'Logout'} onPress={logout} color={'black'} />
         </View>
     );
 };

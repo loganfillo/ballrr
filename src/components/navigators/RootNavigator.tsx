@@ -44,7 +44,14 @@ const RootNavigator: React.FC = () => {
                     }}
                 />
                 <RootStack.Screen name="ProfileMenu" component={ProfileMenuScreen} />
-                <RootStack.Screen name="AccountSettings" component={AccountSettingsScreen} />
+                <RootStack.Screen
+                    name="AccountSettings"
+                    component={AccountSettingsScreen}
+                    options={{
+                        title: 'Account Settings',
+                        headerBackTitleVisible: false,
+                    }}
+                />
                 <RootStack.Screen name="UserPolicy" component={UserPolicyScreen} />
                 <RootStack.Screen
                     name="Notifications"

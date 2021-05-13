@@ -19,6 +19,26 @@ export const GET_USERS_POSTS = gql`
     }
 `;
 
+export const GET_USERS_MEDIA = gql`
+    query getUsersPosts($user_id: Int!) {
+        posts(where: { user_id: { _eq: $user_id } }) {
+            id
+            thumbnail {
+                s3_key
+            }
+            media {
+                s3_key
+            }
+        }
+        users(where: { id: { _eq: $user_id } }) {
+            id
+            profile_pic {
+                s3_key
+            }
+        }
+    }
+`;
+
 export const COUNT_USERS_POST = gql`
     query countPosts($user_id: Int!) {
         posts_aggregate(where: { user_id: { _eq: $user_id } }) {
@@ -103,6 +123,14 @@ export const DELETE_POST = gql`
     mutation deletePost($id: Int!) {
         delete_posts_by_pk(id: $id) {
             id
+        }
+    }
+`;
+
+export const DELETE_USER = gql`
+    mutation deleteUser($user_id: Int!) {
+        delete_users(where: { id: { _eq: $user_id } }) {
+            affected_rows
         }
     }
 `;
