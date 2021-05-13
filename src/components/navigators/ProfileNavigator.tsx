@@ -11,12 +11,11 @@ import FollowersListScreen from '../../screens/FollowersListScreen';
 import FollowingListScreen from '../../screens/FollowingListScreen';
 import { useUser } from '../../lib/user';
 import FeedNavigator from './FeedNavigator';
-import { useUser } from '../../lib/user';
 
 export type ProfileStackParamList = {
     Profile: { userId: number } | undefined;
     FeedNavigator: undefined;
-   FollowersList: { userId: number } | undefined;
+    FollowersList: { userId: number } | undefined;
     FollowingList: { userId: number } | undefined;
     ProfileMenu: { userId: number } | undefined;
     AccountSettings: { userId: number } | undefined;
