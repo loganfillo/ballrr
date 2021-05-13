@@ -2,12 +2,12 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import ProfileScreen from '../../screens/ProfileScreen';
 import InboxButton from '../buttons/InboxButton';
-import FollowersListScreen from '../../screens/FollowersListScreen';
 import ProfileMenuScreen from '../../screens/ProfileMenuScreen';
 import AccountSettingsScreen from '../../screens/AccountSettingsScreen';
 import UserPolicyScreen from '../../screens/UserPolicyScreen';
 import NotificationScreen from '../../screens/NotificationScreen';
 import EditProfileScreen from '../../screens/EditProfileScreen';
+import FollowersListScreen from '../../screens/FollowersListScreen';
 import FollowingListScreen from '../../screens/FollowingListScreen';
 
 export type ProfileStackParamList = {
