@@ -26,11 +26,6 @@ const FlagPicker: React.FC<PickerProps> = ({ searchQuery, onSelect }: PickerProp
     }
 
     useEffect(() => {
-        console.log(
-            flags.filter((flag) => {
-                return flag.name.toUpperCase().startsWith(searchQuery.toUpperCase());
-            }),
-        );
         setFlagList(
             flags.filter((flag) => {
                 return flag.name.toUpperCase().startsWith(searchQuery.toUpperCase());
@@ -88,11 +83,11 @@ export const FlagPickerModal: React.FC<ModalProps> = ({
 
     return (
         <Modal visible={visible}>
-            <SafeAreaView>
+            <SafeAreaView style={{ backgroundColor: 'whitesmoke' }}>
                 <StatusBar hidden />
                 <View
                     style={{
-                        backgroundColor: 'ghostwhite',
+                        backgroundColor: 'whitesmoke',
                         padding: 10,
                         flexDirection: 'row',
                     }}
