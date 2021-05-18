@@ -1,36 +1,32 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { Container } from 'native-base';
-import GradientBackground from './GradientBackground';
+import { View, StyleSheet, Image } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const Loading: React.FC = () => {
     return (
-        <Container>
-            <GradientBackground>
-                <View style={styles.logoContainer}>
-                    <Text style={styles.logo}>B</Text>
-                </View>
-            </GradientBackground>
-        </Container>
+        <SafeAreaView style={styles.safeAreaContainer}>
+            <View style={styles.container}>
+                <Image
+                    style={styles.headingImage}
+                    source={require('../../assets/authMenuLogo2.png')}
+                />
+            </View>
+        </SafeAreaView>
     );
 };
 
 const styles = StyleSheet.create({
-    logoContainer: {
-        flex: 1.0,
-        alignItems: 'center',
-        justifyContent: 'center',
+    safeAreaContainer: {
+        flex: 1,
+        backgroundColor: '#44B244',
     },
-    logo: {
-        fontSize: 75,
-        color: 'white',
-        backgroundColor: 'transparent',
-        padding: 2,
-        paddingLeft: 9,
-        paddingRight: 9,
-        borderRadius: 10,
-        borderColor: 'white',
-        borderWidth: 2,
+    container: {
+        flex: 1,
+    },
+    headingImage: {
+        width: '100%',
+        aspectRatio: 1,
+        height: undefined,
     },
 });
 

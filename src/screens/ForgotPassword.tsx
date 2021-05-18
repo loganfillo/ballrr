@@ -6,15 +6,13 @@ import AuthTextInput from '../components/AuthTextInput';
 import AuthButton from '../components/buttons/AuthButton';
 import { useNavigation } from '@react-navigation/native';
 
-const SignUp: React.FC = () => {
+const ForgotPassword: React.FC = () => {
     const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [email, setEmail] = useState('');
     const navigation = useNavigation();
-    async function signUp() {
+    async function forgotPassword() {
         try {
-            await Auth.signUp({ username, password, attributes: { email } });
-            navigation.navigate('ConfirmSignUp');
+            await Auth.forgotPassword(username);
+            navigation.navigate('ConfirmNewPassword', { username: username });
         } catch (error) {
             console.log(error);
         }
@@ -22,16 +20,8 @@ const SignUp: React.FC = () => {
     return (
         <SafeAreaView style={styles.safeAreaContainer}>
             <View style={styles.container}>
-                <Text style={styles.title}>Sign Up</Text>
-                <AuthTextInput
-                    value={email}
-                    onChangeText={(text) => setEmail(text)}
-                    placeholder="Email"
-                    textContentType="emailAddress"
-                    keyboardType="email-address"
-                    autoCapitalize="none"
-                    leftIcon="email"
-                />
+                <Text style={styles.title}>Forgot Password</Text>
+
                 <AuthTextInput
                     value={username}
                     onChangeText={(text) => setUsername(text)}
@@ -39,21 +29,18 @@ const SignUp: React.FC = () => {
                     autoCapitalize="none"
                     leftIcon="account-circle"
                 />
-                <AuthTextInput
-                    value={password}
-                    onChangeText={(text) => setPassword(text)}
-                    placeholder="Password"
-                    secureTextEntry
-                    autoCapitalize="none"
-                    leftIcon="lock"
-                />
+                <View style={styles.footerButtonContainer}>
+                    <Text style={styles.alreadyHaveAccount}>
+                        A Verification Code will be sent to your Email Address.
+                    </Text>
+                </View>
                 <View style={{ marginTop: 25 }}>
-                    <AuthButton title="Sign Up" onPress={signUp} />
+                    <AuthButton title="Send Verification Code" onPress={forgotPassword} />
                 </View>
                 <View style={styles.footerButtonContainer}>
                     <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
                         <Text style={styles.alreadyHaveAccount}>
-                            Already have an account? Sign In
+                            Remember Your Password? Sign In
                         </Text>
                     </TouchableOpacity>
                 </View>
@@ -91,4 +78,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default SignUp;
+export default ForgotPassword;

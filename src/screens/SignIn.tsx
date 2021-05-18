@@ -35,18 +35,31 @@ const SignIn: React.FC = () => {
                     value={username}
                     onChangeText={(text: React.SetStateAction<string>) => setUsername(text)}
                     placeholder="Username"
+                    autoCapitalize="none"
+                    textContentType="username"
+                    leftIcon="account-circle"
                 />
                 <AuthTextInput
                     value={password}
                     onChangeText={(text: React.SetStateAction<string>) => setPassword(text)}
                     placeholder="Password"
+                    secureTextEntry
+                    autoCapitalize="none"
+                    textContentType="password"
+                    leftIcon="lock"
                 />
+                <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
+                    <Text style={styles.forgotPassword}>Forgot Password?</Text>
+                </TouchableOpacity>
                 <View style={{ marginTop: 25 }}>
                     <AuthButton title="Login" onPress={signIn} />
                 </View>
+                {/* <View style={{ marginTop: 25 }}>
+                    <AuthButton title="Login" onPress={signIn} />
+                </View> */}
                 <View style={styles.footerButtonContainer}>
                     <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
-                        <Text style={styles.forgotPasswordButtonText}>Don't have an Account? Register</Text>
+                        <Text style={styles.registerButton}>Don't have an Account? Register</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -76,9 +89,16 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    forgotPasswordButtonText: {
+    forgotPassword: {
+        textAlign: 'right',
+        color: '#EEEADE',
+        marginTop: 5,
+        marginRight: 35,
+        fontSize: 12,
+    },
+    registerButton: {
         color: 'white',
-        fontSize: 18,
+        fontSize: 14,
         fontWeight: '600',
     },
 });
