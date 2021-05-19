@@ -24,15 +24,18 @@ export const GET_USERS_MEDIA = gql`
         posts(where: { user_id: { _eq: $user_id } }) {
             id
             thumbnail {
+                id
                 s3_key
             }
             media {
+                id
                 s3_key
             }
         }
         users(where: { id: { _eq: $user_id } }) {
             id
             profile_pic {
+                id
                 s3_key
             }
         }
