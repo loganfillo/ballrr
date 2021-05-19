@@ -9,6 +9,7 @@ import { Alert } from 'react-native';
 const UserContext = createContext<User>({
     id: -1,
     username: '',
+    updateLoginStatus: (isUserLoggedIn: boolean) => false,
 });
 
 /**
@@ -16,24 +17,26 @@ const UserContext = createContext<User>({
  */
 export const useUser = (): User => {
     const user = useContext(UserContext);
-    if (user.id < 0) {
-        Alert.alert('Something went wrong, please close the app and try again.');
-    }
+    // if (user.id < 0) {
+    //     Alert.alert('Something went wrong, please close the app and try again.');
+    // }
     return user;
 };
 
 interface Props {
     children: React.ReactNode;
+    updateAuthState: (isUserLoggedIn: boolean) => void;
 }
 
 /**
  * A provider for the User context
  */
-export const UserProvider: React.FC<Props> = ({ children }: Props) => {
+export const UserProvider: React.FC<Props> = ({ children, updateAuthState }: Props) => {
     const [loading, setLoading] = useState(true);
     const [user, setUser] = useState<User>({
         id: -1,
         username: '',
+        updateLoginStatus: updateAuthState,
     });
 
     const apolloClient = useApolloClient();
@@ -62,6 +65,7 @@ export const UserProvider: React.FC<Props> = ({ children }: Props) => {
                 setUser({
                     id,
                     username: cognitoUser.username,
+                    updateLoginStatus: updateAuthState,
                 });
                 setLoading(false);
             } catch (e) {
