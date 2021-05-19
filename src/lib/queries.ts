@@ -19,6 +19,29 @@ export const GET_USERS_POSTS = gql`
     }
 `;
 
+export const GET_USERS_MEDIA = gql`
+    query getUsersPosts($user_id: Int!) {
+        posts(where: { user_id: { _eq: $user_id } }) {
+            id
+            thumbnail {
+                id
+                s3_key
+            }
+            media {
+                id
+                s3_key
+            }
+        }
+        users(where: { id: { _eq: $user_id } }) {
+            id
+            profile_pic {
+                id
+                s3_key
+            }
+        }
+    }
+`;
+
 export const COUNT_USERS_POST = gql`
     query countPosts($user_id: Int!) {
         posts_aggregate(where: { user_id: { _eq: $user_id } }) {
@@ -29,9 +52,9 @@ export const COUNT_USERS_POST = gql`
     }
 `;
 
-export const GET_ALL_POSTS = gql`
-    query getAllPosts {
-        posts(order_by: { created_at: desc }) {
+export const GET_POSTS = gql`
+    query getPosts($post_ids: [Int!] = null) {
+        posts(order_by: { created_at: desc }, where: { id: { _in: $post_ids } }) {
             user_id
             caption
             post_user_id {
@@ -103,6 +126,14 @@ export const DELETE_POST = gql`
     mutation deletePost($id: Int!) {
         delete_posts_by_pk(id: $id) {
             id
+        }
+    }
+`;
+
+export const DELETE_USER = gql`
+    mutation deleteUser($user_id: Int!) {
+        delete_users(where: { id: { _eq: $user_id } }) {
+            affected_rows
         }
     }
 `;
@@ -287,6 +318,109 @@ export const DELETE_PROFILE_PIC_MEDIA = gql`
     mutation deleteProfilePicMedia($user_id: Int!) {
         delete_profile_pic_media(where: { user_id: { _eq: $user_id } }) {
             affected_rows
+        }
+    }
+`;
+
+export const CREATE_COMPETITION = gql`
+    mutation createCompetition(
+        $description: String!
+        $name: String!
+        $post_id: Int!
+        $user_id: Int!
+        $time_limit: Int
+        $creator_score: Int
+        $leaderboard_type: leaderboard_type_enum
+    ) {
+        insert_competitions_one(
+            object: {
+                name: $name
+                description: $description
+                post_id: $post_id
+                user_id: $user_id
+                time_limit: $time_limit
+                creator_score: $creator_score
+                leaderboard_type: $leaderboard_type
+            }
+        ) {
+            id
+        }
+    }
+`;
+
+export const CREATE_COMPETITION_SUBMISSION = gql`
+    mutation createCompSubmission($comp_id: Int!, $post_id: Int!, $score: Int!) {
+        insert_competition_submission_one(
+            object: { comp_id: $comp_id, post_id: $post_id, score: $score }
+        ) {
+            id
+        }
+    }
+`;
+
+export const GET_POST_COMPETITION = gql`
+    query getCompetitionThumbnail($post_id: Int!) {
+        competition_submission_aggregate(where: { post_id: { _eq: $post_id } }) {
+            aggregate {
+                count
+            }
+            nodes {
+                competition {
+                    id
+                }
+            }
+        }
+    }
+`;
+
+export const GET_COMPETITION_THUMBNAIL = gql`
+    query getCompThumbnail($comp_id: Int!) {
+        competitions_by_pk(id: $comp_id) {
+            post {
+                thumbnail {
+                    s3_key
+                }
+            }
+            id
+        }
+    }
+`;
+
+export const GET_COMPETITION = gql`
+    query getCompetition($comp_id: Int!) {
+        competitions_by_pk(id: $comp_id) {
+            creator_score
+            description
+            leaderboard_type
+            name
+            time_limit
+            id
+        }
+    }
+`;
+
+export const GET_COMPETITION_SUBMISSION_COUNT = gql`
+    query getCompSubmissionCount($comp_id: Int!) {
+        competition_submission_aggregate(where: { comp_id: { _eq: $comp_id } }) {
+            aggregate {
+                count
+            }
+        }
+    }
+`;
+
+export const GET_COMPETITION_SUBMISSIONS = gql`
+    query getCompSubmissionThumb($comp_id: Int!) {
+        competition_submission(
+            where: { comp_id: { _eq: $comp_id } }
+            order_by: { post: { created_at: desc } }
+        ) {
+            post {
+                id
+                thumbnail {
+                    s3_key
+                }
+            }
         }
     }
 `;
