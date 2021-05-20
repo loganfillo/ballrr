@@ -31,7 +31,7 @@ export async function saveProfileChanges(
 ): Promise<void> {
     await apolloClient.mutate({
         mutation: UPDATE_USER,
-        variables: { user_id: user.id, bio: bio, name: name, flag: JSON.stringify(flag) },
+        variables: { user_id: user.id, bio: bio, name: name, flag: JSON.stringify(flag.name) },
     });
     if (!profPic.cancelled) {
         if (hasProfPicChanged) {

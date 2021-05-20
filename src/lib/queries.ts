@@ -120,6 +120,19 @@ export const SEARCH_USERS = gql`
     }
 `;
 
+export const SEARCH_USERS_BY_NATION = gql`
+    query searchUsersByNation($flag: String!) {
+        users(where: { flag: { _eq: $flag } }) {
+            username
+            full_name
+            id
+            profile_pic {
+                s3_key
+            }
+        }
+    }
+`;
+
 export const LIKE_POST = gql`
     mutation likePost($post_id: Int!, $user_id: Int!) {
         insert_post_likes_one(
