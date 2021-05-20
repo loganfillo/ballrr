@@ -17,16 +17,17 @@ const AuthButton: React.FC<Props> = ({ title, onPress }: Props) => {
 };
 const styles = StyleSheet.create({
     button: {
-        marginVertical: 10,
+        marginTop: 20,
         borderRadius: 25,
+        alignSelf: 'center',
         justifyContent: 'center',
         alignItems: 'center',
         padding: 15,
-        width: '80%',
-        backgroundColor: 'green',
+        width: '70%',
+        backgroundColor: 'white',
     },
     buttonText: {
-        color: 'white',
+        color: '#44B244',
         fontSize: 18,
         fontWeight: '600',
         textTransform: 'uppercase',

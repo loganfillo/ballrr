@@ -30,23 +30,36 @@ const SignIn: React.FC = () => {
     return (
         <SafeAreaView style={styles.safeAreaContainer}>
             <View style={styles.container}>
-                <Text style={styles.title}>Sign in to your account</Text>
+                <Text style={styles.title}>Login</Text>
                 <AuthTextInput
                     value={username}
                     onChangeText={(text: React.SetStateAction<string>) => setUsername(text)}
-                    placeholder="Enter username"
+                    placeholder="Username"
+                    autoCapitalize="none"
+                    textContentType="username"
+                    leftIcon="account-circle"
                 />
                 <AuthTextInput
                     value={password}
                     onChangeText={(text: React.SetStateAction<string>) => setPassword(text)}
-                    placeholder="Enter password"
+                    placeholder="Password"
+                    secureTextEntry
+                    autoCapitalize="none"
+                    textContentType="password"
+                    leftIcon="lock"
                 />
-                <AuthButton title="Login" onPress={signIn} />
+                <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
+                    <Text style={styles.forgotPassword}>Forgot Password?</Text>
+                </TouchableOpacity>
+                <View style={{ marginTop: 25 }}>
+                    <AuthButton title="Login" onPress={signIn} />
+                </View>
+                {/* <View style={{ marginTop: 25 }}>
+                    <AuthButton title="Login" onPress={signIn} />
+                </View> */}
                 <View style={styles.footerButtonContainer}>
                     <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
-                        <Text style={styles.forgotPasswordButtonText}>
-                            Don't have an account? Sign Up
-                        </Text>
+                        <Text style={styles.registerButton}>Don't have an Account? Register</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -57,26 +70,35 @@ const SignIn: React.FC = () => {
 const styles = StyleSheet.create({
     safeAreaContainer: {
         flex: 1,
-        backgroundColor: 'white',
+        backgroundColor: '#44B244',
     },
     container: {
         flex: 1,
-        alignItems: 'center',
     },
     title: {
-        fontSize: 20,
-        color: '#202020',
+        fontSize: 40,
+        color: 'white',
         fontWeight: '500',
-        marginVertical: 15,
+        marginTop: 80,
+        marginBottom: 15,
+        marginLeft: 30,
+        textAlign: 'left',
     },
     footerButtonContainer: {
         marginVertical: 15,
         justifyContent: 'center',
         alignItems: 'center',
     },
-    forgotPasswordButtonText: {
-        color: 'tomato',
-        fontSize: 18,
+    forgotPassword: {
+        textAlign: 'right',
+        color: '#EEEADE',
+        marginTop: 5,
+        marginRight: 35,
+        fontSize: 12,
+    },
+    registerButton: {
+        color: 'white',
+        fontSize: 14,
         fontWeight: '600',
     },
 });

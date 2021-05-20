@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, Text, View, StyleSheet } from 'react-native';
+import { ScrollView, Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { useUser } from '../lib/user';
 import FollowButton from './buttons/FollowButton';
 import EditProfileButton from './buttons/EditProfileButton';
@@ -12,8 +12,7 @@ import { useQuery } from '@apollo/client';
 import { COUNT_FOLLOWERS, COUNT_FOLLOWING, COUNT_USERS_POST, GET_PROFILE } from '../lib/queries';
 import { Flag } from '../lib/types';
 import { Storage } from 'aws-amplify';
-import LogoutButton from './buttons/LogoutButton';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import AccountSettingsButton from './buttons/AccountSettingsButton';
 import { useNavigation } from '@react-navigation/native';
 
 interface Props {
@@ -144,7 +143,7 @@ const ProfileInfo: React.FC<Props> = ({ profileUserId, refreshing }: Props) => {
             <View style={{ flexDirection: 'row', paddingTop: 5 }}>
                 {user.id === profileUserId ? (
                     <>
-                        <LogoutButton style={{ flex: 1, padding: 5 }} />
+                        <AccountSettingsButton style={{ flex: 1, padding: 5 }} />
                         <EditProfileButton style={{ flex: 1, padding: 5 }} />
                     </>
                 ) : (

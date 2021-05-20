@@ -15,6 +15,9 @@ import config from './aws-exports';
 import { StatusBar } from 'expo-status-bar';
 import AuthenticationNavigator from './src/components/navigators/AuthenticationNavigator';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
+import { LogBox } from 'react-native';
+
+LogBox.ignoreLogs(['Non-serializable values were found in the navigation state']);
 
 Amplify.configure({
     ...config,

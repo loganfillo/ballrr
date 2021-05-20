@@ -158,7 +158,7 @@ const CreatePostScreen: React.FC = () => {
             style={{ backgroundColor: 'white' }}
             resetScrollToCoords={{ x: 0, y: 0 }}
         >
-            <Modal animationType="slide" visible={true}>
+            <Modal animationType="slide" visible={modalVisible}>
                 <GradientBackground>
                     <View
                         style={{

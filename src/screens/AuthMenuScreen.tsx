@@ -1,8 +1,14 @@
+/* eslint-disable react/jsx-no-comment-textnodes */
 import React from 'react';
 import { View, StyleSheet, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-const Loading: React.FC = () => {
+import AuthButton from '../components/buttons/AuthButton';
+import { useNavigation } from '@react-navigation/native';
+
+const AuthMenu: React.FC = () => {
+    const navigation = useNavigation();
+
     return (
         <SafeAreaView style={styles.safeAreaContainer}>
             <View style={styles.container}>
@@ -10,6 +16,10 @@ const Loading: React.FC = () => {
                     style={styles.headingImage}
                     source={require('../../assets/authMenuLogo2.png')}
                 />
+                <View style={{ marginTop: 30 }}>
+                    <AuthButton title="Login" onPress={() => navigation.navigate('SignIn')} />
+                </View>
+                <AuthButton title="Sign Up" onPress={() => navigation.navigate('SignUp')} />
             </View>
         </SafeAreaView>
     );
@@ -30,4 +40,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default Loading;
+export default AuthMenu;
