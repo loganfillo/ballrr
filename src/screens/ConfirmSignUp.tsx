@@ -42,17 +42,20 @@ const ConfirmSignUp: React.FC = () => {
 const styles = StyleSheet.create({
     safeAreaContainer: {
         flex: 1,
-        backgroundColor: 'white',
+        backgroundColor: '#44B244',
     },
     container: {
         flex: 1,
-        alignItems: 'center',
     },
     title: {
-        fontSize: 20,
-        color: '#202020',
+        fontSize: 40,
+        color: 'white',
         fontWeight: '500',
-        marginVertical: 15,
+        marginTop: 80,
+        marginBottom: 15,
+        marginLeft: 30,
+        textAlign: 'left',
+  
     },
 });
 
