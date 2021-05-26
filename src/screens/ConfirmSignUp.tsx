@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Keyboard } from 'react-native';
 import { Auth } from 'aws-amplify';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AuthTextInput from '../components/AuthTextInput';
@@ -10,13 +10,16 @@ const ConfirmSignUp: React.FC = () => {
     const [username, setUsername] = useState('');
     const [authCode, setAuthCode] = useState('');
     const navigation = useNavigation();
+    const [errorMessage, setErrorMessage] = useState('');
     async function confirmSignUp() {
+        Keyboard.dismiss();
         try {
             await Auth.confirmSignUp(username, authCode);
             navigation.navigate('SignIn');
             // Set Alert - Account Verified
         } catch (error) {
             console.log(error.code);
+            setErrorMessage(error.message);
         }
     }
     return (
@@ -34,6 +37,9 @@ const ConfirmSignUp: React.FC = () => {
                     placeholder="Enter verification code"
                 />
                 <AuthButton title="Confirm Sign Up" onPress={confirmSignUp} />
+                <View>
+                    <Text style={styles.errorMessage}>{errorMessage}</Text>
+                </View>
             </View>
         </SafeAreaView>
     );
@@ -55,7 +61,13 @@ const styles = StyleSheet.create({
         marginBottom: 15,
         marginLeft: 30,
         textAlign: 'left',
-  
+    },
+    errorMessage: {
+        color: 'red',
+        fontSize: 18,
+        fontWeight: '600',
+        textAlign: 'center',
+        marginTop: 10,
     },
 });
 

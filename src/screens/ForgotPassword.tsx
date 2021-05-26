@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Keyboard } from 'react-native';
 import { Auth } from 'aws-amplify';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AuthTextInput from '../components/AuthTextInput';
@@ -8,13 +8,17 @@ import { useNavigation } from '@react-navigation/native';
 
 const ForgotPassword: React.FC = () => {
     const [username, setUsername] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
     const navigation = useNavigation();
+
     async function forgotPassword() {
+        Keyboard.dismiss();
         try {
             await Auth.forgotPassword(username);
             navigation.navigate('ConfirmNewPassword', { username: username });
         } catch (error) {
             console.log(error);
+            setErrorMessage(error.message);
         }
     }
     return (
@@ -34,15 +38,16 @@ const ForgotPassword: React.FC = () => {
                         A Verification Code will be sent to your Email Address.
                     </Text>
                 </View>
-                <View style={{ marginTop: 25 }}>
+                <View>
                     <AuthButton title="Send Verification Code" onPress={forgotPassword} />
                 </View>
                 <View style={styles.footerButtonContainer}>
                     <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
-                        <Text style={styles.alreadyHaveAccount}>
-                            Remember Your Password? Sign In
-                        </Text>
+                        <Text style={styles.rememberPassword}>Remember Your Password? Sign In</Text>
                     </TouchableOpacity>
+                </View>
+                <View>
+                    <Text style={styles.errorMessage}>{errorMessage}</Text>
                 </View>
             </View>
         </SafeAreaView>
@@ -67,16 +72,28 @@ const styles = StyleSheet.create({
         textAlign: 'left',
     },
     footerButtonContainer: {
-        marginVertical: 15,
+        marginTop: 10,
         justifyContent: 'center',
         alignItems: 'center',
     },
     alreadyHaveAccount: {
         color: 'white',
         fontSize: 14,
-        fontWeight: '600',
+        fontWeight: '300',
         width: '75%',
         textAlign: 'center',
+    },
+    rememberPassword: {
+        color: 'white',
+        fontSize: 14,
+        fontWeight: '600',
+    },
+    errorMessage: {
+        color: 'red',
+        fontSize: 18,
+        fontWeight: '600',
+        textAlign: 'center',
+        marginTop: 10,
     },
 });
 

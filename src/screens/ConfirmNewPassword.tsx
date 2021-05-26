@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Keyboard } from 'react-native';
 import { Auth } from 'aws-amplify';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AuthTextInput from '../components/AuthTextInput';
@@ -12,25 +12,25 @@ type ConfirmNewPasswordRouteProp = RouteProp<AuthenticationStackParamList, 'Conf
 const ConfirmNewPassword: React.FC = () => {
     const [code, setCode] = useState('');
     const [new_password, setNewPassword] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
     const navigation = useNavigation();
     const { params } = useRoute<ConfirmNewPasswordRouteProp>();
     const username = params.username;
 
     async function enterNewPassword() {
+        Keyboard.dismiss();
         try {
-            await Auth.forgotPasswordSubmit(username, code, new_password)
-                .then((data) => console.log(data))
-                .catch((err) => console.log(err));
+            await Auth.forgotPasswordSubmit(username, code, new_password);
             navigation.navigate('SignIn');
         } catch (error) {
             console.log(error);
+            setErrorMessage(error.message);
         }
     }
     return (
         <SafeAreaView style={styles.safeAreaContainer}>
             <View style={styles.container}>
                 <Text style={styles.title}>Forgot Password</Text>
-
                 <AuthTextInput
                     value={code}
                     onChangeText={(text) => setCode(text)}
@@ -38,7 +38,6 @@ const ConfirmNewPassword: React.FC = () => {
                     autoCapitalize="none"
                     leftIcon="vpn-key"
                 />
-
                 <AuthTextInput
                     value={new_password}
                     onChangeText={(text: React.SetStateAction<string>) => setNewPassword(text)}
@@ -48,9 +47,16 @@ const ConfirmNewPassword: React.FC = () => {
                     textContentType="password"
                     leftIcon="lock"
                 />
-
                 <View style={{ marginTop: 25 }}>
                     <AuthButton title="Submit New Password" onPress={enterNewPassword} />
+                </View>
+                <View style={styles.footerButtonContainer}>
+                    <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
+                        <Text style={styles.rememberPassword}>Remember Your Password? Sign In</Text>
+                    </TouchableOpacity>
+                </View>
+                <View>
+                    <Text style={styles.errorMessage}>{errorMessage}</Text>
                 </View>
             </View>
         </SafeAreaView>
@@ -79,11 +85,17 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    alreadyHaveAccount: {
+    rememberPassword: {
         color: 'white',
         fontSize: 14,
         fontWeight: '600',
-        width: '75%',
+    },
+    errorMessage: {
+        color: 'red',
+        fontSize: 18,
+        fontWeight: '600',
+        textAlign: 'center',
+        marginTop: 10,
     },
 });
 
