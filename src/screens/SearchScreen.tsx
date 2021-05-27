@@ -1,12 +1,13 @@
 import { useApolloClient } from '@apollo/client';
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, View } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { Avatar, List, Searchbar } from 'react-native-paper';
+import { SafeAreaView, View, Text } from 'react-native';
+import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
+import { Avatar, Searchbar } from 'react-native-paper';
 import { SEARCH_USERS } from '../lib/queries';
 import { SearchResult } from '../lib/types';
 import { Storage } from 'aws-amplify';
+import SearchItem from '../components/SearchItem';
 
 const PLACE_HOLDER_IMAGE = 'https://files.thehandbook.com/uploads/2019/03/ronaldo.jpg';
 
@@ -61,27 +62,22 @@ const SearchScreen: React.FC = () => {
                     onChangeText={updateSearchQuery}
                     value={searchQuery}
                 />
-                {results.map((result, index) => {
-                    return (
-                        <TouchableOpacity
-                            key={index}
-                            onPress={() => navigateToProfile(result.userId)}
-                        >
-                            <List.Item
-                                description={`@${result.username}`}
-                                title={`${result.fullName}`}
-                                left={() => (
-                                    <Avatar.Image
-                                        size={46}
-                                        source={{
-                                            uri: result.profPicUrl,
-                                        }}
-                                    />
-                                )}
-                            />
-                        </TouchableOpacity>
-                    );
-                })}
+                <ScrollView>
+                    {results.map((result, index) => {
+                        return (
+                            <TouchableOpacity
+                                key={index}
+                                onPress={() => navigateToProfile(result.userId)}
+                            >
+                                <SearchItem
+                                    description={`@${result.username}`}
+                                    title={`${result.fullName}`}
+                                    profilePic={result.profPicUrl}
+                                />
+                            </TouchableOpacity>
+                        );
+                    })}
+                </ScrollView>
             </View>
         </SafeAreaView>
     );
