@@ -183,6 +183,9 @@ export const GET_LIKES = gql`
             notification_seen
             user_id_of_like {
                 username
+                profile_pic {
+                    s3_key
+                }
             }
         }
     }

@@ -84,12 +84,14 @@ export interface SearchResult {
 
 export enum NotificationType {
     LIKE = 'like',
+    FOLLOW = 'follow',
 }
 
 export interface Notification {
     id: number;
     username: string;
     type: NotificationType;
+    thumbnail: string;
     seen: boolean;
 }
 

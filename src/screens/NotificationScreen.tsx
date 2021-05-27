@@ -1,8 +1,9 @@
 import { useApolloClient, useQuery } from '@apollo/client';
 import { useNavigation } from '@react-navigation/native';
 import React, { useCallback, useEffect, useState } from 'react';
-import { StyleSheet, ScrollView, RefreshControl } from 'react-native';
+import { StyleSheet, ScrollView, RefreshControl, ListView } from 'react-native';
 import { Avatar, List } from 'react-native-paper';
+import NotificationItem from '../components/NotificationItem';
 import { GET_LIKES, UPDATE_LIKES_SEEN } from '../lib/queries';
 import { Notification, NotificationType } from '../lib/types';
 import { useUser } from '../lib/user';
@@ -47,6 +48,7 @@ const NotificationScreen: React.FC = () => {
                         username: like.user_id_of_like.username,
                         type: NotificationType.LIKE,
                         id: like.id,
+                        thumbnail: like.user_id_of_like.profile_pic.s3_key,
                         seen: like.notification_seen,
                     };
                     fetchedLikes.push(likeNotification);
@@ -69,24 +71,16 @@ const NotificationScreen: React.FC = () => {
             style={styles.container}
             refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         >
-            <List.Section>
-                {notifications.map((notification, index) => {
-                    return (
-                        <List.Item
-                            key={index}
-                            title={`${notification.username} Liked your post`}
-                            left={() => (
-                                <Avatar.Image
-                                    size={35}
-                                    source={{
-                                        uri: PLACE_HOLDER_IMAGE,
-                                    }}
-                                />
-                            )}
-                        />
-                    );
-                })}
-            </List.Section>
+            {notifications.map((notification, index) => {
+                return (
+                    <NotificationItem
+                        key={index}
+                        username={notification.username}
+                        notifType={notification.type}
+                        thumbnail={notification.thumbnail}
+                    />
+                );
+            })}
         </ScrollView>
     );
 };
