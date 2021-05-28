@@ -53,6 +53,7 @@ const styles = StyleSheet.create({
         marginVertical: 10,
         width: '85%',
         alignSelf: 'center',
+        fontWeight: '300',
     },
     icon: {
         marginRight: 10,
@@ -62,6 +63,7 @@ const styles = StyleSheet.create({
         width: '80%',
         fontSize: 18,
         color: '#EEEADE',
+        fontWeight: '300',
     },
 });
 
