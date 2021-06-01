@@ -18,7 +18,7 @@ import CreatePostButton from '../components/buttons/CreatePostButton';
 import ViewCompCount from '../components/ViewCompCount';
 import ViewCompPostArray from '../components/ViewCompPostArray';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-
+import ViewCompLeaderboard from '../components/ViewCompLeaderboard';
 const wait = (timeout: number) => {
     return new Promise((resolve) => {
         setTimeout(resolve, timeout);
@@ -30,6 +30,7 @@ type ViewCompScreenRouteProp = RouteProp<CompStackParamList, 'ViewCompetition'>;
 const BrowseChallengeScreen: React.FC = () => {
     const [refreshing, setRefreshing] = useState(false);
     const [competition, setCompetition] = useState<Competition>();
+    const [lbModalVisible, setLbModalVisible] = useState(false);
     const { params } = useRoute<ViewCompScreenRouteProp>();
     const { height } = Dimensions.get('window');
     const navigation = useNavigation();
@@ -65,6 +66,7 @@ const BrowseChallengeScreen: React.FC = () => {
                     score: comp.creator_score,
                     timeLimit: comp.time_limit,
                     leaderboardType: comp.leaderboard_type,
+                    id: params.compId,
                 });
             }
         }
@@ -80,6 +82,12 @@ const BrowseChallengeScreen: React.FC = () => {
             style={{ flex: 1 }}
             refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         >
+            <ViewCompLeaderboard
+                visible={lbModalVisible}
+                comp={competition}
+                refreshing={refreshing}
+                onClose={() => setLbModalVisible(false)}
+            />
             <View style={{ alignItems: 'center', justifyContent: 'center', paddingVertical: 15 }}>
                 <TouchableOpacity onPress={() => Alert.alert('Should this go to original post??')}>
                     <Image
@@ -116,8 +124,17 @@ const BrowseChallengeScreen: React.FC = () => {
                         flexDirection: 'row',
                     }}
                 >
-                    <MaterialCommunityIcons name={'timer'} size={0.02 * height} color={'black'} />
-                    <Text style={{ fontSize: 18, fontWeight: '400' }}>{competition.timeLimit}</Text>
+                    <MaterialCommunityIcons name={'timer'} size={0.02 * height} color={'#111111'} />
+                    <Text
+                        style={{
+                            fontSize: 18,
+                            fontWeight: '400',
+                            color: '#111111',
+                            paddingHorizontal: 3,
+                        }}
+                    >
+                        {competition.timeLimit}s
+                    </Text>
                 </View>
             )}
             <View style={{ justifyContent: 'center', alignItems: 'center', paddingVertical: 5 }}>
@@ -136,7 +153,7 @@ const BrowseChallengeScreen: React.FC = () => {
                         borderRadius: 10,
                         paddingVertical: 10,
                     }}
-                    onPress={() => Alert.alert('Not implemented yet!')}
+                    onPress={() => setLbModalVisible(true)}
                 >
                     <Text
                         style={{

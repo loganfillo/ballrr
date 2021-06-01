@@ -110,4 +110,13 @@ export interface Competition {
     leaderboardType: LeaderBoard;
     timeLimit?: number;
     score?: number;
+    id?: number;
+}
+
+export interface LeaderBoardItem {
+    profPicUrl: string;
+    name: string;
+    username: string;
+    score: number;
+    postId: number;
 }

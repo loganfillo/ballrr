@@ -22,7 +22,7 @@ const FeedPostIconBar: React.FC<Props> = ({ post, compId }: Props) => {
 
     return (
         <>
-            <LikeButton postId={post.id} size={ICON_SIZE} onChange={changeLike} />
+            <LikeButton postId={post.id} size={ICON_SIZE} onChange={changeLike} compId={compId} />
             <LikeCount postId={post.id} likeChanged={likeChanged} />
             {compId !== 0 && (
                 <CreatePostButton

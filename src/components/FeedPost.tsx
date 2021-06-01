@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Dimensions, Image, View } from 'react-native';
-import { MediaType, Post } from '../lib/types';
+import { LeaderBoard, LeaderBoardItem, MediaType, Post } from '../lib/types';
 import { Video } from 'expo-av';
 import FeedPostIconBar from './FeedPostIconBar';
 import FeedPostCaption from './FeedPostCaption';
 import FeedPostCompThumnbail from './FeedPostCompThumbnail';
 import { GET_POST_COMPETITION } from '../lib/queries';
 import { useQuery } from '@apollo/client';
-import DeletePostButton from './buttons/DeletePostButton';
 
 interface Props {
     post: Post;
@@ -16,6 +15,8 @@ interface Props {
 
 const FeedPost: React.FC<Props> = ({ post, shouldPlay }: Props) => {
     const [compId, setCompId] = useState(0);
+    const [compScore, setCompScore] = useState(0);
+    const [compType, setCompType] = useState<LeaderBoardItem>();
     const { width, height } = Dimensions.get('window');
 
     const { loading, error, data } = useQuery(GET_POST_COMPETITION, {
@@ -26,17 +27,20 @@ const FeedPost: React.FC<Props> = ({ post, shouldPlay }: Props) => {
         async function getCompId() {
             if (!loading && !error) {
                 if (data.competition_submission_aggregate.aggregate.count > 0) {
-                    const competition = data.competition_submission_aggregate.nodes[0].competition;
-                    setCompId(competition.id);
+                    const competition_sub = data.competition_submission_aggregate.nodes[0];
+                    setCompScore(competition_sub.score);
+                    setCompId(competition_sub.competition.id);
+                    setCompType(competition_sub.competition.leaderboard_type);
                 }
             }
         }
         getCompId();
     }, [data]);
-
     return (
         <>
-            {compId !== 0 && <FeedPostCompThumnbail compId={compId} />}
+            {compId !== 0 && (
+                <FeedPostCompThumnbail compId={compId} compScore={compScore} compType={compType} />
+            )}
             <View
                 style={{
                     position: 'absolute',
