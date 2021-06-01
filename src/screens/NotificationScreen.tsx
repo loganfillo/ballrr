@@ -1,14 +1,11 @@
 import { useApolloClient, useQuery } from '@apollo/client';
 import { useNavigation } from '@react-navigation/native';
 import React, { useCallback, useEffect, useState } from 'react';
-import { StyleSheet, ScrollView, RefreshControl, ListView } from 'react-native';
-import { Avatar, List } from 'react-native-paper';
+import { StyleSheet, ScrollView, RefreshControl } from 'react-native';
 import NotificationItem from '../components/NotificationItem';
 import { GET_LIKES, UPDATE_LIKES_SEEN } from '../lib/queries';
 import { Notification, NotificationType } from '../lib/types';
 import { useUser } from '../lib/user';
-
-const PLACE_HOLDER_IMAGE = 'https://files.thehandbook.com/uploads/2019/03/ronaldo.jpg';
 
 const wait = (timeout: number) => {
     return new Promise((resolve) => {
