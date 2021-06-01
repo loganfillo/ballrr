@@ -13,7 +13,7 @@ const SearchItem: React.FC<Props> = ({ description, title, profilePic }: Props) 
             <View style={styles.profPic}>
                 {profilePic && (
                     <Avatar.Image
-                        size={46}
+                        size={54}
                         source={{
                             uri: profilePic,
                         }}
@@ -21,8 +21,8 @@ const SearchItem: React.FC<Props> = ({ description, title, profilePic }: Props) 
                 )}
             </View>
             <View style={styles.profInfo}>
-                <Text style={styles.info}>{description}</Text>
-                <Text style={styles.info}>{title}</Text>
+                <Text style={styles.username}>{description}</Text>
+                <Text style={styles.fullname}>{title}</Text>
             </View>
         </View>
     );
@@ -36,10 +36,17 @@ const styles = StyleSheet.create({
     },
     profPic: {
         marginRight: 15,
+        marginLeft: 15,
     },
-    info: {
+    username: {
         color: 'black',
-        fontSize: 20,
+        fontSize: 16,
+        marginTop: 5,
+        fontWeight: '600',
+    },
+    fullname: {
+        color: 'grey',
+        fontSize: 16,
     },
     profInfo: {
         flexDirection: 'column',
