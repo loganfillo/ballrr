@@ -424,3 +424,27 @@ export const GET_COMPETITION_SUBMISSIONS = gql`
         }
     }
 `;
+
+export const GET_COMMENTS = gql`
+    query getComments($post_id: Int!) {
+        comments(where: { post_id: { _eq: $post_id } }, order_by: { created_at: asc }) {
+            post_id
+            created_at
+            commenter {
+                username
+                profile_pic {
+                    s3_key
+                }
+            }
+            comment
+        }
+    }
+`;
+
+export const INSERT_COMMENT = gql`
+    mutation insertComment($comment: String!, $post_id: Int!, $user_id: Int!) {
+        insert_comments(objects: { comment: $comment, post_id: $post_id, user_id: $user_id }) {
+            affected_rows
+        }
+    }
+`;

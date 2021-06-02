@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Post } from '../lib/types';
 import LikeButton from './buttons/LikeButton';
+import CommentButton from './buttons/CommentButton';
 import LikeCount from './LikeCount';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Dimensions } from 'react-native';
@@ -32,7 +33,7 @@ const FeedPostIconBar: React.FC<Props> = ({ post, compId }: Props) => {
                     compId={compId}
                 ></CreatePostButton>
             )}
-            <MaterialCommunityIcons name={'comment'} size={ICON_SIZE} color={'white'} />
+            <CommentButton postId={post.id} size={ICON_SIZE} />
             <MaterialCommunityIcons name={'send'} size={ICON_SIZE} color={'white'} />
         </>
     );
