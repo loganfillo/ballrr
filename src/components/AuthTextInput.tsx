@@ -9,7 +9,7 @@ interface Props {
     placeholder: string;
     secureTextEntry?: boolean;
     autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters' | undefined;
-    keyboardType?: 'email-address' | undefined;
+    keyboardType?: 'email-address' | 'numeric' | undefined;
     textContentType?: 'username' | 'password' | 'emailAddress' | undefined;
 }
 

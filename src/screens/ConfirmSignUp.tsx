@@ -27,11 +27,13 @@ const ConfirmSignUp: React.FC = () => {
                     value={username}
                     onChangeText={(text) => setUsername(text)}
                     placeholder="Enter username"
+                    autoCapitalize="none"
                 />
                 <AuthTextInput
                     value={authCode}
                     onChangeText={(text) => setAuthCode(text)}
                     placeholder="Enter verification code"
+                    keyboardType="numeric"
                 />
                 <AuthButton title="Confirm Sign Up" onPress={confirmSignUp} />
             </View>
