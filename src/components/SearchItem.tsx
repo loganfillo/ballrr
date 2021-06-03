@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Avatar } from 'react-native-paper';
 
+
 interface Props {
     description: string;
     title: string;
@@ -23,7 +24,9 @@ const SearchItem: React.FC<Props> = ({ description, title, profilePic }: Props) 
             </View>
             <View style={styles.profInfo}>
                 <Text style={styles.username}>{description}</Text>
-                <Text style={styles.fullname}>{title}</Text>
+                { title !== 'null' && (
+                    <Text style={styles.fullname}>{title}</Text>
+                )}
             </View>
         </View>
     );
@@ -31,7 +34,7 @@ const SearchItem: React.FC<Props> = ({ description, title, profilePic }: Props) 
 const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
-        paddingTop: 10,
+        paddingVertical: 10,
     },
     profPic: {
         marginRight: 15,
