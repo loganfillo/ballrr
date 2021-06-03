@@ -23,9 +23,7 @@ const SearchItem: React.FC<Props> = ({ description, title, profilePic }: Props) 
             </View>
             <View style={styles.profInfo}>
                 <Text style={styles.username}>{description}</Text>
-                { title !== '' && (
-                    <Text style={styles.fullname}>{title}</Text>
-                )}
+                <Text style={styles.fullname}>{title}</Text>
             </View>
         </View>
     );
