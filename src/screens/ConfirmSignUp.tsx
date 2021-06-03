@@ -57,6 +57,7 @@ const styles = StyleSheet.create({
         marginBottom: 15,
         marginLeft: 30,
         textAlign: 'left',
+  
     },
 });
 
