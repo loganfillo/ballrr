@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {
     TouchableOpacity,
     Modal,
-    Button,
+    Image,
     Dimensions,
     TextInput,
     KeyboardAvoidingView,
@@ -16,7 +16,8 @@ import { Text, View } from 'native-base';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { GET_COMMENTS, INSERT_COMMENT } from '../../lib/queries';
 import { Comment } from '../../lib/types';
-import { CommentDisplay } from '../../components/CommentDisplay';
+import Moment from 'react-moment';
+import 'moment-timezone';
 
 interface Props {
     postId: number;
@@ -39,18 +40,15 @@ const CommentButton: React.FC<Props> = ({ postId, size }: Props) => {
         variables: { comment: comment, post_id: postId, user_id: user.id },
     });
 
-    function afterComment() {
-        setCommentPosted(true);
-        setComment('');
+    async function afterComment() {
+        if (comment != '') {
+            insertComment();
+            setComment('');
+            refetch();
+        }
     }
 
     useEffect(() => {
-        if (commentPosted) {
-            insertComment();
-            setCommentPosted(false);
-            refetch();
-        }
-
         async function fetchComments() {
             if (!loading && !error) {
                 const fetchedComments: Comment[] = [];
@@ -73,7 +71,7 @@ const CommentButton: React.FC<Props> = ({ postId, size }: Props) => {
             }
         }
         fetchComments();
-    }, [data, commentPosted]);
+    }, [data]);
 
     return (
         <View>
@@ -95,94 +93,110 @@ const CommentButton: React.FC<Props> = ({ postId, size }: Props) => {
                 }}
             >
                 <SafeAreaView>
-                    <TouchableOpacity onPress={() => setModalVisible(false)}>
-                        <MaterialCommunityIcons
-                            name={'chevron-left'}
-                            size={0.075 * height}
-                            color={'black'}
-                        />
-                    </TouchableOpacity>
-                    <View style={{}}>
+                    <View style={{ flexDirection: 'row' }}>
+                        <TouchableOpacity onPress={() => setModalVisible(false)}>
+                            <MaterialCommunityIcons
+                                name={'chevron-left'}
+                                size={0.075 * height}
+                                color={'black'}
+                            />
+                        </TouchableOpacity>
                         <Text
                             style={{
                                 color: 'black',
-                                fontSize: 14,
-                                textAlign: 'center',
+                                fontSize: 20,
+                                fontWeight: 'bold',
+                                flexDirection: 'row',
+                                justifyContent: 'center',
+                                alignSelf: 'center',
+                                padding: 5,
                             }}
                         >
-                            Put Comment Here
+                            Comments
                         </Text>
+                    </View>
+                    <View style={{ paddingBottom: 10 }}>
                         <ScrollView>
-                            <Text
-                                style={{
-                                    color: 'black',
-                                    fontSize: 14,
-                                    textAlign: 'center',
-                                }}
-                            >
-                                In Scrollview
-                            </Text>
                             {commentSection.map((comment, id) => {
                                 return (
                                     <View key={id}>
-                                        <Text
+                                        <View style={{ flexDirection: 'row', padding: 3 }}>
+                                            <Image
+                                                style={{
+                                                    borderRadius: 100,
+                                                    height: undefined,
+                                                    width: '10%',
+                                                    aspectRatio: 1,
+                                                    flexDirection: 'row',
+                                                }}
+                                                source={{
+                                                    uri: comment.commenterPicUrl,
+                                                }}
+                                            />
+                                            <View style={{ flexDirection: 'column' }}>
+                                                <Text
+                                                    style={{
+                                                        color: 'black',
+                                                        fontSize: 16,
+                                                        fontWeight: 'bold',
+                                                        flexDirection: 'row',
+                                                        justifyContent: 'center',
+                                                        padding: 2,
+                                                    }}
+                                                >
+                                                    {'@' + comment.commenterUsername}
+                                                </Text>
+                                                <Text
+                                                    style={{
+                                                        fontSize: 16,
+                                                        color: 'black',
+                                                        fontWeight: 'normal',
+                                                        paddingLeft: 20,
+                                                    }}
+                                                >
+                                                    {comment.comment}
+                                                </Text>
+                                            </View>
+                                        </View>
+                                        <Moment
+                                            element={Text}
+                                            fromNow
                                             style={{
-                                                color: 'black',
-                                                fontSize: 16,
-                                                fontWeight: 'bold',
-                                            }}
-                                        >
-                                            {'@' + comment.commenterUsername}
-                                        </Text>
-                                        <Text
-                                            style={{
-                                                fontSize: 13,
+                                                fontSize: 12,
                                                 color: 'black',
                                                 fontWeight: 'normal',
-                                            }}
-                                        >
-                                            {comment.comment}
-                                        </Text>
-                                        <Text
-                                            style={{
-                                                fontSize: 13,
-                                                color: 'black',
-                                                fontWeight: 'normal',
+                                                alignSelf: 'flex-end',
                                             }}
                                         >
                                             {comment.timestamp}
-                                        </Text>
+                                        </Moment>
                                     </View>
                                 );
                             })}
-                            {/* {commentSection.map((comment, id) => {
-                                return (
-                                    <View key={id}>
-                                        <CommentDisplay commentInfo={comment} key={id} />
-                                    </View>
-                                );
-                            })} */}
                         </ScrollView>
-                        <KeyboardAvoidingView
-                            style={{ flexDirection: 'row', justifyContent: 'flex-end', bottom: 0 }}
-                        >
-                            <TextInput
-                                style={{
-                                    borderColor: 'green',
-                                    borderWidth: 1,
-                                    padding: 4,
-                                    flex: 1,
-                                }}
-                                maxLength={200}
-                                onChangeText={(text) => setComment(text)}
-                                value={comment}
-                                autoFocus={true}
-                                returnKeyType="send"
-                                onSubmitEditing={afterComment}
-                            />
-                        </KeyboardAvoidingView>
                     </View>
                 </SafeAreaView>
+                <KeyboardAvoidingView
+                    style={{
+                        flexDirection: 'row',
+                    }}
+                >
+                    <TextInput
+                        style={{
+                            borderColor: 'black',
+                            borderWidth: 3,
+                            padding: 10,
+                            flex: 1,
+                            fontSize: 16,
+                        }}
+                        maxLength={200}
+                        onChangeText={(text) => setComment(text)}
+                        value={comment}
+                        autoFocus={true}
+                        returnKeyType="send"
+                        onSubmitEditing={() => afterComment()}
+                    />
+                </KeyboardAvoidingView>
             </Modal>
         </View>
     );

@@ -171,6 +171,16 @@ export const COUNT_LIKES = gql`
     }
 `;
 
+export const COUNT_COMMENTS = gql`
+    query countComments($post_id: Int) {
+        comments_aggregate(where: { post_id: { _eq: $post_id } }) {
+            aggregate {
+                count
+            }
+        }
+    }
+`;
+
 export const GET_LIKES = gql`
     query getLikes($user_id: Int!) {
         post_likes(
