@@ -1,4 +1,5 @@
-import React from 'react';
+/* eslint-disable prettier/prettier */
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Avatar } from 'react-native-paper';
 
@@ -22,17 +23,17 @@ const SearchItem: React.FC<Props> = ({ description, title, profilePic }: Props) 
             </View>
             <View style={styles.profInfo}>
                 <Text style={styles.username}>{description}</Text>
-                <Text style={styles.fullname}>{title}</Text>
+                { title !== '' && (
+                    <Text style={styles.fullname}>{title}</Text>
+                )}
             </View>
         </View>
     );
 };
 const styles = StyleSheet.create({
     container: {
-        borderColor: '#EEEADE',
-        borderBottomWidth: 1,
         flexDirection: 'row',
-        paddingVertical: 10,
+        paddingTop: 10,
     },
     profPic: {
         marginRight: 15,
@@ -42,7 +43,7 @@ const styles = StyleSheet.create({
         color: 'black',
         fontSize: 16,
         marginTop: 5,
-        fontWeight: '600',
+        fontWeight: '500',
     },
     fullname: {
         color: 'grey',

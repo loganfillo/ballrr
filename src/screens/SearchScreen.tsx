@@ -1,20 +1,22 @@
+/* eslint-disable prettier/prettier */
 import { useApolloClient } from '@apollo/client';
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, View, Text } from 'react-native';
-import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
-import { Avatar, Searchbar } from 'react-native-paper';
+import { SafeAreaView, View, Text, ScrollView } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { Avatar, List } from 'react-native-paper';
 import { SEARCH_USERS } from '../lib/queries';
 import { SearchResult } from '../lib/types';
 import { Storage } from 'aws-amplify';
+import SearchBar from '../components/SearchBar';
 import SearchItem from '../components/SearchItem';
+import HardCodedSearchScreen from '../components/HardCodedSearch';
 
 const PLACE_HOLDER_IMAGE = 'https://files.thehandbook.com/uploads/2019/03/ronaldo.jpg';
 
 const SearchScreen: React.FC = () => {
     const [results, setResults] = useState<SearchResult[]>([]);
     const [searchQuery, setSearchQuery] = useState('');
-
     const apolloClient = useApolloClient();
     const navigation = useNavigation();
 
@@ -57,26 +59,31 @@ const SearchScreen: React.FC = () => {
     return (
         <SafeAreaView>
             <View style={{ padding: 2, borderRadius: 2, borderColor: 'black' }}>
-                <Searchbar
+                <SearchBar
                     placeholder="Search"
                     onChangeText={updateSearchQuery}
                     value={searchQuery}
+                    autoCapitalize="none"
+                    leftIcon="search"
                 />
-                <ScrollView>
-                    {results.map((result, index) => {
-                        return (
-                            <TouchableOpacity
-                                key={index}
-                                onPress={() => navigateToProfile(result.userId)}
-                            >
-                                <SearchItem
-                                    description={`@${result.username}`}
-                                    title={`${result.fullName}`}
-                                    profilePic={result.profPicUrl}
-                                />
-                            </TouchableOpacity>
-                        );
-                    })}
+                <ScrollView style={{ paddingBottom: 500}}>
+                { searchQuery !== '' ? (
+                results.map((result, index) => {
+                    return (
+                        <TouchableOpacity
+                            key={index}
+                            onPress={() => navigateToProfile(result.userId)}
+                        >
+                            <SearchItem
+                                description={`@${result.username}`}
+                                title={`${result.fullName}`}
+                                profilePic={result.profPicUrl}
+                            />
+                        </TouchableOpacity>
+                    );
+                })) : ( 
+                        <HardCodedSearchScreen/>
+                )}
                 </ScrollView>
             </View>
         </SafeAreaView>
