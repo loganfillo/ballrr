@@ -31,7 +31,7 @@ const SearchBar: React.FC<Props> = ({
             {value !== '' && (
                 <TouchableOpacity onPress={() => onChangeText('')}>
                     <View>
-                        <MaterialIcons name="cancel" size={22} style={styles.cancelIcon} />
+                        <MaterialIcons name="cancel" size={24} style={styles.cancelIcon} />
                     </View>
                 </TouchableOpacity>
             )}
@@ -53,13 +53,13 @@ const styles = StyleSheet.create({
     },
     icon: {
         marginRight: 10,
+        marginLeft: 10,
         color: '#44B244',
     },
     cancelIcon: {
-        marginRight: 10,
         marginTop: 2,
-        color: 'grey',
-        alignSelf: 'center',
+        marginLeft: -10,
+        color: '#44B244',
     },
     input: {
         width: '80%',
