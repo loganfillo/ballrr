@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, TextInput } from 'react-native';
+import { View, StyleSheet, TextInput, TouchableOpacity, Text } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
 interface Props {
@@ -28,6 +28,13 @@ const SearchBar: React.FC<Props> = ({
                 placeholderTextColor="grey"
                 autoCapitalize={autoCapitalize}
             />
+            {value !== '' && (
+                <TouchableOpacity onPress={() => onChangeText('')}>
+                    <View>
+                        <MaterialIcons name="cancel" size={22} style={styles.cancelIcon} />
+                    </View>
+                </TouchableOpacity>
+            )}
         </View>
     );
 };
@@ -47,6 +54,12 @@ const styles = StyleSheet.create({
     icon: {
         marginRight: 10,
         color: '#44B244',
+    },
+    cancelIcon: {
+        marginRight: 10,
+        marginTop: 2,
+        color: 'grey',
+        alignSelf: 'center',
     },
     input: {
         width: '80%',
