@@ -35,7 +35,7 @@ const ConfirmNewPassword: React.FC = () => {
                     value={code}
                     onChangeText={(text) => setCode(text)}
                     placeholder="VerificationCode"
-                    autoCapitalize="none"
+                    keyboardType="numeric"
                     leftIcon="vpn-key"
                 />
                 <AuthTextInput
