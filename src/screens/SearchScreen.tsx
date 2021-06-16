@@ -82,7 +82,8 @@ const SearchScreen: React.FC = () => {
                         </TouchableOpacity>
                     );
                 })) : ( 
-                        <HardCodedSearchScreen/>
+//                         <HardCodedSearchScreen/>
+                        <></>
                 )}
                 </ScrollView>
             </View>
