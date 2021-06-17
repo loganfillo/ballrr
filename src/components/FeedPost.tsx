@@ -8,6 +8,7 @@ import FeedPostCompThumnbail from './FeedPostCompThumbnail';
 import { GET_POST_COMPETITION } from '../lib/queries';
 import { useQuery } from '@apollo/client';
 import DeletePostButton from './buttons/DeletePostButton';
+import { useUser } from '../lib/user';
 
 interface Props {
     post: Post;
@@ -17,6 +18,8 @@ interface Props {
 const FeedPost: React.FC<Props> = ({ post, shouldPlay }: Props) => {
     const [compId, setCompId] = useState(0);
     const { width, height } = Dimensions.get('window');
+
+    const user = useUser();
 
     const { loading, error, data } = useQuery(GET_POST_COMPETITION, {
         variables: { post_id: post.id },
@@ -37,6 +40,7 @@ const FeedPost: React.FC<Props> = ({ post, shouldPlay }: Props) => {
     return (
         <>
             {compId !== 0 && <FeedPostCompThumnbail compId={compId} />}
+            {user.id == post.userId && <DeletePostButton post={post} />}
             <View
                 style={{
                     position: 'absolute',
