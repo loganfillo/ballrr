@@ -171,6 +171,16 @@ export const COUNT_LIKES = gql`
     }
 `;
 
+export const COUNT_COMMENTS = gql`
+    query countComments($post_id: Int) {
+        comments_aggregate(where: { post_id: { _eq: $post_id } }) {
+            aggregate {
+                count
+            }
+        }
+    }
+`;
+
 export const GET_LIKES = gql`
     query getLikes($user_id: Int!) {
         post_likes(
@@ -421,6 +431,30 @@ export const GET_COMPETITION_SUBMISSIONS = gql`
                     s3_key
                 }
             }
+        }
+    }
+`;
+
+export const GET_COMMENTS = gql`
+    query getComments($post_id: Int!) {
+        comments(where: { post_id: { _eq: $post_id } }, order_by: { created_at: asc }) {
+            post_id
+            created_at
+            commenter {
+                username
+                profile_pic {
+                    s3_key
+                }
+            }
+            comment
+        }
+    }
+`;
+
+export const INSERT_COMMENT = gql`
+    mutation insertComment($comment: String!, $post_id: Int!, $user_id: Int!) {
+        insert_comments(objects: { comment: $comment, post_id: $post_id, user_id: $user_id }) {
+            affected_rows
         }
     }
 `;

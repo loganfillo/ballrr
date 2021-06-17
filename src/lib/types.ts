@@ -63,6 +63,15 @@ export interface Post {
     thumbnailS3Key: string;
 }
 
+export interface Comment {
+    comment: string;
+    commenterId: number;
+    commenterPicUrl: string;
+    commenterUsername: string;
+    timestamp: number;
+    postId: number;
+}
+
 export interface ThumbnailPost {
     url: string;
     id: number;
