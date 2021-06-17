@@ -27,8 +27,6 @@ const DeletePostButton: React.FC<Props> = ({ post }: Props) => {
 
     useEffect(() => {
         async function handleActionButton() {
-            console.log(clicked);
-
             if (clicked === DELETE) {
                 Alert.alert(
                     'Delete Post?',

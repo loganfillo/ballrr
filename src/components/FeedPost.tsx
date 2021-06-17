@@ -18,7 +18,6 @@ interface Props {
 const FeedPost: React.FC<Props> = ({ post, shouldPlay }: Props) => {
     const [compId, setCompId] = useState(0);
     const { width, height } = Dimensions.get('window');
-
     const user = useUser();
 
     const { loading, error, data } = useQuery(GET_POST_COMPETITION, {
