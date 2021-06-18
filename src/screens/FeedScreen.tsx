@@ -24,7 +24,7 @@ const FeedScreen: React.FC = () => {
 
     useEffect(() => {
         refetch();
-    }, [isFocused]);
+    }, [isFocused, selected]);
 
     const { loading, error, data, refetch } = useQuery(GET_POSTS, {
         variables: params?.postIds === undefined ? {} : { post_ids: params.postIds },
@@ -51,6 +51,18 @@ const FeedScreen: React.FC = () => {
                         id: post.id,
                         s3Key: post.media.s3_key,
                         thumbnailS3Key: post.thumbnail.s3_key,
+                    });
+                }
+                // SOot by postids if response is cached
+                if (params?.postIds !== undefined) {
+                    fetchedPosts.sort(function (a, b) {
+                        const A: number = a.id;
+                        const B: number = b.id;
+                        if (params.postIds.indexOf(A) > params.postIds.indexOf(B)) {
+                            return 1;
+                        } else {
+                            return -1;
+                        }
                     });
                 }
                 setPosts(fetchedPosts);

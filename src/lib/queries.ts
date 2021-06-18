@@ -161,6 +161,19 @@ export const LIKE_POST = gql`
     }
 `;
 
+export const UPDATE_COMP_SUB_SCORE_LIKES = gql`
+    mutation updateCompSubScore($comp_id: Int!, $post_id: Int!, $val: Int!) {
+        update_competition_submission(
+            where: { comp_id: { _eq: $comp_id }, _and: { post_id: { _eq: $post_id } } }
+            _inc: { score: $val }
+        ) {
+            returning {
+                score
+            }
+        }
+    }
+`;
+
 export const COUNT_LIKES = gql`
     query countLikes($post_id: Int) {
         post_likes_aggregate(where: { liked_post_id: { _eq: $post_id } }) {
@@ -377,7 +390,9 @@ export const GET_POST_COMPETITION = gql`
             nodes {
                 competition {
                     id
+                    leaderboard_type
                 }
+                score
             }
         }
     }
@@ -435,6 +450,20 @@ export const GET_COMPETITION_SUBMISSIONS = gql`
     }
 `;
 
+export const GET_COMPETITION_LEADERBOARD = gql`
+    query getLikesList($comp_id: Int!) {
+        competition_submission(where: { comp_id: { _eq: $comp_id } }, order_by: { score: desc }) {
+            post {
+                post_user_id {
+                    profile_pic {
+                        s3_key
+                    }
+                    username
+                    full_name
+                }
+                id
+            }
+            score
 export const GET_COMMENTS = gql`
     query getComments($post_id: Int!) {
         comments(where: { post_id: { _eq: $post_id } }, order_by: { created_at: asc }) {

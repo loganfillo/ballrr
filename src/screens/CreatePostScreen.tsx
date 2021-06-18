@@ -62,6 +62,7 @@ const CreatePostScreen: React.FC = () => {
                     score: 0,
                     timeLimit: comp.time_limit,
                     leaderboardType: comp.leaderboard_type,
+                    id: params.competitionId,
                 });
                 setIsSubmission(true);
                 setHasCompetition(true);

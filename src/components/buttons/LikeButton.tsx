@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { DocumentNode, useApolloClient, useQuery } from '@apollo/client';
-import { DELETE_LIKE, HAS_USER_LIKED_POST, LIKE_POST } from '../../lib/queries';
+import {
+    DELETE_LIKE,
+    HAS_USER_LIKED_POST,
+    LIKE_POST,
+    UPDATE_COMP_SUB_SCORE_LIKES,
+} from '../../lib/queries';
 import { useUser } from '../../lib/user';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
@@ -9,9 +14,10 @@ interface Props {
     postId: number;
     size: number;
     onChange: () => void;
+    compId: number;
 }
 
-const LikeButton: React.FC<Props> = ({ postId, size, onChange }: Props) => {
+const LikeButton: React.FC<Props> = ({ postId, size, onChange, compId }: Props) => {
     const [liked, setLiked] = useState(false);
     const [likeLoading, setLikeLoading] = useState(true);
     const [likeVisible, setLikeVisible] = useState(false);
@@ -50,8 +56,21 @@ const LikeButton: React.FC<Props> = ({ postId, size, onChange }: Props) => {
                 mutation: query as DocumentNode,
                 variables: { post_id: postId, user_id: user.id },
             });
-            setLikeLoading(false);
         }
+        if (compId > 0) {
+            if (isLiked) {
+                await apolloClient.mutate({
+                    mutation: UPDATE_COMP_SUB_SCORE_LIKES,
+                    variables: { post_id: postId, comp_id: compId, val: 1 },
+                });
+            } else if (!isLiked) {
+                await apolloClient.mutate({
+                    mutation: UPDATE_COMP_SUB_SCORE_LIKES,
+                    variables: { post_id: postId, comp_id: compId, val: -1 },
+                });
+            }
+        }
+        setLikeLoading(false);
         onChange();
     }
     return (

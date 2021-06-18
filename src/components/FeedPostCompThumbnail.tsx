@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { Image, View, Dimensions, TouchableOpacity } from 'react-native';
+import { Image, View, Dimensions, TouchableOpacity, Text } from 'react-native';
 import { Storage } from 'aws-amplify';
 import { useQuery } from '@apollo/client';
 import { useNavigation } from '@react-navigation/native';
 import { GET_COMPETITION_THUMBNAIL } from '../lib/queries';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { LeaderBoard } from '../lib/types';
 
 interface Props {
     compId: number;
+    compScore: number;
+    compType: LeaderBoard;
 }
-const FeedPostCompThumnbail: React.FC<Props> = ({ compId }: Props) => {
+const FeedPostCompThumnbail: React.FC<Props> = ({ compId, compScore, compType }: Props) => {
     const [url, setUrl] = useState('');
 
     const navigation = useNavigation();
@@ -61,6 +65,42 @@ const FeedPostCompThumnbail: React.FC<Props> = ({ compId }: Props) => {
                                 uri: url,
                             }}
                         />
+                        <View
+                            style={{
+                                position: 'absolute',
+                                alignSelf: 'flex-end',
+                                bottom: '4%',
+                                right: '5%',
+                            }}
+                        >
+                            <View
+                                style={{
+                                    backgroundColor: 'orange',
+                                    borderRadius: 100,
+                                    padding: 5,
+                                    justifyContent: 'center',
+                                    flexDirection: 'row',
+                                }}
+                            >
+                                <View style={{ justifyContent: 'center' }}>
+                                    <MaterialCommunityIcons
+                                        name={compType === LeaderBoard.LIKES ? 'fire' : 'timer'}
+                                        size={0.02 * height}
+                                        color={'white'}
+                                    />
+                                </View>
+                                <Text
+                                    style={{
+                                        paddingHorizontal: 5,
+                                        color: 'white',
+                                        textAlign: 'center',
+                                        fontSize: 0.018 * height,
+                                    }}
+                                >
+                                    {compScore}
+                                </Text>
+                            </View>
+                        </View>
                     </TouchableOpacity>
                 </View>
             )}
