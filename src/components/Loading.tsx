@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Image } from 'react-native';
+import { View, StyleSheet, Image, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const Loading: React.FC = () => {
@@ -10,6 +10,7 @@ const Loading: React.FC = () => {
                     style={styles.headingImage}
                     source={require('../../assets/authMenuLogo2.png')}
                 />
+                <ActivityIndicator color="black" size="large" />
             </View>
         </SafeAreaView>
     );
