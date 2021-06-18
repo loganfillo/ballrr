@@ -104,7 +104,7 @@ const CommentButton: React.FC<Props> = ({ postId, size }: Props) => {
                         Comments
                     </Text>
                 </SafeAreaView>
-                <ScrollView style={{ paddingBottom: 10 }}>
+                <ScrollView style={{ paddingBottom: 50 }}>
                     {commentSection.map((comment, id) => {
                         return (
                             <View key={id}>
@@ -162,13 +162,12 @@ const CommentButton: React.FC<Props> = ({ postId, size }: Props) => {
                         );
                     })}
                 </ScrollView>
-                <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
+                <KeyboardAvoidingView behavior="padding" style={{}}>
                     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                         <View
                             style={{
                                 paddingHorizontal: 10,
-                                paddingBottom: 25,
-                                flex: 1,
+                                paddingBottom: 20,
                                 justifyContent: 'flex-end',
                             }}
                         >
