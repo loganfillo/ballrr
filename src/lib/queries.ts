@@ -464,6 +464,9 @@ export const GET_COMPETITION_LEADERBOARD = gql`
                 id
             }
             score
+        }
+    }
+`;
 export const GET_COMMENTS = gql`
     query getComments($post_id: Int!) {
         comments(where: { post_id: { _eq: $post_id } }, order_by: { created_at: asc }) {
