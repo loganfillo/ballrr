@@ -82,15 +82,10 @@ export interface SearchResult {
     profPicUrl: string;
 }
 
-export enum NotificationType {
-    LIKE = 'like',
-    FOLLOW = 'follow',
-}
-
 export interface Notification {
-    id: number;
+    redirect_id: number;
     username: string;
-    type: NotificationType;
+    type: string;
     thumbnail: string;
     seen: boolean;
 }

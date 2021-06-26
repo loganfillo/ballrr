@@ -2,10 +2,14 @@ import { useApolloClient, useQuery } from '@apollo/client';
 import { useNavigation } from '@react-navigation/native';
 import React, { useCallback, useEffect, useState } from 'react';
 import { StyleSheet, ScrollView, RefreshControl } from 'react-native';
+import { Storage } from 'aws-amplify';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import NotificationItem from '../components/NotificationItem';
-import { GET_LIKES, UPDATE_LIKES_SEEN } from '../lib/queries';
-import { Notification, NotificationType } from '../lib/types';
+import { GET_NOTIFICATIONS, UPDATE_NOTIFICATIONS } from '../lib/queries';
+import { Notification } from '../lib/types';
 import { useUser } from '../lib/user';
+
+const PLACE_HOLDER_IMAGE = 'https://files.thehandbook.com/uploads/2019/03/ronaldo.jpg';
 
 const wait = (timeout: number) => {
     return new Promise((resolve) => {
@@ -16,12 +20,25 @@ const wait = (timeout: number) => {
 const NotificationScreen: React.FC = () => {
     const [refreshing, setRefreshing] = useState(false);
     const [notifications, setNotifications] = useState<Notification[]>([]);
-
     const user = useUser();
     const apolloClient = useApolloClient();
     const navigation = useNavigation();
 
-    const { loading, error, data, refetch } = useQuery(GET_LIKES, {
+    function handleNotificationNav(notification: Notification) {
+        if (notification.type == 'FOLLOW') {
+            const userId = notification.redirect_id;
+            console.log(userId);
+            navigation.navigate('Profile', { userId });
+        } else if (notification.type == 'LIKE') {
+            const postId = notification.redirect_id;
+            navigation.navigate('FeedNavigator', {
+                screen: 'Feed',
+                params: { postIds: postId, listId: 0 },
+            });
+        }
+    }
+
+    const { loading, error, data, refetch } = useQuery(GET_NOTIFICATIONS, {
         variables: { user_id: user.id },
     });
 
@@ -40,21 +57,38 @@ const NotificationScreen: React.FC = () => {
             if (!loading && !error) {
                 const fetchedLikes: Notification[] = [];
                 const seenIds = [];
-                for (const like of data.post_likes) {
-                    const likeNotification: Notification = {
-                        username: like.user_id_of_like.username,
-                        type: NotificationType.LIKE,
-                        id: like.id,
-                        thumbnail: like.user_id_of_like.profile_pic.s3_key,
-                        seen: like.notification_seen,
-                    };
-                    fetchedLikes.push(likeNotification);
-                    if (!likeNotification.seen) {
-                        seenIds.push(likeNotification.id);
+                for (const notif of data.notifications) {
+                    if (notif.notification_type == 'FOLLOW') {
+                        fetchedLikes.push({
+                            username: notif.notifier_user_id.username,
+                            redirect_id: notif.notifier_user_id.id,
+                            type: notif.notification_type,
+                            thumbnail:
+                                notif.notifier_user_id.profile_pic.s3_key === null
+                                    ? PLACE_HOLDER_IMAGE
+                                    : ((await Storage.get(
+                                          notif.notifier_user_id.profile_pic.s3_key,
+                                      )) as string),
+                            seen: notif.notification_seen,
+                        });
+                    } else if (notif.notification_type == 'LIKE') {
+                        fetchedLikes.push({
+                            username: notif.notifier_user_id.username,
+                            redirect_id: notif.liked_post.id,
+                            type: notif.notification_type,
+                            thumbnail: (await Storage.get(
+                                notif.liked_post.thumbnail.s3_key,
+                            )) as string,
+                            seen: notif.notification_seen,
+                        });
+                    }
+                    if (!notif.notification_seen) {
+                        seenIds.push(notif.id);
                     }
                 }
+
                 await apolloClient.mutate({
-                    mutation: UPDATE_LIKES_SEEN,
+                    mutation: UPDATE_NOTIFICATIONS,
                     variables: { like_ids: seenIds },
                 });
                 setNotifications(fetchedLikes);
@@ -70,12 +104,16 @@ const NotificationScreen: React.FC = () => {
         >
             {notifications.map((notification, index) => {
                 return (
-                    <NotificationItem
+                    <TouchableOpacity
                         key={index}
-                        username={notification.username}
-                        notifType={notification.type}
-                        thumbnail={notification.thumbnail}
-                    />
+                        onPress={() => handleNotificationNav(notification)}
+                    >
+                        <NotificationItem
+                            username={notification.username}
+                            notifType={notification.type}
+                            thumbnail={notification.thumbnail}
+                        />
+                    </TouchableOpacity>
                 );
             })}
         </ScrollView>

@@ -28,29 +28,6 @@
           name: comment_likes
 - table:
     schema: public
-    name: competition_submission
-  object_relationships:
-  - name: competition
-    using:
-      foreign_key_constraint_on: comp_id
-  - name: post
-    using:
-      foreign_key_constraint_on: post_id
-- table:
-    schema: public
-    name: competitions
-  object_relationships:
-  - name: leaderboard
-    using:
-      foreign_key_constraint_on: leaderboard_type
-  - name: post
-    using:
-      foreign_key_constraint_on: post_id
-  - name: user
-    using:
-      foreign_key_constraint_on: user_id
-- table:
-    schema: public
     name: followers
   object_relationships:
   - name: user_followed
@@ -61,12 +38,18 @@
       foreign_key_constraint_on: user_id
 - table:
     schema: public
-    name: leaderboard_type
+    name: media_type
   is_enum: true
 - table:
     schema: public
-    name: media_type
-  is_enum: true
+    name: notifications
+  object_relationships:
+  - name: liked_post
+    using:
+      foreign_key_constraint_on: liked_post_id
+  - name: notifier_user_id
+    using:
+      foreign_key_constraint_on: user_id_of_notifier
 - table:
     schema: public
     name: post_likes
@@ -180,6 +163,13 @@
         table:
           schema: public
           name: followers
+  - name: notifications
+    using:
+      foreign_key_constraint_on:
+        column: user_id_of_notifier
+        table:
+          schema: public
+          name: notifications
   - name: post_likes
     using:
       foreign_key_constraint_on:

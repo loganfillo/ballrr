@@ -1,8 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Avatar } from 'react-native-paper';
-
-const PLACE_HOLDER_IMAGE = 'https://files.thehandbook.com/uploads/2019/03/ronaldo.jpg';
 
 interface Props {
     username: string;
@@ -10,33 +8,28 @@ interface Props {
     thumbnail: string;
 }
 const NotificationItem: React.FC<Props> = ({ username, notifType, thumbnail }: Props) => {
-    const [notifmessage, setNotifMessage] = useState('');
-    const [thumbnailPic, setThumbnailPic] = useState('')
-
-    if (notifType === 'like') {
-        setNotifMessage(username + ' has liked your Post');
-    } else if (notifType === 'follow') {
-        setNotifMessage(username + ' has started following you');
-    }
-
-    if (thumbnail === null) {
-        setThumbnailPic(PLACE_HOLDER_IMAGE);
-    } else {
-        setThumbnailPic(thumbnail);
-    }
-
     return (
         <View style={styles.container}>
             <View style={styles.thumbnailPic}>
                 <Avatar.Image
-                    size={35}
+                    size={40}
                     source={{
-                        uri: thumbnailPic,
+                        uri: thumbnail,
                     }}
                 />
             </View>
             <View style={styles.notifInfo}>
-                <Text>{notifmessage}</Text>
+                {notifType === 'LIKE' && (
+                    <Text>
+                        <Text style={{ fontWeight: '600' }}>@{username}</Text> has Liked Your Post
+                    </Text>
+                )}
+                {notifType === 'FOLLOW' && (
+                    <Text>
+                        <Text style={{ fontWeight: '600' }}>@{username}</Text> has started Following
+                        You
+                    </Text>
+                )}
             </View>
         </View>
     );
@@ -50,14 +43,16 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
     },
     thumbnailPic: {
-        marginRight: 15,
+        marginLeft: 15,
     },
     info: {
         color: 'black',
-        fontSize: 20,
+        fontSize: 23,
     },
     notifInfo: {
         flexDirection: 'column',
+        marginLeft: 10,
+        marginTop: 10,
     },
 });
 
