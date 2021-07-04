@@ -41,7 +41,6 @@ export async function saveProfileChanges(
     league: string,
     apolloClient: ApolloClient<NormalizedCacheObject>,
 ): Promise<void> {
-    console.log('saving profile with position as ' + position);
     await apolloClient.mutate({
         mutation: UPDATE_USER,
         variables: {

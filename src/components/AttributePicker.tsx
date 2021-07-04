@@ -13,12 +13,12 @@ interface InputProps {
 const AttributeInput: React.FC<InputProps> = ({ title, value, onChange }: InputProps) => {
     return (
         <>
-            <Text style={{ paddingVertical: 8, color: 'grey' }}>{title}</Text>
+            <Text style={{ paddingVertical: 8, color: 'grey', fontSize: 15 }}>{title}</Text>
             <TextInput
                 style={{
                     borderBottomColor: 'grey',
                     borderBottomWidth: 1,
-                    paddingVertical: 4,
+                    paddingVertical: 5,
                 }}
                 maxLength={50}
                 onChangeText={onChange}
@@ -92,11 +92,24 @@ export const AttributePickerModal: React.FC<ModalProps> = ({
                 <StatusBar hidden />
                 <View
                     style={{
-                        backgroundColor: 'ghostwhite',
+                        backgroundColor: 'white',
                         padding: 5,
                         alignItems: 'flex-end',
+                        flexDirection: 'row',
                     }}
                 >
+                    <Text
+                        style={{
+                            color: 'grey',
+                            fontSize: 20,
+                            flexDirection: 'row',
+                            flex: 1,
+                            paddingHorizontal: 10,
+                            paddingBottom: 5,
+                        }}
+                    >
+                        Edit Attributes
+                    </Text>
                     <Button title={'Done'} onPress={exitModal} />
                 </View>
 
