@@ -4,13 +4,14 @@ import { chooseMedia, createThumbnail } from '../lib/media';
 import { Flag, Media } from '../lib/types';
 import { useUser } from '../lib/user';
 import { FlagPickerModal } from '../components/FlagPicker';
-import ProfileAttributes from '../components/ProfileAttributes';
+import { Chip } from 'react-native-paper';
 import { AttributePickerModal } from '../components/AttributePicker';
 import { useNavigation } from '@react-navigation/core';
 import { ApolloClient, NormalizedCacheObject, useApolloClient, useQuery } from '@apollo/client';
 import { GET_PROFILE } from '../lib/queries';
 import { saveProfileChanges } from '../lib/profile';
 import { Storage } from 'aws-amplify';
+import ProfileAttributes from '../components/ProfileAttributes';
 
 const EditProfile: React.FC = () => {
     const [saving, setSaving] = useState(false);
@@ -23,12 +24,11 @@ const EditProfile: React.FC = () => {
     const [hasProfPicChanged, setHasProfPicChanged] = useState(false);
     const [prevProfPic, setPrevProfPic] = useState('');
     const [image, setImage] = useState('');
+    const [refetchAttributes, setRefetchAttributes] = useState(false);
 
     const user = useUser();
     const navigation = useNavigation();
     const apolloClient = useApolloClient();
-
-    const SaveButton = () => <Button title={'Save'} onPress={onSave} disabled={saving} />;
 
     const { loading, error, data, refetch } = useQuery(GET_PROFILE, {
         variables: {
@@ -36,12 +36,20 @@ const EditProfile: React.FC = () => {
         },
     });
 
+    const [position, setPosition] = useState(data.users_by_pk.position);
+    const [location, setLocation] = useState(data.users_by_pk.location);
+    const [height, setHeight] = useState(data.users_by_pk.height);
+    const [weight, setWeight] = useState(data.users_by_pk.weight);
+    const [foot, setFoot] = useState(data.users_by_pk.foot);
+    const [league, setLeague] = useState(data.users_by_pk.league);
+
+    const SaveButton = () => <Button title={'Save'} onPress={onSave} disabled={saving} />;
+
     useEffect(() => {
         async function fetchProfile() {
             if (!loading && !error) {
                 if (data.users_by_pk.full_name !== null) setName(data.users_by_pk.full_name);
                 if (data.users_by_pk.bio !== null) setBio(data.users_by_pk.bio);
-                if (data.users_by_pk.flag !== null) setFlag(JSON.parse(data.users_by_pk.flag));
                 if (data.users_by_pk.flag !== null) setFlag(JSON.parse(data.users_by_pk.flag));
                 if (data.users_by_pk.profile_pic !== null) {
                     const profPicUrl = (await Storage.get(
@@ -53,6 +61,19 @@ const EditProfile: React.FC = () => {
             }
         }
 
+        async function fetchAttributes() {
+            if (!loading && !error) {
+                if (data.users_by_pk.location !== null) setLocation(data.users_by_pk.location);
+                if (data.users_by_pk.position !== null) setPosition(data.users_by_pk.position);
+                if (data.users_by_pk.height !== null) setHeight(data.users_by_pk.height);
+                if (data.users_by_pk.weight !== null) setWeight(data.users_by_pk.weight);
+                if (data.users_by_pk.foot !== null) setFoot(data.users_by_pk.foot);
+                if (data.users_by_pk.league !== null) setLeague(data.users_by_pk.league);
+            }
+        }
+
+        setRefetchAttributes(!refetchAttributes);
+        fetchAttributes();
         fetchProfile();
     }, [data]);
 
@@ -69,6 +90,12 @@ const EditProfile: React.FC = () => {
         profPic,
         hasProfPicChanged,
         prevProfPic,
+        position,
+        location,
+        height,
+        weight,
+        foot,
+        league,
         apolloClient,
     ]);
 
@@ -82,6 +109,12 @@ const EditProfile: React.FC = () => {
             profPic,
             hasProfPicChanged,
             prevProfPic,
+            position,
+            location,
+            height,
+            weight,
+            foot,
+            league,
             apolloClient as ApolloClient<NormalizedCacheObject>,
         );
         await refetch();
@@ -107,6 +140,31 @@ const EditProfile: React.FC = () => {
         setFlagModalVisible(false);
     }
 
+    function onPositionChange(position: string) {
+        console.log('changing postion to ' + position);
+        setPosition(position);
+    }
+
+    function onLocationChange(location: string) {
+        setLocation(location);
+    }
+
+    function onHeightChange(height: string) {
+        setHeight(height);
+    }
+
+    function onWeightChange(weight: string) {
+        setWeight(weight);
+    }
+
+    function onFootChange(foot: string) {
+        setFoot(foot);
+    }
+
+    function onLeagueChange(league: string) {
+        setLeague(league);
+    }
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <FlagPickerModal
@@ -117,7 +175,13 @@ const EditProfile: React.FC = () => {
             <AttributePickerModal
                 visible={attrModalVisible}
                 onClose={() => setAttrModalVisible(false)}
-                onFlagChange={onFlagChange}
+                profileUserId={user.id}
+                onPositionChange={onPositionChange}
+                onLocationChange={onLocationChange}
+                onHeightChange={onHeightChange}
+                onWeightChange={onWeightChange}
+                onFootChange={onFootChange}
+                onLeagueChange={onLeagueChange}
             />
             <ScrollView
                 style={{
@@ -221,7 +285,10 @@ const EditProfile: React.FC = () => {
                         />
                     </View>
                     <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-                        <ProfileAttributes profileUserId={user.id} />
+                        <ProfileAttributes
+                            profileUserId={user.id}
+                            refetchAttributes={refetchAttributes}
+                        />
                     </View>
                 </View>
             </ScrollView>
