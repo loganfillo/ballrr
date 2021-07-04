@@ -4,7 +4,6 @@ import { chooseMedia, createThumbnail } from '../lib/media';
 import { Flag, Media } from '../lib/types';
 import { useUser } from '../lib/user';
 import { FlagPickerModal } from '../components/FlagPicker';
-import { Chip } from 'react-native-paper';
 import { AttributePickerModal } from '../components/AttributePicker';
 import { useNavigation } from '@react-navigation/core';
 import { ApolloClient, NormalizedCacheObject, useApolloClient, useQuery } from '@apollo/client';
@@ -141,7 +140,6 @@ const EditProfile: React.FC = () => {
     }
 
     function onPositionChange(position: string) {
-        console.log('changing postion to ' + position);
         setPosition(position);
     }
 

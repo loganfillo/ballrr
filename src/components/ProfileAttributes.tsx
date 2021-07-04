@@ -24,7 +24,6 @@ const ProfileAttributes: React.FC<Props> = ({ profileUserId, refetchAttributes }
     useEffect(() => {
         async function fetchAttributes() {
             if (!loading && !error) {
-                console.log(data.users[0]);
                 if (data.users[0].location !== null) setLocation(data.users[0].location);
                 if (data.users[0].position !== null) setPosition(data.users[0].position);
                 if (data.users[0].height !== null) setHeight(data.users[0].height);
