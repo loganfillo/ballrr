@@ -95,8 +95,11 @@ export interface Notification {
     redirect_id: number;
     username: string;
     type: string;
-    thumbnail: string;
+    notifier_user_id: number;
+    profile_thumbnail: string;
+    post_thumbnail?: string;
     seen: boolean;
+    timestamp: number;
 }
 
 export interface Flag {

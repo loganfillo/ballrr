@@ -23,8 +23,8 @@ const Tab = createBottomTabNavigator<TabNavigatorParamList>();
 
 const isTabBarVisible = (route: RouteProp<TabNavigatorParamList, keyof TabNavigatorParamList>) => {
     const routeName = getFocusedRouteNameFromRoute(route) ?? '';
-    console.log(!['FollowingList', 'FollowersList'].includes(routeName));
-    return !['FollowingList', 'FollowersList'].includes(routeName);
+    console.log(routeName);
+    return !['FollowingList', 'FollowersList, Notifications'].includes(routeName);
 };
 
 const TabNavigator: React.FC = () => {

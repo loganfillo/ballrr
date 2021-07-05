@@ -245,6 +245,7 @@ export const GET_NOTIFICATIONS = gql`
         ) {
             notification_seen
             notification_type
+            created_at
             notifier_user_id {
                 id
                 username

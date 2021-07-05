@@ -64,23 +64,34 @@ const NotificationScreen: React.FC = () => {
                             username: notif.notifier_user_id.username,
                             redirect_id: notif.notifier_user_id.id,
                             type: notif.notification_type,
-                            thumbnail:
+                            notifier_user_id: notif.notifier_user_id.id,
+                            profile_thumbnail:
                                 notif.notifier_user_id.profile_pic.s3_key === null
                                     ? PLACE_HOLDER_IMAGE
                                     : ((await Storage.get(
                                           notif.notifier_user_id.profile_pic.s3_key,
                                       )) as string),
+                            post_thumbnail: undefined,
                             seen: notif.notification_seen,
+                            timestamp: notif.created_at,
                         });
                     } else if (notif.notification_type == 'LIKE') {
                         fetchedLikes.push({
                             username: notif.notifier_user_id.username,
                             redirect_id: notif.liked_post.id,
                             type: notif.notification_type,
-                            thumbnail: (await Storage.get(
+                            notifier_user_id: notif.notifier_user_id.id,
+                            profile_thumbnail:
+                                notif.notifier_user_id.profile_pic.s3_key === null
+                                    ? PLACE_HOLDER_IMAGE
+                                    : ((await Storage.get(
+                                          notif.notifier_user_id.profile_pic.s3_key,
+                                      )) as string),
+                            post_thumbnail: (await Storage.get(
                                 notif.liked_post.thumbnail.s3_key,
                             )) as string,
                             seen: notif.notification_seen,
+                            timestamp: notif.created_at,
                         });
                     }
                     if (!notif.notification_seen) {
@@ -112,7 +123,11 @@ const NotificationScreen: React.FC = () => {
                         <NotificationItem
                             username={notification.username}
                             notifType={notification.type}
-                            thumbnail={notification.thumbnail}
+                            prof_thumbnail={notification.profile_thumbnail}
+                            post_thumbnail={notification.post_thumbnail}
+                            timestamp={notification.timestamp}
+                            curr_userId={user.id}
+                            notifier_userId={notification.notifier_user_id}
                         />
                     </TouchableOpacity>
                 );
