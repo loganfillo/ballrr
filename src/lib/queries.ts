@@ -389,6 +389,36 @@ export const GET_PROFILE = gql`
     }
 `;
 
+export const GET_FOLLOWERS = gql`
+    query getFollowers($user_id: Int!) {
+        followers(where: { user_followed_id: { _eq: $user_id } }) {
+            user_follower {
+                id
+                username
+                full_name
+                profile_pic {
+                    s3_key
+                }
+            }
+        }
+    }
+`;
+
+export const GET_FOLLOWING = gql`
+    query getFollowing($user_id: Int!) {
+        followers(where: { user_id: { _eq: $user_id } }) {
+            user_followed {
+                id
+                username
+                full_name
+                profile_pic {
+                    s3_key
+                }
+            }
+        }
+    }
+`;
+
 export const CREATE_PROFILE_PIC_MEDIA = gql`
     mutation createProfilePicMedia($s3_key: String!, $user_id: Int!) {
         insert_profile_pic_media_one(object: { s3_key: $s3_key, user_id: $user_id }) {

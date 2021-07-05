@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, Text, View } from 'react-native';
+import { ScrollView, Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { useUser } from '../lib/user';
 import FollowButton from './buttons/FollowButton';
 import EditProfileButton from './buttons/EditProfileButton';
@@ -13,6 +13,7 @@ import { COUNT_FOLLOWERS, COUNT_FOLLOWING, COUNT_USERS_POST, GET_PROFILE } from 
 import { Flag } from '../lib/types';
 import { Storage } from 'aws-amplify';
 import AccountSettingsButton from './buttons/AccountSettingsButton';
+import { useNavigation } from '@react-navigation/native';
 
 interface Props {
     profileUserId: number;
@@ -25,6 +26,7 @@ const ProfileInfo: React.FC<Props> = ({ profileUserId, refreshing }: Props) => {
     const [flag, setFlag] = useState<Flag>();
     const [image, setImage] = useState('');
     const [username, setUsername] = useState('');
+    const navigation = useNavigation();
 
     const user = useUser();
 
@@ -58,28 +60,40 @@ const ProfileInfo: React.FC<Props> = ({ profileUserId, refreshing }: Props) => {
 
     return (
         <View>
-            <View style={{ flexDirection: 'row' }}>
-                <View style={{ flex: 3, paddingTop: 5, paddingLeft: 8 }}>
+            <View style={styles.container}>
+                <View style={{ flex: 3 }}>
                     <ProfilePic flag={flag} image={image} />
                 </View>
-                <ProfileCounts
-                    name={'posts'}
-                    query={COUNT_USERS_POST}
-                    refreshing={refreshing}
-                    profileUserId={profileUserId}
-                />
-                <ProfileCounts
-                    name={'followers'}
-                    query={COUNT_FOLLOWERS}
-                    refreshing={refreshing}
-                    profileUserId={profileUserId}
-                />
-                <ProfileCounts
-                    name={'following'}
-                    query={COUNT_FOLLOWING}
-                    refreshing={refreshing}
-                    profileUserId={profileUserId}
-                />
+                <View style={styles.count_field}>
+                    <ProfileCounts
+                        name={'posts'}
+                        query={COUNT_USERS_POST}
+                        refreshing={refreshing}
+                        profileUserId={profileUserId}
+                    />
+                </View>
+                <TouchableOpacity
+                    onPress={() => navigation.navigate('FollowersList', { userId: profileUserId })}
+                    style={styles.count_field}
+                >
+                    <ProfileCounts
+                        name={'followers'}
+                        query={COUNT_FOLLOWERS}
+                        refreshing={refreshing}
+                        profileUserId={profileUserId}
+                    />
+                </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => navigation.navigate('FollowingList', { userId: profileUserId })}
+                    style={styles.count_field}
+                >
+                    <ProfileCounts
+                        name={'following'}
+                        query={COUNT_FOLLOWING}
+                        refreshing={refreshing}
+                        profileUserId={profileUserId}
+                    />
+                </TouchableOpacity>
             </View>
             <View
                 style={{
@@ -154,5 +168,16 @@ const ProfileInfo: React.FC<Props> = ({ profileUserId, refreshing }: Props) => {
         </View>
     );
 };
+
+const styles = StyleSheet.create({
+    container: {
+        flexDirection: 'row',
+    },
+    count_field: {
+        flex: 1,
+        position: 'relative',
+        paddingRight: 16,
+    },
+});
 
 export default ProfileInfo;
