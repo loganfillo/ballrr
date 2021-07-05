@@ -9,7 +9,7 @@ interface Props {
     placeholder: string;
     secureTextEntry?: boolean;
     autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters' | undefined;
-    keyboardType?: 'email-address' | undefined;
+    keyboardType?: 'email-address' | 'numeric' | undefined;
     textContentType?: 'username' | 'password' | 'emailAddress' | undefined;
 }
 
@@ -53,6 +53,7 @@ const styles = StyleSheet.create({
         marginVertical: 10,
         width: '85%',
         alignSelf: 'center',
+        fontWeight: '300',
     },
     icon: {
         marginRight: 10,
@@ -62,6 +63,7 @@ const styles = StyleSheet.create({
         width: '80%',
         fontSize: 18,
         color: '#EEEADE',
+        fontWeight: '300',
     },
 });
 

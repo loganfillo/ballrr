@@ -169,9 +169,32 @@ export const LIKE_POST = gql`
     }
 `;
 
+export const UPDATE_COMP_SUB_SCORE_LIKES = gql`
+    mutation updateCompSubScore($comp_id: Int!, $post_id: Int!, $val: Int!) {
+        update_competition_submission(
+            where: { comp_id: { _eq: $comp_id }, _and: { post_id: { _eq: $post_id } } }
+            _inc: { score: $val }
+        ) {
+            returning {
+                score
+            }
+        }
+    }
+`;
+
 export const COUNT_LIKES = gql`
     query countLikes($post_id: Int) {
         post_likes_aggregate(where: { liked_post_id: { _eq: $post_id } }) {
+            aggregate {
+                count
+            }
+        }
+    }
+`;
+
+export const COUNT_COMMENTS = gql`
+    query countComments($post_id: Int) {
+        comments_aggregate(where: { post_id: { _eq: $post_id } }) {
             aggregate {
                 count
             }
@@ -480,7 +503,9 @@ export const GET_POST_COMPETITION = gql`
             nodes {
                 competition {
                     id
+                    leaderboard_type
                 }
+                score
             }
         }
     }
@@ -534,6 +559,47 @@ export const GET_COMPETITION_SUBMISSIONS = gql`
                     s3_key
                 }
             }
+        }
+    }
+`;
+
+export const GET_COMPETITION_LEADERBOARD = gql`
+    query getLikesList($comp_id: Int!) {
+        competition_submission(where: { comp_id: { _eq: $comp_id } }, order_by: { score: desc }) {
+            post {
+                post_user_id {
+                    profile_pic {
+                        s3_key
+                    }
+                    username
+                    full_name
+                }
+                id
+            }
+            score
+        }
+    }
+`;
+export const GET_COMMENTS = gql`
+    query getComments($post_id: Int!) {
+        comments(where: { post_id: { _eq: $post_id } }, order_by: { created_at: asc }) {
+            post_id
+            created_at
+            commenter {
+                username
+                profile_pic {
+                    s3_key
+                }
+            }
+            comment
+        }
+    }
+`;
+
+export const INSERT_COMMENT = gql`
+    mutation insertComment($comment: String!, $post_id: Int!, $user_id: Int!) {
+        insert_comments(objects: { comment: $comment, post_id: $post_id, user_id: $user_id }) {
+            affected_rows
         }
     }
 `;

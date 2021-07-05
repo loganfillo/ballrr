@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Keyboard } from 'react-native';
 import { Auth } from 'aws-amplify';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AuthTextInput from '../components/AuthTextInput';
@@ -10,13 +10,16 @@ const SignUp: React.FC = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
     const navigation = useNavigation();
     async function signUp() {
+        Keyboard.dismiss();
         try {
             await Auth.signUp({ username, password, attributes: { email } });
             navigation.navigate('ConfirmSignUp');
         } catch (error) {
             console.log(error);
+            setErrorMessage(error.message);
         }
     }
     return (
@@ -57,6 +60,9 @@ const SignUp: React.FC = () => {
                         </Text>
                     </TouchableOpacity>
                 </View>
+                <View>
+                    <Text style={styles.errorMessage}>{errorMessage}</Text>
+                </View>
             </View>
         </SafeAreaView>
     );
@@ -88,6 +94,13 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 14,
         fontWeight: '600',
+    },
+    errorMessage: {
+        color: 'red',
+        fontSize: 18,
+        fontWeight: '600',
+        textAlign: 'center',
+        marginTop: 10,
     },
 });
 

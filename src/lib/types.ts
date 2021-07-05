@@ -63,6 +63,15 @@ export interface Post {
     thumbnailS3Key: string;
 }
 
+export interface Comment {
+    comment: string;
+    commenterId: number;
+    commenterPicUrl: string;
+    commenterUsername: string;
+    timestamp: number;
+    postId: number;
+}
+
 export interface ThumbnailPost {
     url: string;
     id: number;
@@ -107,4 +116,13 @@ export interface Competition {
     leaderboardType: LeaderBoard;
     timeLimit?: number;
     score?: number;
+    id?: number;
+}
+
+export interface LeaderBoardItem {
+    profPicUrl: string;
+    name: string;
+    username: string;
+    score: number;
+    postId: number;
 }
