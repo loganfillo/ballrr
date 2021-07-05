@@ -24,6 +24,7 @@ const Tab = createBottomTabNavigator<TabNavigatorParamList>();
 const isTabBarVisible = (route: RouteProp<TabNavigatorParamList, keyof TabNavigatorParamList>) => {
     const routeName = getFocusedRouteNameFromRoute(route) ?? '';
     console.log(routeName);
+    console.log(!['FollowingList', 'FollowersList', 'Notifications'].includes(routeName));
     return !['FollowingList', 'FollowersList, Notifications'].includes(routeName);
 };
 
@@ -32,12 +33,15 @@ const TabNavigator: React.FC = () => {
         <Tab.Navigator
             initialRouteName="FeedTab"
             tabBar={({ navigation }) => <TabBar navigation={navigation} />}
-            screenOptions={({ route }) => ({ tabBarVisible: isTabBarVisible(route) })}
         >
             <Tab.Screen name="FeedTab" component={FeedNavigator} />
             <Tab.Screen name="SearchTab" component={SearchNavigator} />
             <Tab.Screen name="CompetitionTab" component={CompetitionNavigator} />
-            <Tab.Screen name="ProfileTab" component={ProfileNavigator} />
+            <Tab.Screen
+                name="ProfileTab"
+                component={ProfileNavigator}
+                options={({ route }) => ({ tabBarVisible: isTabBarVisible(route) })}
+            />
         </Tab.Navigator>
     );
 };
