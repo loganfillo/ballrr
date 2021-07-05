@@ -58,7 +58,7 @@ const NotificationItem: React.FC<Props> = ({
                             element={Text}
                             fromNow
                             style={{
-                                fontSize: 12,
+                                fontSize: 10,
                                 color: 'black',
                                 fontWeight: 'normal',
                                 alignSelf: 'flex-end',
@@ -76,7 +76,7 @@ const NotificationItem: React.FC<Props> = ({
                             element={Text}
                             fromNow
                             style={{
-                                fontSize: 12,
+                                fontSize: 10,
                                 color: 'black',
                                 fontWeight: 'normal',
                                 alignSelf: 'flex-end',

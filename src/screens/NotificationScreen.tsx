@@ -59,41 +59,27 @@ const NotificationScreen: React.FC = () => {
                 const fetchedLikes: Notification[] = [];
                 const seenIds = [];
                 for (const notif of data.notifications) {
-                    if (notif.notification_type == 'FOLLOW') {
-                        fetchedLikes.push({
-                            username: notif.notifier_user_id.username,
-                            redirect_id: notif.notifier_user_id.id,
-                            type: notif.notification_type,
-                            notifier_user_id: notif.notifier_user_id.id,
-                            profile_thumbnail:
-                                notif.notifier_user_id.profile_pic.s3_key === null
-                                    ? PLACE_HOLDER_IMAGE
-                                    : ((await Storage.get(
-                                          notif.notifier_user_id.profile_pic.s3_key,
-                                      )) as string),
-                            post_thumbnail: undefined,
-                            seen: notif.notification_seen,
-                            timestamp: notif.created_at,
-                        });
-                    } else if (notif.notification_type == 'LIKE') {
-                        fetchedLikes.push({
-                            username: notif.notifier_user_id.username,
-                            redirect_id: notif.liked_post.id,
-                            type: notif.notification_type,
-                            notifier_user_id: notif.notifier_user_id.id,
-                            profile_thumbnail:
-                                notif.notifier_user_id.profile_pic.s3_key === null
-                                    ? PLACE_HOLDER_IMAGE
-                                    : ((await Storage.get(
-                                          notif.notifier_user_id.profile_pic.s3_key,
-                                      )) as string),
-                            post_thumbnail: (await Storage.get(
-                                notif.liked_post.thumbnail.s3_key,
-                            )) as string,
-                            seen: notif.notification_seen,
-                            timestamp: notif.created_at,
-                        });
-                    }
+                    fetchedLikes.push({
+                        username: notif.notifier_user_id.username,
+                        redirect_id: notif.notifier_user_id.id,
+                        type: notif.notification_type,
+                        notifier_user_id: notif.notifier_user_id.id,
+                        profile_thumbnail:
+                            notif.notifier_user_id.profile_pic.s3_key === null
+                                ? PLACE_HOLDER_IMAGE
+                                : ((await Storage.get(
+                                      notif.notifier_user_id.profile_pic.s3_key,
+                                  )) as string),
+                        post_thumbnail:
+                            notif.liked_post === null
+                                ? undefined
+                                : ((await Storage.get(
+                                      notif.liked_post.thumbnail.s3_key,
+                                  )) as string),
+                        seen: notif.notification_seen,
+                        timestamp: notif.created_at,
+                    });
+
                     if (!notif.notification_seen) {
                         seenIds.push(notif.id);
                     }
