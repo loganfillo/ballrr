@@ -8,6 +8,7 @@ import NotificationItem from '../components/NotificationItem';
 import { GET_NOTIFICATIONS, UPDATE_NOTIFICATIONS } from '../lib/queries';
 import { Notification } from '../lib/types';
 import { useUser } from '../lib/user';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 const PLACE_HOLDER_IMAGE = 'https://files.thehandbook.com/uploads/2019/03/ronaldo.jpg';
 
@@ -22,16 +23,16 @@ const NotificationScreen: React.FC = () => {
     const [notifications, setNotifications] = useState<Notification[]>([]);
     const user = useUser();
     const apolloClient = useApolloClient();
-    const navigation = useNavigation();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const navigation = useNavigation<StackNavigationProp<any>>();
 
     function handleNotificationNav(notification: Notification) {
         if (notification.type == 'FOLLOW') {
             const userId = notification.redirect_id;
-            console.log(userId);
-            navigation.navigate('Profile', { userId });
+            navigation.push('Profile', { userId });
         } else if (notification.type == 'LIKE') {
             const postId = notification.redirect_id;
-            navigation.navigate('FeedNavigator', {
+            navigation.push('FeedNavigator', {
                 screen: 'Feed',
                 params: { postIds: postId, listId: 0 },
             });

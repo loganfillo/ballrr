@@ -4,10 +4,12 @@ import ProfileScreen from '../../screens/ProfileScreen';
 import InboxButton from '../buttons/InboxButton';
 import { useUser } from '../../lib/user';
 import FeedNavigator from './FeedNavigator';
+import NotificationScreen from '../../screens/NotificationScreen';
 
 export type ProfileStackParamList = {
     Profile: { userId: number } | undefined;
     FeedNavigator: undefined;
+    Notifications: undefined;
 };
 
 const Stack = createStackNavigator<ProfileStackParamList>();
@@ -38,6 +40,11 @@ const ProfileNavigator: React.FC = () => {
                     gestureResponseDistance: { horizontal: 200 },
                     headerShown: false,
                 }}
+            />
+            <Stack.Screen
+                name="Notifications"
+                component={NotificationScreen}
+                options={{ headerBackTitleVisible: false }}
             />
         </Stack.Navigator>
     );

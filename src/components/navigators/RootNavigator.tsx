@@ -53,11 +53,6 @@ const RootNavigator: React.FC = () => {
                     }}
                 />
                 <RootStack.Screen name="UserPolicy" component={UserPolicyScreen} />
-                <RootStack.Screen
-                    name="Notifications"
-                    component={NotificationScreen}
-                    options={{ headerBackTitleVisible: false }}
-                />
             </RootStack.Navigator>
         </NavigationContainer>
     );
