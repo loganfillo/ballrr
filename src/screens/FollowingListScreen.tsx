@@ -9,6 +9,7 @@ import { Following } from '../lib/types';
 import { Storage } from 'aws-amplify';
 import { useUser } from '../lib/user';
 import { ProfileStackParamList } from '../components/navigators/ProfileNavigator';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 const PLACE_HOLDER_IMAGE = 'https://files.thehandbook.com/uploads/2019/03/ronaldo.jpg';
 
@@ -16,7 +17,8 @@ type FollowingRouteProp = RouteProp<ProfileStackParamList, 'FollowingList'>;
 
 const FollowingList: React.FC = () => {
     const [following, setFollowing] = useState<Following[]>([]);
-    const navigation = useNavigation();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const navigation = useNavigation<StackNavigationProp<any>>();
     const { params } = useRoute<FollowingRouteProp>();
     const user = useUser();
     const profileUserId = params !== undefined ? params.userId : user.id;
@@ -52,7 +54,7 @@ const FollowingList: React.FC = () => {
     }, [data]);
 
     function navigateToProfile(userId: number) {
-        navigation.navigate('Profile', { userId });
+        navigation.push('Profile', { userId });
     }
 
     return (

@@ -7,8 +7,9 @@ import { Avatar, List } from 'react-native-paper';
 import { GET_FOLLOWERS } from '../lib/queries';
 import { Follower } from '../lib/types';
 import { Storage } from 'aws-amplify';
-import { ProfileStackParamList } from '../components/navigators/ProfileNavigator';
 import { useUser } from '../lib/user';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { ProfileStackParamList } from '../components/navigators/ProfileNavigator';
 
 const PLACE_HOLDER_IMAGE = 'https://files.thehandbook.com/uploads/2019/03/ronaldo.jpg';
 
@@ -16,7 +17,8 @@ type FollowerRouteProp = RouteProp<ProfileStackParamList, 'FollowersList'>;
 
 const FollowersList: React.FC = () => {
     const [followers, setFollowers] = useState<Follower[]>([]);
-    const navigation = useNavigation();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const navigation = useNavigation<StackNavigationProp<any>>();
     const { params } = useRoute<FollowerRouteProp>();
     const user = useUser();
     const profileUserId = params !== undefined ? params.userId : user.id;
@@ -52,7 +54,7 @@ const FollowersList: React.FC = () => {
     }, [data]);
 
     function navigateToProfile(userId: number) {
-        navigation.navigate('Profile', { userId });
+        navigation.push('Profile', { userId });
     }
 
     return (

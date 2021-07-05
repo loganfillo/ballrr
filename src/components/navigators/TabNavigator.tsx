@@ -2,7 +2,11 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import ProfileNavigator, { ProfileStackParamList } from './ProfileNavigator';
 import FeedNavigator from './FeedNavigator';
-import { NavigatorScreenParams } from '@react-navigation/native';
+import {
+    getFocusedRouteNameFromRoute,
+    NavigatorScreenParams,
+    RouteProp,
+} from '@react-navigation/native';
 import CompetitionNavigator from './CompetitionNavigator';
 import SearchNavigator, { SearchStackParamList } from './SearchNavigator';
 import TabBar from '../TabBar';
@@ -17,11 +21,18 @@ export type TabNavigatorParamList = {
 
 const Tab = createBottomTabNavigator<TabNavigatorParamList>();
 
+const isTabBarVisible = (route: RouteProp<TabNavigatorParamList, keyof TabNavigatorParamList>) => {
+    const routeName = getFocusedRouteNameFromRoute(route) ?? '';
+    console.log(!['FollowingList', 'FollowersList'].includes(routeName));
+    return !['FollowingList', 'FollowersList'].includes(routeName);
+};
+
 const TabNavigator: React.FC = () => {
     return (
         <Tab.Navigator
             initialRouteName="FeedTab"
             tabBar={({ navigation }) => <TabBar navigation={navigation} />}
+            screenOptions={({ route }) => ({ tabBarVisible: isTabBarVisible(route) })}
         >
             <Tab.Screen name="FeedTab" component={FeedNavigator} />
             <Tab.Screen name="SearchTab" component={SearchNavigator} />
