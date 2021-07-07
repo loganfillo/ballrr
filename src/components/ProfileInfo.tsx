@@ -14,6 +14,7 @@ import { Flag } from '../lib/types';
 import { Storage } from 'aws-amplify';
 import AccountSettingsButton from './buttons/AccountSettingsButton';
 import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 interface Props {
     profileUserId: number;
@@ -26,7 +27,8 @@ const ProfileInfo: React.FC<Props> = ({ profileUserId, refreshing }: Props) => {
     const [flag, setFlag] = useState<Flag>();
     const [image, setImage] = useState('');
     const [username, setUsername] = useState('');
-    const navigation = useNavigation();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const navigation = useNavigation<StackNavigationProp<any>>();
 
     const user = useUser();
 
@@ -73,7 +75,7 @@ const ProfileInfo: React.FC<Props> = ({ profileUserId, refreshing }: Props) => {
                     />
                 </View>
                 <TouchableOpacity
-                    onPress={() => navigation.navigate('FollowersList', { userId: profileUserId })}
+                    onPress={() => navigation.push('FollowersList', { userId: profileUserId })}
                     style={styles.count_field}
                 >
                     <ProfileCounts
@@ -84,7 +86,7 @@ const ProfileInfo: React.FC<Props> = ({ profileUserId, refreshing }: Props) => {
                     />
                 </TouchableOpacity>
                 <TouchableOpacity
-                    onPress={() => navigation.navigate('FollowingList', { userId: profileUserId })}
+                    onPress={() => navigation.push('FollowingList', { userId: profileUserId })}
                     style={styles.count_field}
                 >
                     <ProfileCounts
