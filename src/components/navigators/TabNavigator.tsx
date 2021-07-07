@@ -32,7 +32,10 @@ const TabNavigator: React.FC = () => {
     return (
         <Tab.Navigator
             initialRouteName="FeedTab"
-            tabBar={({ navigation }) => <TabBar navigation={navigation} />}
+            tabBar={({ navigation, descriptors, state }) => (
+                <TabBar navigation={navigation} descriptors={descriptors} state={state} />
+            )}
+            // screenOptions={({ route }) => ({ tabBarVisible: isTabBarVisible(route) })}
         >
             <Tab.Screen name="FeedTab" component={FeedNavigator} />
             <Tab.Screen name="SearchTab" component={SearchNavigator} />
@@ -40,7 +43,21 @@ const TabNavigator: React.FC = () => {
             <Tab.Screen
                 name="ProfileTab"
                 component={ProfileNavigator}
-                options={({ route }) => ({ tabBarVisible: isTabBarVisible(route) })}
+                options={({ route }) => ({
+                    tabBarVisible: ((route) => {
+                        const routeName = getFocusedRouteNameFromRoute(route) ?? '';
+
+                        if (
+                            routeName === 'FollowingList' ||
+                            routeName === 'FollowersList' ||
+                            routeName === 'Notifications'
+                        ) {
+                            return false;
+                        }
+
+                        return true;
+                    })(route),
+                })}
             />
         </Tab.Navigator>
     );
