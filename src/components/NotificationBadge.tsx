@@ -24,7 +24,7 @@ const NotificationBadge: React.FC<Props> = ({ icon, top, right }: Props) => {
 
     useEffect(() => {
         if (!loading && !error && data) {
-            const newCount = data.post_likes_aggregate.aggregate.count;
+            const newCount = data.notifications_aggregate.aggregate.count;
             setCount(newCount);
             setVisible(data ? newCount > 0 : false);
         }

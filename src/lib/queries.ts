@@ -96,10 +96,31 @@ export const GET_USER = gql`
 `;
 
 export const UPDATE_USER = gql`
-    mutation updateUser($user_id: Int!, $bio: String!, $name: String!, $flag: String!) {
+    mutation updateUser(
+        $user_id: Int!
+        $bio: String!
+        $name: String!
+        $flag: String!
+        $location: String!
+        $position: String!
+        $height: String!
+        $weight: String!
+        $foot: String!
+        $league: String!
+    ) {
         update_users_by_pk(
             pk_columns: { id: $user_id }
-            _set: { bio: $bio, full_name: $name, flag: $flag }
+            _set: {
+                bio: $bio
+                full_name: $name
+                flag: $flag
+                location: $location
+                position: $position
+                height: $height
+                weight: $weight
+                foot: $foot
+                league: $league
+            }
         ) {
             id
         }
@@ -126,6 +147,9 @@ export const DELETE_POST = gql`
     mutation deletePost($id: Int!) {
         delete_posts_by_pk(id: $id) {
             id
+        }
+        delete_notifications(where: { _and: { liked_post_id: { _eq: $id } } }) {
+            affected_rows
         }
     }
 `;
@@ -264,14 +288,15 @@ export const GET_NOTIFICATIONS = gql`
 `;
 
 export const COUNT_UNSEEN_NOTIFS = gql`
-    query countUnseenLikes($user_id: Int!) {
-        notifications(
+    query countUnseenNotifs($user_id: Int!) {
+        notifications_aggregate(
             where: {
                 notification_seen: { _eq: false }
-                _and: {
-                    liked_post: { post_user_id: { id: { _eq: $user_id } } }
-                    _and: { user_id: { _neq: $user_id } }
-                }
+                _and: { user_id_of_notifier: { _neq: $user_id } }
+                _or: [
+                    { user_followed_id: { _eq: $user_id } }
+                    { liked_post: { user_id: { _eq: $user_id } } }
+                ]
             }
         ) {
             aggregate {
@@ -409,6 +434,12 @@ export const GET_PROFILE = gql`
             profile_pic {
                 s3_key
             }
+            position
+            location
+            height
+            weight
+            foot
+            league
         }
     }
 `;
@@ -601,6 +632,19 @@ export const INSERT_COMMENT = gql`
     mutation insertComment($comment: String!, $post_id: Int!, $user_id: Int!) {
         insert_comments(objects: { comment: $comment, post_id: $post_id, user_id: $user_id }) {
             affected_rows
+        }
+    }
+`;
+
+export const GET_PROFILE_ATTRIBUTES = gql`
+    query getProfileAttributes($user_id: Int!) {
+        users(where: { id: { _eq: $user_id } }) {
+            location
+            position
+            height
+            weight
+            foot
+            league
         }
     }
 `;
