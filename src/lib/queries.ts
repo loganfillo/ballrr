@@ -127,6 +127,9 @@ export const DELETE_POST = gql`
         delete_posts_by_pk(id: $id) {
             id
         }
+        delete_notifications(where: { _and: { liked_post_id: { _eq: $id } } }) {
+            affected_rows
+        }
     }
 `;
 
@@ -264,14 +267,15 @@ export const GET_NOTIFICATIONS = gql`
 `;
 
 export const COUNT_UNSEEN_NOTIFS = gql`
-    query countUnseenLikes($user_id: Int!) {
-        notifications(
+    query countUnseenNotifs($user_id: Int!) {
+        notifications_aggregate(
             where: {
                 notification_seen: { _eq: false }
-                _and: {
-                    liked_post: { post_user_id: { id: { _eq: $user_id } } }
-                    _and: { user_id: { _neq: $user_id } }
-                }
+                _and: { user_id_of_notifier: { _neq: $user_id } }
+                _or: [
+                    { user_followed_id: { _eq: $user_id } }
+                    { liked_post: { user_id: { _eq: $user_id } } }
+                ]
             }
         ) {
             aggregate {
