@@ -16,6 +16,12 @@ import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
  * @param profPic The profile pic to set
  * @param hasProfPicChanged If the profile pic has changes
  * @param prevProfPicKey The previous profile pic S3 key
+ * @param position Position of the player to set (Attribute)
+ * @param location Location of the player to set (Attribute)
+ * @param height Height of the player to set (Attribute)
+ * @param weight Weight of the player to set (Attribute)
+ * @param foot Foot of the player to set (Attribute)
+ * @param league League of the player to set (Attribute)
  * @param apolloClient GraphQL client
  */
 
@@ -27,11 +33,28 @@ export async function saveProfileChanges(
     profPic: Media,
     hasProfPicChanged: boolean,
     prevProfPicKey: string,
+    position: string,
+    location: string,
+    height: string,
+    weight: string,
+    foot: string,
+    league: string,
     apolloClient: ApolloClient<NormalizedCacheObject>,
 ): Promise<void> {
     await apolloClient.mutate({
         mutation: UPDATE_USER,
-        variables: { user_id: user.id, bio: bio, name: name, flag: JSON.stringify(flag) },
+        variables: {
+            user_id: user.id,
+            bio: bio,
+            name: name,
+            flag: JSON.stringify(flag),
+            position: position,
+            location: location,
+            height: height,
+            weight: weight,
+            foot: foot,
+            league: league,
+        },
     });
     if (!profPic.cancelled) {
         if (hasProfPicChanged) {
