@@ -29,6 +29,7 @@ const ProfileInfo: React.FC<Props> = ({ profileUserId, refreshing }: Props) => {
     const [username, setUsername] = useState('');
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const navigation = useNavigation<StackNavigationProp<any>>();
+    const [refetchAttributes, setRefetchAttributes] = useState(false);
 
     const user = useUser();
 
@@ -44,6 +45,7 @@ const ProfileInfo: React.FC<Props> = ({ profileUserId, refreshing }: Props) => {
 
     useEffect(() => {
         async function fetchProfile() {
+            setRefetchAttributes(!refetchAttributes);
             if (!loading && !error) {
                 if (data.users_by_pk.full_name !== null) setName(data.users_by_pk.full_name);
                 if (data.users_by_pk.bio !== null) setBio(data.users_by_pk.bio);
@@ -161,7 +163,10 @@ const ProfileInfo: React.FC<Props> = ({ profileUserId, refreshing }: Props) => {
             </View>
             <View style={{ flexDirection: 'row', paddingTop: 5, paddingBottom: 8 }}>
                 <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-                    <ProfileAttributes profileUserId={profileUserId} />
+                    <ProfileAttributes
+                        profileUserId={profileUserId}
+                        refetchAttributes={refetchAttributes}
+                    />
                 </ScrollView>
             </View>
             <View style={{ flexDirection: 'row', paddingTop: 5, paddingBottom: 5 }}>

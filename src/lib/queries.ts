@@ -96,10 +96,31 @@ export const GET_USER = gql`
 `;
 
 export const UPDATE_USER = gql`
-    mutation updateUser($user_id: Int!, $bio: String!, $name: String!, $flag: String!) {
+    mutation updateUser(
+        $user_id: Int!
+        $bio: String!
+        $name: String!
+        $flag: String!
+        $location: String!
+        $position: String!
+        $height: String!
+        $weight: String!
+        $foot: String!
+        $league: String!
+    ) {
         update_users_by_pk(
             pk_columns: { id: $user_id }
-            _set: { bio: $bio, full_name: $name, flag: $flag }
+            _set: {
+                bio: $bio
+                full_name: $name
+                flag: $flag
+                location: $location
+                position: $position
+                height: $height
+                weight: $weight
+                foot: $foot
+                league: $league
+            }
         ) {
             id
         }
@@ -413,6 +434,12 @@ export const GET_PROFILE = gql`
             profile_pic {
                 s3_key
             }
+            position
+            location
+            height
+            weight
+            foot
+            league
         }
     }
 `;
@@ -605,6 +632,19 @@ export const INSERT_COMMENT = gql`
     mutation insertComment($comment: String!, $post_id: Int!, $user_id: Int!) {
         insert_comments(objects: { comment: $comment, post_id: $post_id, user_id: $user_id }) {
             affected_rows
+        }
+    }
+`;
+
+export const GET_PROFILE_ATTRIBUTES = gql`
+    query getProfileAttributes($user_id: Int!) {
+        users(where: { id: { _eq: $user_id } }) {
+            location
+            position
+            height
+            weight
+            foot
+            league
         }
     }
 `;
