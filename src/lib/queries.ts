@@ -255,7 +255,7 @@ export const UPDATE_LIKES_SEEN = gql`
 `;
 
 export const GET_NOTIFICATIONS = gql`
-    query getNotifications($user_id: Int!) {
+    query getNotifications($user_id: Int) {
         notifications(
             where: {
                 _or: [
@@ -267,6 +267,7 @@ export const GET_NOTIFICATIONS = gql`
                 ]
             }
         ) {
+            id
             notification_seen
             notification_type
             created_at
@@ -283,12 +284,13 @@ export const GET_NOTIFICATIONS = gql`
                     s3_key
                 }
             }
+            comment
         }
     }
 `;
 
 export const COUNT_UNSEEN_NOTIFS = gql`
-    query countUnseenNotifs($user_id: Int!) {
+    query countUnseenNotifs($user_id: Int) {
         notifications_aggregate(
             where: {
                 notification_seen: { _eq: false }
@@ -632,6 +634,17 @@ export const INSERT_COMMENT = gql`
     mutation insertComment($comment: String!, $post_id: Int!, $user_id: Int!) {
         insert_comments(objects: { comment: $comment, post_id: $post_id, user_id: $user_id }) {
             affected_rows
+        }
+        insert_notifications_one(
+            object: {
+                user_id_of_notifier: $user_id
+                liked_post_id: $post_id
+                notification_type: "COMMENT"
+                notification_seen: false
+                comment: $comment
+            }
+        ) {
+            id
         }
     }
 `;

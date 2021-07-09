@@ -100,6 +100,7 @@ export interface Notification {
     post_thumbnail?: string;
     seen: boolean;
     timestamp: number;
+    comment: string;
 }
 
 export interface Flag {

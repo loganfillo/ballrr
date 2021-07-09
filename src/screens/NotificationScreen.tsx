@@ -30,7 +30,7 @@ const NotificationScreen: React.FC = () => {
         if (notification.type == 'FOLLOW') {
             const userId = notification.redirect_id;
             navigation.push('Profile', { userId });
-        } else if (notification.type == 'LIKE') {
+        } else if (notification.type == 'LIKE' || notification.type == 'COMMENT') {
             const postId = notification.redirect_id;
             navigation.push('FeedNavigator', {
                 screen: 'Feed',
@@ -61,7 +61,10 @@ const NotificationScreen: React.FC = () => {
                 for (const notif of data.notifications) {
                     fetchedLikes.push({
                         username: notif.notifier_user_id.username,
-                        redirect_id: notif.notifier_user_id.id,
+                        redirect_id:
+                            notif.notification_type === 'FOLLOW'
+                                ? notif.notifier_user_id.id
+                                : notif.liked_post.id,
                         type: notif.notification_type,
                         notifier_user_id: notif.notifier_user_id.id,
                         profile_thumbnail:
@@ -78,13 +81,13 @@ const NotificationScreen: React.FC = () => {
                                   )) as string),
                         seen: notif.notification_seen,
                         timestamp: notif.created_at,
+                        comment: notif.notification_type === 'COMMENT' ? notif.comment : undefined,
                     });
 
                     if (!notif.notification_seen) {
                         seenIds.push(notif.id);
                     }
                 }
-
                 await apolloClient.mutate({
                     mutation: UPDATE_NOTIFICATIONS,
                     variables: { like_ids: seenIds },
@@ -102,20 +105,18 @@ const NotificationScreen: React.FC = () => {
         >
             {notifications.map((notification, index) => {
                 return (
-                    <TouchableOpacity
+                    <NotificationItem
                         key={index}
-                        onPress={() => handleNotificationNav(notification)}
-                    >
-                        <NotificationItem
-                            username={notification.username}
-                            notifType={notification.type}
-                            prof_thumbnail={notification.profile_thumbnail}
-                            post_thumbnail={notification.post_thumbnail}
-                            timestamp={notification.timestamp}
-                            curr_userId={user.id}
-                            notifier_userId={notification.notifier_user_id}
-                        />
-                    </TouchableOpacity>
+                        username={notification.username}
+                        notifType={notification.type}
+                        prof_thumbnail={notification.profile_thumbnail}
+                        post_thumbnail={notification.post_thumbnail}
+                        timestamp={notification.timestamp}
+                        curr_userId={user.id}
+                        notifier_userId={notification.notifier_user_id}
+                        postId={notification.redirect_id}
+                        comment_message={notification.comment}
+                    />
                 );
             })}
         </ScrollView>
