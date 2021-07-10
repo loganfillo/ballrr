@@ -13,17 +13,22 @@ interface InputProps {
 const AttributeInput: React.FC<InputProps> = ({ title, value, onChange }: InputProps) => {
     return (
         <>
-            <Text style={{ paddingVertical: 8, color: 'grey', fontSize: 15 }}>{title}</Text>
-            <TextInput
-                style={{
-                    borderBottomColor: 'grey',
-                    borderBottomWidth: 1,
-                    paddingVertical: 5,
-                }}
-                maxLength={50}
-                onChangeText={onChange}
-                value={value}
-            />
+            <View style={{ flexDirection: 'row', marginVertical: 10 }}>
+                <Text style={{ paddingVertical: 4, color: 'grey', flex: 1 }}>{title}</Text>
+                <TextInput
+                    style={{
+                        borderColor: 'grey',
+                        borderWidth: 1,
+                        paddingVertical: 4,
+                        flexBasis: 260,
+                        paddingLeft: 10,
+                    }}
+                    placeholder={title}
+                    maxLength={50}
+                    onChangeText={onChange}
+                    value={value}
+                />
+            </View>
         </>
     );
 };

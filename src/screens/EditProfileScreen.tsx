@@ -1,5 +1,13 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react';
-import { Text, ScrollView, SafeAreaView, TextInput, View, Button, Image } from 'react-native';
+import {
+    Text,
+    ScrollView,
+    SafeAreaView,
+    TextInput,
+    View,
+    Button,
+    TouchableOpacity,
+} from 'react-native';
 import { chooseMedia, createThumbnail } from '../lib/media';
 import { Flag, Media } from '../lib/types';
 import { useUser } from '../lib/user';
@@ -11,6 +19,7 @@ import { GET_PROFILE } from '../lib/queries';
 import { saveProfileChanges } from '../lib/profile';
 import { Storage } from 'aws-amplify';
 import ProfileAttributes from '../components/ProfileAttributes';
+import { Avatar } from 'react-native-paper';
 
 const EditProfile: React.FC = () => {
     const [saving, setSaving] = useState(false);
@@ -186,86 +195,89 @@ const EditProfile: React.FC = () => {
                     backgroundColor: 'whitesmoke',
                 }}
             >
-                <View style={{ flexDirection: 'row' }}>
-                    <View
-                        style={{
-                            paddingTop: 10,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            flex: 1,
-                        }}
-                    >
-                        {image === '' ? (
-                            <Text style={{ fontSize: 15, textAlign: 'center', color: 'grey' }}>
-                                Add Pic
+                <View style={{ flexDirection: 'row', marginVertical: 20 }}>
+                    <View style={{ paddingHorizontal: 15, paddingTop: 5 }}>
+                        <View style={{ flexDirection: 'row' }}>
+                            {image === '' ? (
+                                <Avatar.Icon size={40} icon="user" />
+                            ) : (
+                                <Avatar.Image
+                                    size={40}
+                                    source={{
+                                        uri: image,
+                                    }}
+                                />
+                            )}
+                        </View>
+                    </View>
+                    <View style={{ flexDirection: 'column' }}>
+                        <Text style={{ fontSize: 18, fontWeight: '500', marginLeft: 5 }}>
+                            {user.username}
+                        </Text>
+                        <TouchableOpacity onPress={changeProfilePic}>
+                            <Text style={{ fontSize: 16, color: '#2B88DB', marginLeft: 5 }}>
+                                Change Profile Pic
                             </Text>
-                        ) : (
-                            <Image
-                                style={{
-                                    borderRadius: 100,
-                                    height: undefined,
-                                    width: `50%`,
-                                    aspectRatio: 1,
-                                    alignSelf: 'center',
-                                }}
-                                source={{
-                                    uri: image,
-                                }}
-                            />
-                        )}
-                    </View>
-                    <View
-                        style={{
-                            paddingTop: 10,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            flex: 1,
-                        }}
-                    >
-                        {flag === undefined || flag.noFlag === true ? (
-                            <Text style={{ fontSize: 15, textAlign: 'center', color: 'grey' }}>
-                                Add Flag
-                            </Text>
-                        ) : (
-                            <Text style={{ fontSize: 60, textAlign: 'center' }}>{flag.emoji}</Text>
-                        )}
-                    </View>
-                </View>
-                <View style={{ flexDirection: 'row' }}>
-                    <View style={{ flex: 1 }}>
-                        <Button title={'Change Pic'} onPress={changeProfilePic} disabled={saving} />
-                    </View>
-                    <View style={{ flex: 1 }}>
-                        <Button
-                            title={'Change Flag'}
-                            onPress={() => setFlagModalVisible(true)}
-                            disabled={saving}
-                        />
+                        </TouchableOpacity>
                     </View>
                 </View>
                 <View style={{ paddingHorizontal: 15, paddingTop: 5 }}>
-                    <Text style={{ paddingBottom: 8, color: 'grey' }}>Name</Text>
-                    <TextInput
-                        style={{
-                            borderBottomColor: 'green',
-                            borderBottomWidth: 1,
-                            paddingVertical: 4,
-                        }}
-                        maxLength={50}
-                        onChangeText={(text) => setName(text)}
-                        value={name}
-                    />
-                    <Text style={{ paddingBottom: 8, paddingTop: 15, color: 'grey' }}>Bio</Text>
-                    <TextInput
-                        style={{
-                            borderBottomColor: 'green',
-                            borderBottomWidth: 1,
-                            paddingVertical: 4,
-                        }}
-                        maxLength={200}
-                        onChangeText={(text) => setBio(text)}
-                        value={bio}
-                    />
+                    <View style={{ flexDirection: 'row' }}>
+                        <Text style={{ paddingVertical: 4, color: 'grey' }}>Name</Text>
+                        <TextInput
+                            style={{
+                                borderColor: 'grey',
+                                borderWidth: 1,
+                                paddingVertical: 4,
+                                marginLeft: 20,
+                                flexBasis: 260,
+                                paddingLeft: 10,
+                            }}
+                            placeholder={'Name'}
+                            maxLength={50}
+                            onChangeText={(text) => setName(text)}
+                            value={name}
+                        />
+                    </View>
+                    <View style={{ flexDirection: 'row', marginTop: 20 }}>
+                        <Text style={{ paddingVertical: 4, color: 'grey' }}>Bio</Text>
+                        <TextInput
+                            style={{
+                                borderColor: 'grey',
+                                borderWidth: 1,
+                                paddingVertical: 4,
+                                marginLeft: 38,
+                                flexBasis: 260,
+                                paddingLeft: 10,
+                            }}
+                            placeholder={'Bio'}
+                            maxLength={200}
+                            onChangeText={(text) => setBio(text)}
+                            value={bio}
+                        />
+                    </View>
+                    <View style={{ flexDirection: 'row', marginTop: 20 }}>
+                        <Text style={{ paddingVertical: 4, color: 'grey' }}>Flag</Text>
+                        <View style={{ marginLeft: 30, flexDirection: 'row' }}>
+                            {flag === undefined || flag.noFlag === true ? (
+                                <Text style={{ fontSize: 15, textAlign: 'center', color: 'grey' }}>
+                                    Add Flag
+                                </Text>
+                            ) : (
+                                <Text style={{ fontSize: 20, textAlign: 'center' }}>
+                                    {flag.emoji}
+                                </Text>
+                            )}
+                        </View>
+                        <TouchableOpacity
+                            onPress={() => setFlagModalVisible(true)}
+                            disabled={saving}
+                        >
+                            <Text style={{ fontSize: 16, color: '#2B88DB', marginLeft: 5 }}>
+                                Change Flag
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
                     <View
                         style={{
                             paddingBottom: 8,
