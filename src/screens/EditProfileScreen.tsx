@@ -223,13 +223,12 @@ const EditProfile: React.FC = () => {
                 </View>
                 <View style={{ paddingHorizontal: 15, paddingTop: 5 }}>
                     <View style={{ flexDirection: 'row' }}>
-                        <Text style={{ paddingVertical: 4, color: 'grey' }}>Name</Text>
+                        <Text style={{ paddingVertical: 4, color: 'grey', flex: 1 }}>Name</Text>
                         <TextInput
                             style={{
                                 borderColor: 'grey',
                                 borderWidth: 1,
                                 paddingVertical: 4,
-                                marginLeft: 20,
                                 flexBasis: 260,
                                 paddingLeft: 10,
                             }}
@@ -240,13 +239,12 @@ const EditProfile: React.FC = () => {
                         />
                     </View>
                     <View style={{ flexDirection: 'row', marginTop: 20 }}>
-                        <Text style={{ paddingVertical: 4, color: 'grey' }}>Bio</Text>
+                        <Text style={{ paddingVertical: 4, color: 'grey', flex: 1 }}>Bio</Text>
                         <TextInput
                             style={{
                                 borderColor: 'grey',
                                 borderWidth: 1,
                                 paddingVertical: 4,
-                                marginLeft: 38,
                                 flexBasis: 260,
                                 paddingLeft: 10,
                             }}
@@ -257,8 +255,8 @@ const EditProfile: React.FC = () => {
                         />
                     </View>
                     <View style={{ flexDirection: 'row', marginTop: 20 }}>
-                        <Text style={{ paddingVertical: 4, color: 'grey' }}>Flag</Text>
-                        <View style={{ marginLeft: 30, flexDirection: 'row' }}>
+                        <Text style={{ paddingVertical: 4, color: 'grey', flex: 1 }}>Flag</Text>
+                        <View style={{ flexDirection: 'row', flex: 3 }}>
                             {flag === undefined || flag.noFlag === true ? (
                                 <Text style={{ fontSize: 15, textAlign: 'center', color: 'grey' }}>
                                     Add Flag
@@ -268,15 +266,16 @@ const EditProfile: React.FC = () => {
                                     {flag.emoji}
                                 </Text>
                             )}
+
+                            <TouchableOpacity
+                                onPress={() => setFlagModalVisible(true)}
+                                disabled={saving}
+                            >
+                                <Text style={{ fontSize: 16, color: '#2B88DB', marginLeft: 5 }}>
+                                    Change Flag
+                                </Text>
+                            </TouchableOpacity>
                         </View>
-                        <TouchableOpacity
-                            onPress={() => setFlagModalVisible(true)}
-                            disabled={saving}
-                        >
-                            <Text style={{ fontSize: 16, color: '#2B88DB', marginLeft: 5 }}>
-                                Change Flag
-                            </Text>
-                        </TouchableOpacity>
                     </View>
                     <View
                         style={{
