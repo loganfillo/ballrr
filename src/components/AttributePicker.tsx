@@ -37,12 +37,12 @@ interface ModalProps {
     visible: boolean;
     onClose: () => void;
     profileUserId: number;
-    onPositionChange: (item: any) => void;
-    onLocationChange: (item: any) => void;
-    onHeightChange: (item: any) => void;
-    onWeightChange: (item: any) => void;
-    onFootChange: (item: any) => void;
-    onLeagueChange: (item: any) => void;
+    onPositionChange: (item: string) => void;
+    onLocationChange: (item: string) => void;
+    onHeightChange: (item: string) => void;
+    onWeightChange: (item: string) => void;
+    onFootChange: (item: string) => void;
+    onLeagueChange: (item: string) => void;
 }
 
 export const AttributePickerModal: React.FC<ModalProps> = ({
