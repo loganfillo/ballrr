@@ -120,3 +120,7 @@ alter table "public"."notifications" rename column "liked_post" to "liked_post_i
 ALTER TABLE "public"."post_likes" ADD COLUMN "notification_seen" boolean NULL;
 
 ALTER TABLE "public"."post_likes" DROP COLUMN "notification_seen" CASCADE;
+
+ALTER TABLE "public"."notifications" ALTER COLUMN "user_id_of_notifier" DROP NOT NULL;
+
+ALTER TABLE "public"."notifications" ADD COLUMN "comment" text NULL;

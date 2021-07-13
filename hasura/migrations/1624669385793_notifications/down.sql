@@ -129,3 +129,7 @@ DROP TABLE "public"."notifications";
 ALTER TABLE "public"."notifications" DROP COLUMN "user_id";
 
 DROP TABLE "public"."notifications";
+
+ALTER TABLE "public"."notifications" DROP COLUMN "comment";
+
+ALTER TABLE "public"."notifications" ALTER COLUMN "user_id_of_notifier" SET NOT NULL;
