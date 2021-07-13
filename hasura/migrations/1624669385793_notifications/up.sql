@@ -1,8 +1,3 @@
-
-CREATE TABLE "public"."notifications"("id" serial NOT NULL, "username" text NOT NULL, "content_id" integer NOT NULL, "notification_type" text NOT NULL, "notification_seen" text NOT NULL, PRIMARY KEY ("id") , UNIQUE ("id"));
-
-ALTER TABLE "public"."notifications" ADD COLUMN "user_id" integer NULL;
-
 CREATE TABLE "public"."notifications"("link_to_content_id" integer NOT NULL, "user_id" integer NOT NULL, "notifier_username" text NOT NULL, "created_at" timetz NOT NULL, "id" serial NOT NULL, "notification_type" text NOT NULL, "notification_seen" text NOT NULL, PRIMARY KEY ("id") );
 
 alter table "public"."notifications"
