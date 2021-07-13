@@ -21,7 +21,10 @@ const TabNavigator: React.FC = () => {
     return (
         <Tab.Navigator
             initialRouteName="FeedTab"
-            tabBar={({ navigation }) => <TabBar navigation={navigation} />}
+            tabBar={({ navigation, descriptors, state }) => (
+                <TabBar navigation={navigation} descriptors={descriptors} state={state} />
+            )}
+            screenOptions={{ tabBarVisible: false }}
         >
             <Tab.Screen name="FeedTab" component={FeedNavigator} />
             <Tab.Screen name="SearchTab" component={SearchNavigator} />
