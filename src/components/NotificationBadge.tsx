@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client';
 import React, { useEffect, useState } from 'react';
 import { View, Dimensions } from 'react-native';
-import { COUNT_UNSEEN_LIKES } from '../lib/queries';
+import { COUNT_UNSEEN_NOTIFS } from '../lib/queries';
 import { useUser } from '../lib/user';
 
 interface Props {
@@ -17,14 +17,14 @@ const NotificationBadge: React.FC<Props> = ({ icon, top, right }: Props) => {
     const user = useUser();
     const { width } = Dimensions.get('window');
 
-    const { loading, error, data } = useQuery(COUNT_UNSEEN_LIKES, {
+    const { loading, error, data } = useQuery(COUNT_UNSEEN_NOTIFS, {
         variables: { user_id: user.id },
         pollInterval: 500,
     });
 
     useEffect(() => {
         if (!loading && !error && data) {
-            const newCount = data.post_likes_aggregate.aggregate.count;
+            const newCount = data.notifications_aggregate.aggregate.count;
             setCount(newCount);
             setVisible(data ? newCount > 0 : false);
         }
