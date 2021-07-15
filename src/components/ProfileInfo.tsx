@@ -65,7 +65,7 @@ const ProfileInfo: React.FC<Props> = ({ profileUserId, refreshing }: Props) => {
     return (
         <View>
             <View style={styles.container}>
-                <View style={{ flex: 3 }}>
+                <View style={{ flex: 2 }}>
                     <ProfilePic flag={flag} image={image} />
                 </View>
                 <View style={styles.count_field}>
@@ -179,6 +179,7 @@ const ProfileInfo: React.FC<Props> = ({ profileUserId, refreshing }: Props) => {
 const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
+        margin: 5,
     },
     count_field: {
         flex: 1,
