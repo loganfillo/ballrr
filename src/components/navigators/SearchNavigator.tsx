@@ -1,8 +1,6 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import SearchScreen from '../../screens/SearchScreen';
-import InboxButton from '../buttons/InboxButton';
-import { useUser } from '../../lib/user';
 import ProfileNavigator from './ProfileNavigator';
 
 export type SearchStackParamList = {

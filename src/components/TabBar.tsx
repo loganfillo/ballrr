@@ -2,8 +2,11 @@ import React, { useState } from 'react';
 import CreatePostButton from './buttons/CreatePostButton';
 import NotificationBadge from './NotificationBadge';
 import { View, Animated, Dimensions } from 'react-native';
-import { NavigationHelpers, ParamListBase } from '@react-navigation/core';
-import { BottomTabNavigationEventMap } from '@react-navigation/bottom-tabs/lib/typescript/src/types';
+import { NavigationHelpers, ParamListBase, TabNavigationState } from '@react-navigation/core';
+import {
+    BottomTabNavigationEventMap,
+    BottomTabDescriptorMap,
+} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
 import TabIcon from './TabIcon';
 
 const FEED_TAB = 'FeedTab';
@@ -24,10 +27,17 @@ const TAB_SPACING = (TAB_BAR_WIDTH - NUMBER_TABS * ICON_SIZE) / (NUMBER_TABS + 1
 const TAB_MARGIN = 3;
 
 interface TabBarProps {
+    descriptors: BottomTabDescriptorMap;
+    state: TabNavigationState<ParamListBase>;
     navigation: NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>;
 }
 
-const TabBar: React.FC<TabBarProps> = ({ navigation }: TabBarProps) => {
+const TabBar: React.FC<TabBarProps> = ({ navigation, descriptors, state }: TabBarProps) => {
+    const focusedOptions = descriptors[state.routes[state.index].key].options;
+
+    if (focusedOptions.tabBarVisible === false) {
+        return null;
+    }
     const [index, setIndex] = useState(0);
     const { width, height } = Dimensions.get('window');
 
