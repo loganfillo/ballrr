@@ -148,6 +148,9 @@ export const DELETE_POST = gql`
         delete_posts_by_pk(id: $id) {
             id
         }
+        delete_notifications(where: { _and: { liked_post_id: { _eq: $id } } }) {
+            affected_rows
+        }
     }
 `;
 
@@ -174,8 +177,16 @@ export const SEARCH_USERS = gql`
 
 export const LIKE_POST = gql`
     mutation likePost($post_id: Int!, $user_id: Int!) {
-        insert_post_likes_one(
-            object: { user_id: $user_id, liked_post_id: $post_id, notification_seen: false }
+        insert_post_likes_one(object: { user_id: $user_id, liked_post_id: $post_id }) {
+            id
+        }
+        insert_notifications_one(
+            object: {
+                user_id_of_notifier: $user_id
+                liked_post_id: $post_id
+                notification_type: "LIKE"
+                notification_seen: false
+            }
         ) {
             id
         }
@@ -232,15 +243,62 @@ export const GET_LIKES = gql`
     }
 `;
 
-export const COUNT_UNSEEN_LIKES = gql`
-    query countUnseenLikes($user_id: Int!) {
-        post_likes_aggregate(
+export const UPDATE_LIKES_SEEN = gql`
+    mutation updateLikesSeen($like_ids: [Int!]) {
+        update_post_likes(where: { id: { _in: $like_ids } }, _set: { notification_seen: true }) {
+            returning {
+                id
+            }
+            affected_rows
+        }
+    }
+`;
+
+export const GET_NOTIFICATIONS = gql`
+    query getNotifications($user_id: Int) {
+        notifications(
+            where: {
+                _or: [
+                    { user_followed_id: { _eq: $user_id } }
+                    {
+                        liked_post: { post_user_id: { id: { _eq: $user_id } } }
+                        _and: { notifier_user_id: { id: { _neq: $user_id } } }
+                    }
+                ]
+            }
+        ) {
+            id
+            notification_seen
+            notification_type
+            created_at
+            notifier_user_id {
+                id
+                username
+                profile_pic {
+                    s3_key
+                }
+            }
+            liked_post {
+                id
+                thumbnail {
+                    s3_key
+                }
+            }
+            comment
+        }
+    }
+`;
+
+export const COUNT_UNSEEN_NOTIFS = gql`
+    query countUnseenNotifs($user_id: Int) {
+        notifications_aggregate(
             where: {
                 notification_seen: { _eq: false }
-                _and: {
-                    liked_post: { post_user_id: { id: { _eq: $user_id } } }
-                    _and: { user_id: { _neq: $user_id } }
-                }
+                _and: { user_id_of_notifier: { _neq: $user_id } }
+                _or: [
+                    { user_followed_id: { _eq: $user_id } }
+                    { liked_post: { user_id: { _eq: $user_id } } }
+                ]
             }
         ) {
             aggregate {
@@ -257,6 +315,17 @@ export const DELETE_LIKE = gql`
         ) {
             affected_rows
         }
+        delete_notifications(
+            where: {
+                user_id_of_notifier: { _eq: $user_id }
+                _and: {
+                    liked_post_id: { _eq: $post_id }
+                    _and: { notification_type: { _eq: "LIKE" } }
+                }
+            }
+        ) {
+            affected_rows
+        }
     }
 `;
 
@@ -270,9 +339,9 @@ export const HAS_USER_LIKED_POST = gql`
     }
 `;
 
-export const UPDATE_LIKES_SEEN = gql`
-    mutation updateLikesSeen($like_ids: [Int!]) {
-        update_post_likes(where: { id: { _in: $like_ids } }, _set: { notification_seen: true }) {
+export const UPDATE_NOTIFICATIONS = gql`
+    mutation updateNotifications($like_ids: [Int!]) {
+        update_notifications(where: { id: { _in: $like_ids } }, _set: { notification_seen: true }) {
             returning {
                 id
             }
@@ -319,6 +388,16 @@ export const FOLLOW_USER = gql`
         insert_followers_one(object: { user_id: $user_id, user_followed_id: $user_followed_id }) {
             id
         }
+        insert_notifications_one(
+            object: {
+                user_id_of_notifier: $user_id
+                user_followed_id: $user_followed_id
+                notification_type: "FOLLOW"
+                notification_seen: false
+            }
+        ) {
+            id
+        }
     }
 `;
 
@@ -328,6 +407,17 @@ export const UNFOLLOW_USER = gql`
             where: {
                 user_followed: { id: { _eq: $user_followed_id } }
                 _and: { user_follower: { id: { _eq: $user_id } } }
+            }
+        ) {
+            affected_rows
+        }
+        delete_notifications(
+            where: {
+                user_id_of_notifier: { _eq: $user_id }
+                _and: {
+                    user_followed_id: { _eq: $user_followed_id }
+                    _and: { notification_type: { _eq: "FOLLOW" } }
+                }
             }
         ) {
             affected_rows
@@ -352,6 +442,36 @@ export const GET_PROFILE = gql`
             weight
             foot
             league
+        }
+    }
+`;
+
+export const GET_FOLLOWERS = gql`
+    query getFollowers($user_id: Int!) {
+        followers(where: { user_followed_id: { _eq: $user_id } }) {
+            user_follower {
+                id
+                username
+                full_name
+                profile_pic {
+                    s3_key
+                }
+            }
+        }
+    }
+`;
+
+export const GET_FOLLOWING = gql`
+    query getFollowing($user_id: Int!) {
+        followers(where: { user_id: { _eq: $user_id } }) {
+            user_followed {
+                id
+                username
+                full_name
+                profile_pic {
+                    s3_key
+                }
+            }
         }
     }
 `;
@@ -514,6 +634,17 @@ export const INSERT_COMMENT = gql`
     mutation insertComment($comment: String!, $post_id: Int!, $user_id: Int!) {
         insert_comments(objects: { comment: $comment, post_id: $post_id, user_id: $user_id }) {
             affected_rows
+        }
+        insert_notifications_one(
+            object: {
+                user_id_of_notifier: $user_id
+                liked_post_id: $post_id
+                notification_type: "COMMENT"
+                notification_seen: false
+                comment: $comment
+            }
+        ) {
+            id
         }
     }
 `;
