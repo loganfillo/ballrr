@@ -288,6 +288,9 @@ const EditProfile: React.FC = () => {
                             refetchAttributes={refetchAttributes}
                         />
                     </View>
+                    <View style={{ padding: 30, alignSelf: 'center', flex: 1 }}>
+                        <Text style={{ color: 'grey' }}>Save to see changes</Text>
+                    </View>
                 </View>
             </ScrollView>
         </SafeAreaView>
