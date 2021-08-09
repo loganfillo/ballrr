@@ -8,7 +8,6 @@ import {
     View,
     ScrollView,
     TouchableOpacity,
-    Alert,
     RefreshControl,
 } from 'react-native';
 import { CompStackParamList } from '../components/navigators/CompetitionNavigator';
@@ -67,6 +66,7 @@ const BrowseChallengeScreen: React.FC = () => {
                     timeLimit: comp.time_limit,
                     leaderboardType: comp.leaderboard_type,
                     id: params.compId,
+                    postId: comp.post.id,
                 });
             }
         }
@@ -76,6 +76,13 @@ const BrowseChallengeScreen: React.FC = () => {
         setRefreshing(true);
         wait(1000).then(() => setRefreshing(false));
     }, []);
+
+    function navigateToPost() {
+        navigation.navigate('FeedNavigator', {
+            screen: 'Feed',
+            params: { postIds: [competition?.postId] },
+        });
+    }
 
     return (
         <ScrollView
@@ -89,19 +96,40 @@ const BrowseChallengeScreen: React.FC = () => {
                 onClose={() => setLbModalVisible(false)}
             />
             <View style={{ alignItems: 'center', justifyContent: 'center', paddingVertical: 15 }}>
-                <TouchableOpacity onPress={() => Alert.alert('Should this go to original post??')}>
-                    <Image
-                        resizeMode="cover"
-                        style={{
-                            height: 0.2 * height,
-                            borderRadius: 10,
-                            width: 0.12 * height,
-                        }}
-                        source={{
-                            uri: params.thumbnailUrl,
-                        }}
-                    />
-                </TouchableOpacity>
+                <View
+                    style={{
+                        height: 0.2 * height,
+                        width: 0.12 * height,
+                    }}
+                >
+                    <TouchableOpacity
+                        disabled={loading}
+                        onPress={navigateToPost}
+                        style={{ flex: 1 }}
+                    >
+                        <Image
+                            resizeMode="cover"
+                            style={{
+                                height: '100%',
+                                flex: 1,
+                                borderRadius: 10,
+                                borderColor: 'orange',
+                                borderWidth: 1,
+                            }}
+                            source={{
+                                uri: params.thumbnailUrl,
+                            }}
+                        />
+                        <View
+                            style={{
+                                position: 'absolute',
+                                alignSelf: 'flex-end',
+                                bottom: '4%',
+                                right: '5%',
+                            }}
+                        ></View>
+                    </TouchableOpacity>
+                </View>
             </View>
             <View
                 style={{
@@ -113,7 +141,7 @@ const BrowseChallengeScreen: React.FC = () => {
                 <View style={{ paddingRight: 10 }}>
                     <Text style={{ fontSize: 22, fontWeight: '400' }}>{competition?.name}</Text>
                 </View>
-                <ViewCompCount compId={params.compId} refreshing={refreshing} />
+                <ViewCompCount compId={params.compId} color={'black'} refreshing={refreshing} />
             </View>
             {competition?.leaderboardType === LeaderBoard.TIMED && (
                 <View

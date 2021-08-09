@@ -11,7 +11,7 @@ const CommentCount: React.FC<Props> = ({ postId }: Props) => {
     const [count, setCount] = useState(0);
     const [countVisible, setCountVisible] = useState(true);
 
-    const { loading, error, data, refetch } = useQuery(COUNT_COMMENTS, {
+    const { loading, error, data } = useQuery(COUNT_COMMENTS, {
         variables: { post_id: postId },
     });
 

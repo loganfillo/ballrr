@@ -91,6 +91,12 @@ export interface SearchResult {
     profPicUrl: string;
 }
 
+export interface CompSearchResult {
+    name: string;
+    type: LeaderBoard;
+    compId: number;
+}
+
 export interface Notification {
     redirect_id: number;
     username: string;
@@ -121,6 +127,7 @@ export interface Competition {
     timeLimit?: number;
     score?: number;
     id?: number;
+    postId?: number;
 }
 
 export interface LeaderBoardItem {

@@ -16,7 +16,7 @@ const SearchNavigator: React.FC = () => {
             <SearchStack.Screen
                 name="Search"
                 component={SearchScreen}
-                options={{ headerShown: false }}
+                options={{ headerShown: true }}
             />
             <SearchStack.Screen
                 name="ProfileNavigator"

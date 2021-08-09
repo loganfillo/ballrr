@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import {
     TouchableOpacity,
     Modal,
@@ -9,13 +9,14 @@ import {
     ScrollView,
     TouchableWithoutFeedback,
     Keyboard,
+    SafeAreaView,
+    RefreshControl,
 } from 'react-native';
-import { DocumentNode, useApolloClient, useQuery, useMutation } from '@apollo/client';
+import { useQuery, useMutation } from '@apollo/client';
 import { Storage } from 'aws-amplify';
 import { useUser } from '../../lib/user';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Text, View } from 'native-base';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { GET_COMMENTS, INSERT_COMMENT } from '../../lib/queries';
 import { Comment } from '../../lib/types';
 import Moment from 'react-moment';
@@ -26,21 +27,34 @@ interface Props {
     size: number;
 }
 
+const wait = (timeout: number) => {
+    return new Promise((resolve) => {
+        setTimeout(resolve, timeout);
+    });
+};
+
 const CommentButton: React.FC<Props> = ({ postId, size }: Props) => {
     const user = useUser();
     const [modalVisible, setModalVisible] = useState(false);
     const { height } = Dimensions.get('window');
+    const [refreshing, setRefreshing] = useState(false);
     const [comment, setComment] = useState('');
-    const [commentPosted, setCommentPosted] = useState(false);
     const [commentSection, setCommentSection] = useState<Comment[]>([]);
 
     const { loading, error, data, refetch } = useQuery(GET_COMMENTS, {
         variables: { post_id: postId },
+        fetchPolicy: 'cache-and-network',
     });
 
     const [insertComment] = useMutation(INSERT_COMMENT, {
         variables: { comment: comment, post_id: postId, user_id: user.id },
     });
+
+    const onRefresh = useCallback(() => {
+        setRefreshing(true);
+        refetch();
+        wait(1000).then(() => setRefreshing(false));
+    }, []);
 
     async function afterComment() {
         if (comment != '') {
@@ -83,7 +97,10 @@ const CommentButton: React.FC<Props> = ({ postId, size }: Props) => {
 
             <Modal visible={modalVisible}>
                 <SafeAreaView style={{ flexDirection: 'row' }}>
-                    <TouchableOpacity onPress={() => setModalVisible(false)}>
+                    <TouchableOpacity
+                        onPress={() => setModalVisible(false)}
+                        style={{ paddingVertical: 5 }}
+                    >
                         <MaterialCommunityIcons
                             name={'chevron-left'}
                             size={0.05 * height}
@@ -104,60 +121,71 @@ const CommentButton: React.FC<Props> = ({ postId, size }: Props) => {
                         Comments
                     </Text>
                 </SafeAreaView>
-                <ScrollView style={{ paddingBottom: 50 }}>
+                <ScrollView
+                    style={{ paddingBottom: 50 }}
+                    refreshControl={
+                        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                    }
+                >
                     {commentSection.map((comment, id) => {
                         return (
                             <View key={id}>
-                                <View style={{ flexDirection: 'row', padding: 3 }}>
-                                    <Image
+                                <View style={{ borderBottomWidth: 2, borderColor: 'whitesmoke' }} />
+                                <View key={id} style={{ padding: 8, backgroundColor: 'white' }}>
+                                    <View
                                         style={{
-                                            borderRadius: 100,
-                                            height: undefined,
-                                            width: '10%',
-                                            aspectRatio: 1,
                                             flexDirection: 'row',
                                         }}
-                                        source={{
-                                            uri: comment.commenterPicUrl,
-                                        }}
-                                    />
-                                    <View style={{ flexDirection: 'column' }}>
-                                        <Text
+                                    >
+                                        <Image
                                             style={{
-                                                color: 'black',
-                                                fontSize: 16,
-                                                fontWeight: 'bold',
+                                                borderRadius: 100,
+                                                height: undefined,
+                                                width: '8%',
+                                                aspectRatio: 1,
                                                 flexDirection: 'row',
-                                                justifyContent: 'center',
-                                                padding: 2,
                                             }}
-                                        >
-                                            {'@' + comment.commenterUsername}
-                                        </Text>
-                                        <Text
-                                            style={{
-                                                fontSize: 16,
-                                                color: 'black',
-                                                fontWeight: 'normal',
-                                                paddingLeft: 15,
+                                            source={{
+                                                uri: comment.commenterPicUrl,
                                             }}
-                                        >
-                                            {comment.comment}
-                                        </Text>
+                                        />
+                                        <View style={{ flexDirection: 'column', paddingLeft: 8 }}>
+                                            <Text
+                                                style={{
+                                                    color: 'black',
+                                                    fontSize: 14,
+                                                    fontWeight: 'bold',
+                                                    flexDirection: 'row',
+                                                    justifyContent: 'center',
+                                                }}
+                                            >
+                                                {'@' + comment.commenterUsername}
+                                            </Text>
+                                            <Text
+                                                style={{
+                                                    fontSize: 14,
+                                                    color: 'black',
+                                                    fontWeight: 'normal',
+                                                }}
+                                            >
+                                                {comment.comment}
+                                            </Text>
+                                        </View>
                                     </View>
+                                    <Moment
+                                        element={Text}
+                                        fromNow
+                                        style={{
+                                            fontSize: 10,
+                                            color: 'black',
+                                            fontWeight: 'normal',
+                                            alignSelf: 'flex-end',
+                                            paddingRight: 10,
+                                        }}
+                                    >
+                                        {comment.timestamp}
+                                    </Moment>
                                 </View>
-                                <Moment
-                                    element={Text}
-                                    fromNow
-                                    style={{
-                                        fontSize: 12,
-                                        color: 'black',
-                                        fontWeight: 'normal',
-                                        alignSelf: 'flex-end',
-                                    }}
-                                >
-                                    {comment.timestamp}
-                                </Moment>
                             </View>
                         );
                     })}
@@ -166,19 +194,23 @@ const CommentButton: React.FC<Props> = ({ postId, size }: Props) => {
                     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                         <View
                             style={{
-                                paddingHorizontal: 10,
-                                paddingBottom: 20,
                                 justifyContent: 'flex-end',
+                                backgroundColor: 'whitesmoke',
+                                borderRadius: 100,
+                                padding: 15,
+                                marginHorizontal: 5,
+                                marginBottom: 10,
                             }}
                         >
                             <TextInput
                                 style={{
                                     borderColor: 'black',
-                                    borderWidth: 1,
+                                    borderBottomWidth: 1,
                                     padding: 5,
                                     fontSize: 16,
                                     borderRadius: 10,
                                 }}
+                                placeholder="Enter comment here..."
                                 maxLength={200}
                                 onChangeText={(text) => setComment(text)}
                                 value={comment}

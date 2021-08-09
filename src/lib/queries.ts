@@ -54,6 +54,30 @@ export const COUNT_USERS_POST = gql`
 
 export const GET_POSTS = gql`
     query getPosts($post_ids: [Int!] = null) {
+        posts(order_by: { created_at: desc }) {
+            user_id
+            caption
+            post_user_id {
+                username
+                full_name
+                profile_pic {
+                    s3_key
+                }
+            }
+            media {
+                s3_key
+                type
+            }
+            id
+            thumbnail {
+                s3_key
+            }
+        }
+    }
+`;
+
+export const GET_POSTS_BY_ID = gql`
+    query getPosts($post_ids: [Int!]) {
         posts(order_by: { created_at: desc }, where: { id: { _in: $post_ids } }) {
             user_id
             caption
@@ -171,6 +195,16 @@ export const SEARCH_USERS = gql`
             profile_pic {
                 s3_key
             }
+        }
+    }
+`;
+
+export const SEARCH_COMPS = gql`
+    query searchComp($search_query: String!) {
+        competitions(where: { name: { _ilike: $search_query } }) {
+            name
+            leaderboard_type
+            id
         }
     }
 `;
@@ -567,6 +601,9 @@ export const GET_COMPETITION = gql`
             name
             time_limit
             id
+            post {
+                id
+            }
         }
     }
 `;

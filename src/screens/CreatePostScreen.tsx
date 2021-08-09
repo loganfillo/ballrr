@@ -169,12 +169,12 @@ const CreatePostScreen: React.FC = () => {
                             backgroundColor: 'transparent',
                         }}
                     >
-                        <View
+                        {/* <View
                             style={{
                                 backgroundColor: 'white',
                                 borderColor: 'black',
                                 borderRadius: 10,
-                                padding: 20,
+                                padding: 15,
                                 alignItems: 'center',
                                 shadowColor: '#000',
                                 shadowOffset: {
@@ -188,15 +188,17 @@ const CreatePostScreen: React.FC = () => {
                         >
                             <Text
                                 style={{
-                                    marginBottom: 15,
+                                    paddingBottom: 0,
                                     textAlign: 'center',
-                                    fontSize: 18,
+                                    fontSize: 20,
                                     color: 'slategrey',
                                 }}
                             >
                                 Your post is uploading
                             </Text>
-                            <ActivityIndicator size="large" />
+                        </View> */}
+                        <View style={{ paddingTop: 25 }}>
+                            <ActivityIndicator color="white" size="large" />
                         </View>
                     </View>
                 </GradientBackground>

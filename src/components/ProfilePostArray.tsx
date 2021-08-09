@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client';
 import React, { useEffect, useState } from 'react';
 import { Dimensions, Image, View, TouchableOpacity } from 'react-native';
-import { GET_USERS_POSTS } from '../lib/queries';
+import { GET_USERS_POSTS, GET_POST_COMPETITION } from '../lib/queries';
 import { ThumbnailPost } from '../lib/types';
 import { Storage } from 'aws-amplify';
 import { useNavigation } from '@react-navigation/native';
@@ -14,9 +14,9 @@ interface Props {
 
 const ProfilePostArray: React.FC<Props> = ({ profileUserId, refreshing, onLoad }: Props) => {
     const [posts, setPosts] = useState<ThumbnailPost[]>([]);
+    const navigation = useNavigation();
 
     const { width } = Dimensions.get('window');
-    const navigation = useNavigation();
 
     useEffect(() => {
         refetch();
@@ -28,6 +28,13 @@ const ProfilePostArray: React.FC<Props> = ({ profileUserId, refreshing, onLoad }
         },
         fetchPolicy: 'cache-and-network',
     });
+
+    function navigateToProfileFeed(listId: number) {
+        navigation.navigate('FeedNavigator', {
+            screen: 'Feed',
+            params: { postIds: posts.map((post) => post.id), listId: listId },
+        });
+    }
 
     useEffect(() => {
         async function fetchPosts() {
@@ -48,12 +55,6 @@ const ProfilePostArray: React.FC<Props> = ({ profileUserId, refreshing, onLoad }
         fetchPosts();
     }, [data]);
 
-    function navigateToProfileFeed(listId: number) {
-        navigation.navigate('FeedNavigator', {
-            screen: 'Feed',
-            params: { postIds: posts.map((post) => post.id), listId: listId },
-        });
-    }
     return (
         <View
             style={{
@@ -64,21 +65,67 @@ const ProfilePostArray: React.FC<Props> = ({ profileUserId, refreshing, onLoad }
         >
             {posts.map((post, id) => {
                 return (
-                    <View key={id} style={{ padding: 1 }}>
-                        <TouchableOpacity
-                            activeOpacity={0.5}
-                            onPress={() => navigateToProfileFeed(id)}
-                        >
-                            <Image
-                                style={{ width: width / 3 - 2, height: width / 3 - 2 }}
-                                source={{
-                                    uri: post.url,
-                                }}
-                            />
-                        </TouchableOpacity>
-                    </View>
+                    <ProfilePostArrayPic
+                        key={id}
+                        post={post}
+                        posts={posts}
+                        onPress={() => navigateToProfileFeed(id)}
+                    />
                 );
             })}
+        </View>
+    );
+};
+
+interface PicProps {
+    key: number;
+    post: ThumbnailPost;
+    onPress: () => void;
+}
+
+const ProfilePostArrayPic: React.FC<PicProps> = ({ key, post, onPress }: PicProps) => {
+    const [compId, setCompId] = useState(0);
+    const { width } = Dimensions.get('window');
+
+    const { loading, error, data } = useQuery(GET_POST_COMPETITION, {
+        variables: { post_id: post.id },
+    });
+    useEffect(() => {
+        async function getCompId() {
+            if (!loading && !error) {
+                if (data.competition_submission_aggregate.aggregate.count > 0) {
+                    const competition_sub = data.competition_submission_aggregate.nodes[0];
+                    setCompId(competition_sub.competition.id);
+                }
+            }
+        }
+        getCompId();
+    }, [data]);
+
+    return (
+        <View key={key} style={{ padding: 1 }}>
+            <TouchableOpacity activeOpacity={0.5} onPress={onPress}>
+                {compId !== 0 && (
+                    <View
+                        style={{
+                            position: 'absolute',
+                            width: 12,
+                            aspectRatio: 1,
+                            borderRadius: 100,
+                            backgroundColor: 'orange',
+                            zIndex: 100,
+                            top: 5,
+                            right: 5,
+                        }}
+                    ></View>
+                )}
+                <Image
+                    style={{ width: width / 3 - 2, height: width / 3 - 2 }}
+                    source={{
+                        uri: post.url,
+                    }}
+                />
+            </TouchableOpacity>
         </View>
     );
 };

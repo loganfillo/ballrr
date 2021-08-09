@@ -8,6 +8,7 @@ interface Props {
     onChangeText: (arg0: string) => void;
     placeholder: string;
     autoCapitalize?: 'none' | undefined;
+    color: string;
 }
 
 const SearchBar: React.FC<Props> = ({
@@ -16,10 +17,13 @@ const SearchBar: React.FC<Props> = ({
     onChangeText,
     placeholder,
     autoCapitalize,
+    color,
 }: Props) => {
     return (
         <View style={styles.container}>
-            {leftIcon && <MaterialIcons name={leftIcon} size={28} style={styles.icon} />}
+            {leftIcon && (
+                <MaterialIcons name={leftIcon} size={28} style={{ ...styles.icon, color: color }} />
+            )}
             <TextInput
                 style={styles.input}
                 value={value}
@@ -31,7 +35,11 @@ const SearchBar: React.FC<Props> = ({
             {value !== '' && (
                 <TouchableOpacity onPress={() => onChangeText('')}>
                     <View>
-                        <MaterialIcons name="cancel" size={24} style={styles.cancelIcon} />
+                        <MaterialIcons
+                            name="cancel"
+                            size={24}
+                            style={{ ...styles.cancelIcon, color: color }}
+                        />
                     </View>
                 </TouchableOpacity>
             )}

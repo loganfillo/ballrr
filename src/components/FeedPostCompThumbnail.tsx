@@ -10,10 +10,12 @@ import { LeaderBoard } from '../lib/types';
 interface Props {
     compId: number;
     compScore: number;
-    compType: LeaderBoard;
+    compType: LeaderBoard | undefined;
 }
 const FeedPostCompThumnbail: React.FC<Props> = ({ compId, compScore, compType }: Props) => {
-    const [url, setUrl] = useState('');
+    const [url, setUrl] = useState(
+        'https://images-na.ssl-images-amazon.com/images/I/11Pl7si+xBL._SX331_BO1,204,203,200_.jpg',
+    );
 
     const navigation = useNavigation();
     const { height } = Dimensions.get('window');

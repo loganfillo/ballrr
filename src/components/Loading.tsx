@@ -10,7 +10,7 @@ const Loading: React.FC = () => {
                     style={styles.headingImage}
                     source={require('../../assets/authMenuLogo2.png')}
                 />
-                <ActivityIndicator color="black" size="large" />
+                <ActivityIndicator color="white" size="large" />
             </View>
         </SafeAreaView>
     );

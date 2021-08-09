@@ -65,6 +65,7 @@ const SearchScreen: React.FC = () => {
                     value={searchQuery}
                     autoCapitalize="none"
                     leftIcon="search"
+                    color='#44B244'
                 />
                 <ScrollView style={{ paddingBottom: 500}}>
                 { searchQuery !== '' ? (
