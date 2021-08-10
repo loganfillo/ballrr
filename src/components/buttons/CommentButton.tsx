@@ -42,6 +42,7 @@ const CommentButton: React.FC<Props> = ({ postId, size }: Props) => {
     const [refreshing, setRefreshing] = useState(false);
     const [comment, setComment] = useState('');
     const [commentSection, setCommentSection] = useState<Comment[]>([]);
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const navigation = useNavigation<StackNavigationProp<any>>();
 
@@ -69,7 +70,8 @@ const CommentButton: React.FC<Props> = ({ postId, size }: Props) => {
     }
 
     function navigateToProfile(userId: number) {
-        navigation.push('Profile', { userId });
+        setModalVisible(false);
+        navigation.navigate('Profile', { screen: 'Profile', params: { userId } });
     }
 
     useEffect(() => {
@@ -78,7 +80,7 @@ const CommentButton: React.FC<Props> = ({ postId, size }: Props) => {
                 const fetchedComments: Comment[] = [];
                 for (const comment of data.comments) {
                     fetchedComments.push({
-                        commenterId: user.id,
+                        commenterId: comment.commenter.id,
                         comment: comment.comment,
                         timestamp: comment.created_at,
                         commenterPicUrl:
@@ -143,48 +145,50 @@ const CommentButton: React.FC<Props> = ({ postId, size }: Props) => {
                                     <View
                                         style={{
                                             flexDirection: 'row',
+                                            alignItems: 'flex-start',
                                         }}
-                                        source={{
-                                            uri: comment.commenterPicUrl,
-                                        }}
-                                    />
-                                    <View style={{ flexDirection: 'column' }}>
+                                    >
                                         <TouchableOpacity
                                             onPress={() => navigateToProfile(comment.commenterId)}
+                                            style={{ flex: 1 }}
                                         >
-                                            <Text
+                                            <Image
                                                 style={{
-                                                    color: 'black',
-                                                    fontSize: 16,
-                                                    fontWeight: 'bold',
+                                                    borderRadius: 100,
+                                                    height: undefined,
+                                                    width: '100%',
+                                                    aspectRatio: 1,
                                                     flexDirection: 'row',
-                                                    justifyContent: 'center',
-                                                    padding: 2,
                                                 }}
-                                            >
-                                                {'@' + comment.commenterUsername}
-                                            </Text>
+                                                source={{
+                                                    uri: comment.commenterPicUrl,
+                                                }}
+                                            />
                                         </TouchableOpacity>
-                                        <Text
+                                        <View
                                             style={{
-                                                fontSize: 16,
-                                                color: 'black',
-                                                fontWeight: 'normal',
-                                                paddingLeft: 15,
+                                                flexDirection: 'column',
+                                                paddingLeft: 8,
+                                                flex: 8,
                                             }}
-                                        />
-                                        <View style={{ flexDirection: 'column', paddingLeft: 8 }}>
-                                            <Text
-                                                style={{
-                                                    color: 'black',
-                                                    fontSize: 14,
-                                                    fontWeight: 'bold',
-                                                    flexDirection: 'row',
-                                                    justifyContent: 'center',
-                                                }}
+                                        >
+                                            <TouchableOpacity
+                                                onPress={() =>
+                                                    navigateToProfile(comment.commenterId)
+                                                }
                                             >
-                                                {'@' + comment.commenterUsername}
-                                            </Text>
+                                                <Text
+                                                    style={{
+                                                        color: 'black',
+                                                        fontSize: 14,
+                                                        fontWeight: 'bold',
+                                                        flexDirection: 'row',
+                                                        justifyContent: 'center',
+                                                    }}
+                                                >
+                                                    {'@' + comment.commenterUsername}
+                                                </Text>
+                                            </TouchableOpacity>
                                             <Text
                                                 style={{
                                                     fontSize: 14,

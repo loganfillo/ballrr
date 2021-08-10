@@ -68,7 +68,6 @@ const ProfilePostArray: React.FC<Props> = ({ profileUserId, refreshing, onLoad }
                     <ProfilePostArrayPic
                         key={id}
                         post={post}
-                        posts={posts}
                         onPress={() => navigateToProfileFeed(id)}
                     />
                 );
@@ -78,12 +77,11 @@ const ProfilePostArray: React.FC<Props> = ({ profileUserId, refreshing, onLoad }
 };
 
 interface PicProps {
-    key: number;
     post: ThumbnailPost;
     onPress: () => void;
 }
 
-const ProfilePostArrayPic: React.FC<PicProps> = ({ key, post, onPress }: PicProps) => {
+const ProfilePostArrayPic: React.FC<PicProps> = ({ post, onPress }: PicProps) => {
     const [compId, setCompId] = useState(0);
     const { width } = Dimensions.get('window');
 
@@ -103,7 +101,7 @@ const ProfilePostArrayPic: React.FC<PicProps> = ({ key, post, onPress }: PicProp
     }, [data]);
 
     return (
-        <View key={key} style={{ padding: 1 }}>
+        <View style={{ padding: 1 }}>
             <TouchableOpacity activeOpacity={0.5} onPress={onPress}>
                 {compId !== 0 && (
                     <View
