@@ -59,6 +59,7 @@ const ViewCompPostArray: React.FC<Props> = ({ compId, refreshing }: Props) => {
                 flex: 1,
                 flexDirection: 'row',
                 flexWrap: 'wrap',
+                paddingHorizontal: 5,
             }}
         >
             {posts.map((post, id) => {

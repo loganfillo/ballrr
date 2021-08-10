@@ -6,9 +6,10 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 interface Props {
     compId: number;
+    color: string;
     refreshing: boolean;
 }
-const ViewCompCount: React.FC<Props> = ({ compId, refreshing }: Props) => {
+const ViewCompCount: React.FC<Props> = ({ compId, color, refreshing }: Props) => {
     const [counter, setCounter] = useState(0);
     const { height } = Dimensions.get('window');
 
@@ -32,13 +33,9 @@ const ViewCompCount: React.FC<Props> = ({ compId, refreshing }: Props) => {
 
     return (
         <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-            <MaterialCommunityIcons
-                name={'account-multiple'}
-                size={0.025 * height}
-                color={'black'}
-            />
+            <MaterialCommunityIcons name={'account-multiple'} size={0.025 * height} color={color} />
             <View style={{ paddingLeft: 3 }}>
-                <Text style={{ fontSize: 18 }}>{counter}</Text>
+                <Text style={{ fontSize: 18, color: color }}>{counter}</Text>
             </View>
         </View>
     );

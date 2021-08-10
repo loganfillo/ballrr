@@ -140,7 +140,7 @@ export async function createThumbnail(media: Media): Promise<Media> {
                 thumbnailUri = await resizeAndFormatThumbnail(uri, height / 3, width / 3);
             }
         } else if (media.file && media.type === MediaType.IMAGE) {
-            thumbnailUri = await resizeAndFormatThumbnail(media.file.uri, 150, 150);
+            thumbnailUri = await resizeAndFormatThumbnail(media.file.uri, 300, 300);
         }
         if (thumbnailUri !== null) {
             const file: MediaFile | null = await constructMediaFile(thumbnailUri, MediaType.IMAGE);

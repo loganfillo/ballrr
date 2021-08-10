@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Dimensions, Image, View } from 'react-native';
-import { LeaderBoard, LeaderBoardItem, MediaType, Post } from '../lib/types';
+import { LeaderBoard, MediaType, Post } from '../lib/types';
 import { Video } from 'expo-av';
 import FeedPostIconBar from './FeedPostIconBar';
 import FeedPostCaption from './FeedPostCaption';
@@ -18,7 +18,7 @@ interface Props {
 const FeedPost: React.FC<Props> = ({ post, shouldPlay }: Props) => {
     const [compId, setCompId] = useState(0);
     const [compScore, setCompScore] = useState(0);
-    const [compType, setCompType] = useState<LeaderBoardItem>();
+    const [compType, setCompType] = useState<LeaderBoard>();
     const { width, height } = Dimensions.get('window');
     const user = useUser();
 
@@ -41,7 +41,9 @@ const FeedPost: React.FC<Props> = ({ post, shouldPlay }: Props) => {
     }, [data]);
     return (
         <>
-            {compId !== 0 && <FeedPostCompThumnbail compId={compId} compScore={compScore} compType={compType} />}
+            {compId !== 0 && (
+                <FeedPostCompThumnbail compId={compId} compScore={compScore} compType={compType} />
+            )}
             {user.id == post.userId && <DeletePostButton post={post} />}
             <View
                 style={{
@@ -53,7 +55,11 @@ const FeedPost: React.FC<Props> = ({ post, shouldPlay }: Props) => {
                     alignItems: 'flex-start',
                 }}
             >
-                <FeedPostCaption username={post.username} caption={post.caption} />
+                <FeedPostCaption
+                    username={post.username}
+                    caption={post.caption}
+                    userId={post.userId}
+                />
             </View>
             <View
                 style={{

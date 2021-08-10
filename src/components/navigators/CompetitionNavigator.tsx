@@ -1,7 +1,7 @@
 import React from 'react';
 import ViewCompetitionScreen from '../../screens/ViewCompetitionScreen';
+import SearchCompetitionScreen from '../../screens/SearchCompetitionScreen';
 import { createStackNavigator } from '@react-navigation/stack';
-import { Text } from 'react-native';
 import FeedNavigator from './FeedNavigator';
 
 export type CompStackParamList = {
@@ -11,9 +11,8 @@ export type CompStackParamList = {
 };
 
 const CompStack = createStackNavigator<CompStackParamList>();
-const PlaceHolder = () => <Text>Competition Search Screen</Text>;
 
-const ChallengeNavigator: React.FC = () => {
+const CompetitionNavigator: React.FC = () => {
     return (
         <CompStack.Navigator
             screenOptions={{
@@ -22,9 +21,9 @@ const ChallengeNavigator: React.FC = () => {
         >
             <CompStack.Screen
                 name="SearchCompetitions"
-                component={PlaceHolder}
+                component={SearchCompetitionScreen}
                 options={{
-                    headerTitle: 'Competition',
+                    headerTitle: 'Competitions',
                     headerBackTitleVisible: false,
                 }}
             />
@@ -50,4 +49,4 @@ const ChallengeNavigator: React.FC = () => {
     );
 };
 
-export default ChallengeNavigator;
+export default CompetitionNavigator;

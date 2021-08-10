@@ -170,7 +170,7 @@ const ProfileInfo: React.FC<Props> = ({ profileUserId, refreshing }: Props) => {
                 </ScrollView>
             </View>
             <View style={{ flexDirection: 'row', paddingTop: 5, paddingBottom: 5 }}>
-                <ProfileHighlights />
+                {/* <ProfileHighlights /> */}
             </View>
         </View>
     );

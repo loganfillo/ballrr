@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client';
 import React, { useEffect, useState } from 'react';
-import { GET_POSTS } from '../lib/queries';
+import { GET_POSTS, GET_POSTS_BY_ID } from '../lib/queries';
 import { Post } from '../lib/types';
 import FeedPost from '../components/FeedPost';
 import ViewPager from '@react-native-community/viewpager';
@@ -26,9 +26,12 @@ const FeedScreen: React.FC = () => {
         refetch();
     }, [isFocused, selected]);
 
-    const { loading, error, data, refetch } = useQuery(GET_POSTS, {
-        variables: params?.postIds === undefined ? {} : { post_ids: params.postIds },
-    });
+    const { loading, error, data, refetch } = useQuery(
+        params?.postIds === undefined ? GET_POSTS : GET_POSTS_BY_ID,
+        {
+            variables: params?.postIds === undefined ? {} : { post_ids: params.postIds },
+        },
+    );
 
     useEffect(() => {
         async function fetchPosts() {
