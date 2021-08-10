@@ -19,6 +19,8 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Text, View } from 'native-base';
 import { GET_COMMENTS, INSERT_COMMENT } from '../../lib/queries';
 import { Comment } from '../../lib/types';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import Moment from 'react-moment';
 import 'moment-timezone';
 
@@ -40,6 +42,9 @@ const CommentButton: React.FC<Props> = ({ postId, size }: Props) => {
     const [refreshing, setRefreshing] = useState(false);
     const [comment, setComment] = useState('');
     const [commentSection, setCommentSection] = useState<Comment[]>([]);
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const navigation = useNavigation<StackNavigationProp<any>>();
 
     const { loading, error, data, refetch } = useQuery(GET_COMMENTS, {
         variables: { post_id: postId },
@@ -64,13 +69,18 @@ const CommentButton: React.FC<Props> = ({ postId, size }: Props) => {
         }
     }
 
+    function navigateToProfile(userId: number) {
+        setModalVisible(false);
+        navigation.navigate('Profile', { screen: 'Profile', params: { userId } });
+    }
+
     useEffect(() => {
         async function fetchComments() {
             if (!loading && !error) {
                 const fetchedComments: Comment[] = [];
                 for (const comment of data.comments) {
                     fetchedComments.push({
-                        commenterId: user.id,
+                        commenterId: comment.commenter.id,
                         comment: comment.comment,
                         timestamp: comment.created_at,
                         commenterPicUrl:
@@ -135,32 +145,50 @@ const CommentButton: React.FC<Props> = ({ postId, size }: Props) => {
                                     <View
                                         style={{
                                             flexDirection: 'row',
+                                            alignItems: 'flex-start',
                                         }}
                                     >
-                                        <Image
-                                            style={{
-                                                borderRadius: 100,
-                                                height: undefined,
-                                                width: '8%',
-                                                aspectRatio: 1,
-                                                flexDirection: 'row',
-                                            }}
-                                            source={{
-                                                uri: comment.commenterPicUrl,
-                                            }}
-                                        />
-                                        <View style={{ flexDirection: 'column', paddingLeft: 8 }}>
-                                            <Text
+                                        <TouchableOpacity
+                                            onPress={() => navigateToProfile(comment.commenterId)}
+                                            style={{ flex: 1 }}
+                                        >
+                                            <Image
                                                 style={{
-                                                    color: 'black',
-                                                    fontSize: 14,
-                                                    fontWeight: 'bold',
+                                                    borderRadius: 100,
+                                                    height: undefined,
+                                                    width: '100%',
+                                                    aspectRatio: 1,
                                                     flexDirection: 'row',
-                                                    justifyContent: 'center',
                                                 }}
+                                                source={{
+                                                    uri: comment.commenterPicUrl,
+                                                }}
+                                            />
+                                        </TouchableOpacity>
+                                        <View
+                                            style={{
+                                                flexDirection: 'column',
+                                                paddingLeft: 8,
+                                                flex: 8,
+                                            }}
+                                        >
+                                            <TouchableOpacity
+                                                onPress={() =>
+                                                    navigateToProfile(comment.commenterId)
+                                                }
                                             >
-                                                {'@' + comment.commenterUsername}
-                                            </Text>
+                                                <Text
+                                                    style={{
+                                                        color: 'black',
+                                                        fontSize: 14,
+                                                        fontWeight: 'bold',
+                                                        flexDirection: 'row',
+                                                        justifyContent: 'center',
+                                                    }}
+                                                >
+                                                    {'@' + comment.commenterUsername}
+                                                </Text>
+                                            </TouchableOpacity>
                                             <Text
                                                 style={{
                                                     fontSize: 14,

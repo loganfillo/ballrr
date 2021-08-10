@@ -661,6 +661,7 @@ export const GET_COMMENTS = gql`
                 profile_pic {
                     s3_key
                 }
+                id
             }
             comment
         }
