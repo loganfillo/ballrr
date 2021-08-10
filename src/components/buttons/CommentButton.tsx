@@ -19,6 +19,8 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Text, View } from 'native-base';
 import { GET_COMMENTS, INSERT_COMMENT } from '../../lib/queries';
 import { Comment } from '../../lib/types';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import Moment from 'react-moment';
 import 'moment-timezone';
 
@@ -40,6 +42,8 @@ const CommentButton: React.FC<Props> = ({ postId, size }: Props) => {
     const [refreshing, setRefreshing] = useState(false);
     const [comment, setComment] = useState('');
     const [commentSection, setCommentSection] = useState<Comment[]>([]);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const navigation = useNavigation<StackNavigationProp<any>>();
 
     const { loading, error, data, refetch } = useQuery(GET_COMMENTS, {
         variables: { post_id: postId },
@@ -62,6 +66,10 @@ const CommentButton: React.FC<Props> = ({ postId, size }: Props) => {
             setComment('');
             refetch();
         }
+    }
+
+    function navigateToProfile(userId: number) {
+        navigation.push('Profile', { userId });
     }
 
     useEffect(() => {
@@ -136,17 +144,33 @@ const CommentButton: React.FC<Props> = ({ postId, size }: Props) => {
                                         style={{
                                             flexDirection: 'row',
                                         }}
-                                    >
-                                        <Image
+                                        source={{
+                                            uri: comment.commenterPicUrl,
+                                        }}
+                                    />
+                                    <View style={{ flexDirection: 'column' }}>
+                                        <TouchableOpacity
+                                            onPress={() => navigateToProfile(comment.commenterId)}
+                                        >
+                                            <Text
+                                                style={{
+                                                    color: 'black',
+                                                    fontSize: 16,
+                                                    fontWeight: 'bold',
+                                                    flexDirection: 'row',
+                                                    justifyContent: 'center',
+                                                    padding: 2,
+                                                }}
+                                            >
+                                                {'@' + comment.commenterUsername}
+                                            </Text>
+                                        </TouchableOpacity>
+                                        <Text
                                             style={{
-                                                borderRadius: 100,
-                                                height: undefined,
-                                                width: '8%',
-                                                aspectRatio: 1,
-                                                flexDirection: 'row',
-                                            }}
-                                            source={{
-                                                uri: comment.commenterPicUrl,
+                                                fontSize: 16,
+                                                color: 'black',
+                                                fontWeight: 'normal',
+                                                paddingLeft: 15,
                                             }}
                                         />
                                         <View style={{ flexDirection: 'column', paddingLeft: 8 }}>

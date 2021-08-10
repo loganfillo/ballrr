@@ -3,7 +3,7 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { useEffect, useState } from 'react';
 import Moment from 'react-moment';
-import { Image, View, Text, StyleSheet, Button, Alert, TouchableOpacity } from 'react-native';
+import { Image, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Avatar } from 'react-native-paper';
 import { CHECK_IF_FOLLOWING, FOLLOW_USER } from '../lib/queries';
 
