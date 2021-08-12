@@ -28,6 +28,37 @@
           name: comment_likes
 - table:
     schema: public
+    name: competition_submission
+  object_relationships:
+  - name: competition
+    using:
+      foreign_key_constraint_on: comp_id
+  - name: post
+    using:
+      foreign_key_constraint_on: post_id
+- table:
+    schema: public
+    name: competitions
+  object_relationships:
+  - name: leaderboardTypeByLeaderboardType
+    using:
+      foreign_key_constraint_on: leaderboard_type
+  - name: post
+    using:
+      foreign_key_constraint_on: post_id
+  - name: user
+    using:
+      foreign_key_constraint_on: user_id
+  array_relationships:
+  - name: competition_submissions
+    using:
+      foreign_key_constraint_on:
+        column: comp_id
+        table:
+          schema: public
+          name: competition_submission
+- table:
+    schema: public
     name: followers
   object_relationships:
   - name: user_followed
@@ -38,8 +69,27 @@
       foreign_key_constraint_on: user_id
 - table:
     schema: public
+    name: leaderboard_type
+  array_relationships:
+  - name: competitions
+    using:
+      foreign_key_constraint_on:
+        column: leaderboard_type
+        table:
+          schema: public
+          name: competitions
+- table:
+    schema: public
     name: media_type
   is_enum: true
+  array_relationships:
+  - name: post_media
+    using:
+      foreign_key_constraint_on:
+        column: type
+        table:
+          schema: public
+          name: post_media
 - table:
     schema: public
     name: notifications
@@ -80,6 +130,7 @@
         remote_table:
           schema: public
           name: post_media
+        insertion_order: null
         column_mapping:
           id: post_id
   - name: post_user_id
@@ -91,6 +142,7 @@
         remote_table:
           schema: public
           name: thumbnail_media
+        insertion_order: null
         column_mapping:
           id: post_id
   array_relationships:
@@ -101,6 +153,13 @@
         table:
           schema: public
           name: comments
+  - name: notifications
+    using:
+      foreign_key_constraint_on:
+        column: liked_post_id
+        table:
+          schema: public
+          name: notifications
   - name: post_likes
     using:
       foreign_key_constraint_on:
@@ -132,6 +191,7 @@
         remote_table:
           schema: public
           name: profile_pic_media
+        insertion_order: null
         column_mapping:
           id: user_id
   array_relationships:
@@ -149,6 +209,13 @@
         table:
           schema: public
           name: comments
+  - name: competitions
+    using:
+      foreign_key_constraint_on:
+        column: user_id
+        table:
+          schema: public
+          name: competitions
   - name: followers
     using:
       foreign_key_constraint_on:

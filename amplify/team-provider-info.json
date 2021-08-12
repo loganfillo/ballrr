@@ -16,5 +16,23 @@
         "ballrr10ccebdb": {}
       }
     }
+  },
+  "sampledev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-ballrr-sampledev-104309-authRole",
+      "UnauthRoleArn": "arn:aws:iam::076156105412:role/amplify-ballrr-sampledev-104309-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::076156105412:role/amplify-ballrr-sampledev-104309-authRole",
+      "Region": "us-west-2",
+      "DeploymentBucketName": "amplify-ballrr-sampledev-104309-deployment",
+      "UnauthRoleName": "amplify-ballrr-sampledev-104309-unauthRole",
+      "StackName": "amplify-ballrr-sampledev-104309",
+      "StackId": "arn:aws:cloudformation:us-west-2:076156105412:stack/amplify-ballrr-sampledev-104309/99fc83a0-facb-11eb-bae4-061ffb84020d",
+      "AmplifyAppId": "d2bz5spdfhv9az"
+    },
+    "categories": {
+      "auth": {
+        "ballrr10ccebdb": {}
+      }
+    }
   }
 }
