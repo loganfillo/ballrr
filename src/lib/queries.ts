@@ -243,6 +243,25 @@ export const SEND_POST_TO_FOLLOWER = gql`
     }
 `;
 
+export const CHECK_IF_POST_SHARED_PREV = gql`
+    query sharedPostCheck($post_id: Int, $user_id: Int, $recipient_id: Int) {
+        notifications(
+            where: {
+                post_id: { _eq: $post_id }
+                _and: {
+                    user_id_of_notifier: { _eq: $user_id }
+                    _and: {
+                        user_notified_id: { _eq: $recipient_id }
+                        _and: { notification_type: { _eq: "SHARED_POST" } }
+                    }
+                }
+            }
+        ) {
+            id
+        }
+    }
+`;
+
 export const UPDATE_COMP_SUB_SCORE_LIKES = gql`
     mutation updateCompSubScore($comp_id: Int!, $post_id: Int!, $val: Int!) {
         update_competition_submission(
@@ -258,7 +277,7 @@ export const UPDATE_COMP_SUB_SCORE_LIKES = gql`
 
 export const COUNT_LIKES = gql`
     query countLikes($post_id: Int) {
-        post_likes_aggregate(where: { liked_post_id: { _eq: $post_id } }) {
+        post_likes_aggregate(where: { post_id: { _eq: $post_id } }) {
             aggregate {
                 count
             }

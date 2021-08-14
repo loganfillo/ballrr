@@ -3,7 +3,7 @@ import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Avatar } from 'react-native-paper';
-import { CHECK_IF_FOLLOWING, SEND_POST_TO_FOLLOWER } from '../lib/queries';
+import { CHECK_IF_POST_SHARED_PREV, SEND_POST_TO_FOLLOWER } from '../lib/queries';
 
 interface Props {
     curr_userId: number;
@@ -26,6 +26,10 @@ const SendModalItem: React.FC<Props> = ({
     const navigation = useNavigation();
     const apolloClient = useApolloClient();
     const [hasBeenShared, setHasBeenShared] = useState(false);
+    const { loading, error, data } = useQuery(CHECK_IF_POST_SHARED_PREV, {
+        variables: { post_id: postId, user_id: curr_userId, user_notified_id: recipient_userId },
+        fetchPolicy: 'cache-and-network',
+    });
 
     function navigateToProfile(userId: number) {
         navigation.navigate('Profile', { screen: 'Profile', params: { userId } });
@@ -47,6 +51,15 @@ const SendModalItem: React.FC<Props> = ({
     function exitModal() {
         onClose();
     }
+
+    useEffect(() => {
+        if (!loading && !error) {
+            console.log(data);
+            if (data.notifications.length > 0) {
+                setHasBeenShared(true);
+            }
+        }
+    }, [data]);
 
     return (
         <View style={styles.container}>

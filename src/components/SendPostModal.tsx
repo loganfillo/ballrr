@@ -5,15 +5,12 @@ import {
     View,
     Button,
     Modal,
-    TouchableOpacity,
     ScrollView,
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { GET_FOLLOWERS } from '../lib/queries';
 import { useQuery } from '@apollo/client';
 import { Follower } from '../lib/types';
-import { useNavigation } from '@react-navigation/native';
-import { Avatar, List } from 'react-native-paper';
 import { Storage } from 'aws-amplify';
 import SendModalItem from './SendModalItem';
 
