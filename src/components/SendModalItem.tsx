@@ -89,7 +89,7 @@ const SendModalItem: React.FC<Props> = ({
                     <View
                         style={{
                             paddingVertical: 10,
-                            paddingHorizontal: 30,
+                            paddingHorizontal: 34.5,
                             backgroundColor: 'lightgrey',
                             borderRadius: 5,
                             marginTop: 13,
