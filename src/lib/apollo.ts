@@ -50,6 +50,14 @@ export default function createApolloClient(): ApolloClient<NormalizedCacheObject
         cache,
         connectToDevTools: true,
         ssrMode: typeof window === 'undefined',
+        defaultOptions: {
+            watchQuery: {
+                fetchPolicy: 'no-cache',
+            },
+            query: {
+                fetchPolicy: 'no-cache',
+            },
+        },
     });
     return client;
 }
