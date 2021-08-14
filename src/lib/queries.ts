@@ -172,7 +172,7 @@ export const DELETE_POST = gql`
         delete_posts_by_pk(id: $id) {
             id
         }
-        delete_notifications(where: { _and: { liked_post_id: { _eq: $id } } }) {
+        delete_notifications(where: { _and: { post_id: { _eq: $id } } }) {
             affected_rows
         }
     }
@@ -217,8 +217,24 @@ export const LIKE_POST = gql`
         insert_notifications_one(
             object: {
                 user_id_of_notifier: $user_id
-                liked_post_id: $post_id
+                post_id: $post_id
                 notification_type: "LIKE"
+                notification_seen: false
+            }
+        ) {
+            id
+        }
+    }
+`;
+
+export const SEND_POST_TO_FOLLOWER = gql`
+    mutation sendPostToFollower($post_id: Int!, $user_id: Int!, $recipient_id: Int!) {
+        insert_notifications_one(
+            object: {
+                user_id_of_notifier: $user_id
+                user_notified_id: $recipient_id
+                post_id: $post_id
+                notification_type: "SHARED_POST"
                 notification_seen: false
             }
         ) {
@@ -291,9 +307,10 @@ export const UPDATE_LIKES_SEEN = gql`
 export const GET_NOTIFICATIONS = gql`
     query getNotifications($user_id: Int) {
         notifications(
+            order_by: { created_at: desc }
             where: {
                 _or: [
-                    { user_followed_id: { _eq: $user_id } }
+                    { user_notified_id: { _eq: $user_id } }
                     {
                         liked_post: { post_user_id: { id: { _eq: $user_id } } }
                         _and: { notifier_user_id: { id: { _neq: $user_id } } }
@@ -330,7 +347,7 @@ export const COUNT_UNSEEN_NOTIFS = gql`
                 notification_seen: { _eq: false }
                 _and: { user_id_of_notifier: { _neq: $user_id } }
                 _or: [
-                    { user_followed_id: { _eq: $user_id } }
+                    { user_notified_id: { _eq: $user_id } }
                     { liked_post: { user_id: { _eq: $user_id } } }
                 ]
             }
@@ -352,10 +369,7 @@ export const DELETE_LIKE = gql`
         delete_notifications(
             where: {
                 user_id_of_notifier: { _eq: $user_id }
-                _and: {
-                    liked_post_id: { _eq: $post_id }
-                    _and: { notification_type: { _eq: "LIKE" } }
-                }
+                _and: { post_id: { _eq: $post_id }, _and: { notification_type: { _eq: "LIKE" } } }
             }
         ) {
             affected_rows
@@ -425,7 +439,7 @@ export const FOLLOW_USER = gql`
         insert_notifications_one(
             object: {
                 user_id_of_notifier: $user_id
-                user_followed_id: $user_followed_id
+                user_notified_id: $user_followed_id
                 notification_type: "FOLLOW"
                 notification_seen: false
             }
@@ -449,7 +463,7 @@ export const UNFOLLOW_USER = gql`
             where: {
                 user_id_of_notifier: { _eq: $user_id }
                 _and: {
-                    user_followed_id: { _eq: $user_followed_id }
+                    user_notified_id: { _eq: $user_followed_id }
                     _and: { notification_type: { _eq: "FOLLOW" } }
                 }
             }
@@ -676,7 +690,7 @@ export const INSERT_COMMENT = gql`
         insert_notifications_one(
             object: {
                 user_id_of_notifier: $user_id
-                liked_post_id: $post_id
+                post_id: $post_id
                 notification_type: "COMMENT"
                 notification_seen: false
                 comment: $comment

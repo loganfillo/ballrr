@@ -26,19 +26,6 @@ const NotificationScreen: React.FC = () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const navigation = useNavigation<StackNavigationProp<any>>();
 
-    function handleNotificationNav(notification: Notification) {
-        if (notification.type == 'FOLLOW') {
-            const userId = notification.redirect_id;
-            navigation.push('Profile', { userId });
-        } else if (notification.type == 'LIKE' || notification.type == 'COMMENT') {
-            const postId = notification.redirect_id;
-            navigation.push('FeedNavigator', {
-                screen: 'Feed',
-                params: { postIds: postId, listId: 0 },
-            });
-        }
-    }
-
     const { loading, error, data, refetch } = useQuery(GET_NOTIFICATIONS, {
         variables: { user_id: user.id },
     });
