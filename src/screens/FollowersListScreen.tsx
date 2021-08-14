@@ -3,13 +3,13 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
-import { Avatar, List } from 'react-native-paper';
 import { GET_FOLLOWERS } from '../lib/queries';
 import { Follower } from '../lib/types';
 import { Storage } from 'aws-amplify';
 import { useUser } from '../lib/user';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { ProfileStackParamList } from '../components/navigators/ProfileNavigator';
+import FollowItem from '../components/FollowItem';
 
 const PLACE_HOLDER_IMAGE = 'https://files.thehandbook.com/uploads/2019/03/ronaldo.jpg';
 
@@ -33,7 +33,6 @@ const FollowersList: React.FC = () => {
         async function fetchFollowers() {
             if (!loading && !error) {
                 const fetchedUsers: Follower[] = [];
-
                 for (const user of data.followers) {
                     fetchedUsers.push({
                         username: user.user_follower.username,
@@ -66,17 +65,10 @@ const FollowersList: React.FC = () => {
                             key={index}
                             onPress={() => navigateToProfile(result.userId)}
                         >
-                            <List.Item
+                            <FollowItem
                                 description={`@${result.username}`}
                                 title={`${result.fullName}`}
-                                left={() => (
-                                    <Avatar.Image
-                                        size={46}
-                                        source={{
-                                            uri: result.profPicUrl,
-                                        }}
-                                    />
-                                )}
+                                profilePic={result.profPicUrl}
                             />
                         </TouchableOpacity>
                     );

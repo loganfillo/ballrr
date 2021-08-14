@@ -4,7 +4,6 @@ import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView, View, Text, ScrollView } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { Avatar, List } from 'react-native-paper';
 import { SEARCH_USERS } from '../lib/queries';
 import { SearchResult } from '../lib/types';
 import { Storage } from 'aws-amplify';
