@@ -54,9 +54,10 @@ const SendModalItem: React.FC<Props> = ({
 
     useEffect(() => {
         if (!loading && !error) {
-            console.log(data);
-            if (data.notifications.length > 0) {
-                setHasBeenShared(true);
+            for (const notif of data.notifications) {
+                if (notif.user_notified_id === recipient_userId) {
+                    setHasBeenShared(true);
+                }
             }
         }
     }, [data]);
@@ -77,7 +78,7 @@ const SendModalItem: React.FC<Props> = ({
                     </View>
 
                     <View style={styles.profInfo}>
-                        <Text style={styles.username}>{recipient_userName}</Text>
+                        <Text style={styles.username}>@{recipient_userName}</Text>
                         {recipient_fullName !== 'null' && (
                             <Text style={styles.fullname}>{recipient_fullName}</Text>
                         )}
@@ -122,7 +123,7 @@ const SendModalItem: React.FC<Props> = ({
 const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
-        paddingVertical: 10,
+        paddingVertical: 5,
     },
     profPic: {
         marginLeft: 15,
@@ -132,7 +133,7 @@ const styles = StyleSheet.create({
         color: 'black',
         fontSize: 16,
         marginTop: 5,
-        fontWeight: '500',
+        fontWeight: '600',
     },
     fullname: {
         color: 'grey',

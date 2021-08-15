@@ -250,14 +250,11 @@ export const CHECK_IF_POST_SHARED_PREV = gql`
                 post_id: { _eq: $post_id }
                 _and: {
                     user_id_of_notifier: { _eq: $user_id }
-                    _and: {
-                        user_notified_id: { _eq: $recipient_id }
-                        _and: { notification_type: { _eq: "SHARED_POST" } }
-                    }
+                    _and: { notification_type: { _eq: "SHARED_POST" } }
                 }
             }
         ) {
-            id
+            user_notified_id
         }
     }
 `;

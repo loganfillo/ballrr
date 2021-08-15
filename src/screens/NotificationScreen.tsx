@@ -55,7 +55,7 @@ const NotificationScreen: React.FC = () => {
                         type: notif.notification_type,
                         notifier_user_id: notif.notifier_user_id.id,
                         profile_thumbnail:
-                            notif.notifier_user_id.profile_pic.s3_key === null
+                            notif.notifier_user_id.profile_pic === null
                                 ? PLACE_HOLDER_IMAGE
                                 : ((await Storage.get(
                                       notif.notifier_user_id.profile_pic.s3_key,
