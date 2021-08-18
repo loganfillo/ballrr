@@ -59,7 +59,6 @@ const NotificationItem: React.FC<Props> = ({
 
     useEffect(() => {
         if (!loading && !error) {
-            console.log(data);
             if (data.followers.length > 0) {
                 setFollowing(true);
             }
@@ -224,6 +223,50 @@ const NotificationItem: React.FC<Props> = ({
                             </TouchableOpacity>
                         )}
                     </View>
+                </>
+            )}
+            {notifType === 'SHARED_POST' && (
+                <>
+                    <TouchableOpacity onPress={() => navigateToProfile(notifier_userId)}>
+                        <View style={styles.thumbnailPic}>
+                            <Avatar.Image
+                                size={40}
+                                source={{
+                                    uri: prof_thumbnail,
+                                }}
+                            />
+                        </View>
+                    </TouchableOpacity>
+                    <View style={styles.notifInfoLikesComments}>
+                        <TouchableOpacity onPress={() => navigateToPost(postId)}>
+                            <Text>
+                                <Text style={{ fontWeight: '600' }}>@{username}</Text> has Shared a
+                                Post With You&nbsp;
+                                <Moment
+                                    element={Text}
+                                    fromNow
+                                    style={{
+                                        fontSize: 10,
+                                        color: 'black',
+                                        fontWeight: 'normal',
+                                        alignSelf: 'flex-end',
+                                    }}
+                                >
+                                    {timestamp}
+                                </Moment>
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                    <TouchableOpacity onPress={() => navigateToPost(postId)}>
+                        <View style={{ marginLeft: 10 }}>
+                            <Image
+                                style={{ width: 40, height: 40 }}
+                                source={{
+                                    uri: post_thumbnail,
+                                }}
+                            />
+                        </View>
+                    </TouchableOpacity>
                 </>
             )}
         </View>

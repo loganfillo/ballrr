@@ -9,7 +9,7 @@ interface Props {
     title: string;
     profilePic: string;
 }
-const SearchItem: React.FC<Props> = ({ description, title, profilePic }: Props) => {
+const FollowItem: React.FC<Props> = ({ description, title, profilePic }: Props) => {
     return (
         <View style={styles.container}>
             <View style={styles.profPic}>
@@ -71,4 +71,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default SearchItem;
+export default FollowItem;

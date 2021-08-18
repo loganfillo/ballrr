@@ -29,6 +29,9 @@
 - table:
     schema: public
     name: competition_submission
+- table:
+    schema: public
+    name: competitions
   object_relationships:
   - name: competition
     using:
@@ -70,6 +73,7 @@
 - table:
     schema: public
     name: leaderboard_type
+  is_enum: true
   array_relationships:
   - name: competitions
     using:
@@ -96,7 +100,7 @@
   object_relationships:
   - name: liked_post
     using:
-      foreign_key_constraint_on: liked_post_id
+      foreign_key_constraint_on: post_id
   - name: notifier_user_id
     using:
       foreign_key_constraint_on: user_id_of_notifier

@@ -7,6 +7,10 @@ import CommentCount from './CommentCount';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Dimensions } from 'react-native';
 import CreatePostButton from './buttons/CreatePostButton';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { SendPostModal } from './SendPostModal';
+import { useUser } from '../lib/user';
 
 interface Props {
     post: Post;
@@ -15,7 +19,9 @@ interface Props {
 
 const FeedPostIconBar: React.FC<Props> = ({ post, compId }: Props) => {
     const [likeChanged, setLikeChanged] = useState(false);
+    const [sendCompModalVisible, setSendCompModalVisible] = useState(false);
     const { width } = Dimensions.get('window');
+    const user = useUser();
     const ICON_SIZE = 0.1 * width;
 
     function changeLike() {
@@ -24,6 +30,12 @@ const FeedPostIconBar: React.FC<Props> = ({ post, compId }: Props) => {
 
     return (
         <>
+            <SendPostModal
+                visible={sendCompModalVisible}
+                onClose={() => setSendCompModalVisible(false)}
+                profileUserId={user.id}
+                postId={post.id}
+            />
             <LikeButton postId={post.id} size={ICON_SIZE} onChange={changeLike} compId={compId} />
             <LikeCount postId={post.id} likeChanged={likeChanged} />
             {compId !== 0 && (
@@ -36,7 +48,9 @@ const FeedPostIconBar: React.FC<Props> = ({ post, compId }: Props) => {
             )}
             <CommentButton postId={post.id} size={ICON_SIZE} />
             <CommentCount postId={post.id}></CommentCount>
-            <MaterialCommunityIcons name={'send'} size={ICON_SIZE} color={'white'} />
+            <TouchableOpacity onPress={() => setSendCompModalVisible(true)}>
+                <MaterialCommunityIcons name={'send'} size={ICON_SIZE} color={'white'} />
+            </TouchableOpacity>
         </>
     );
 };
