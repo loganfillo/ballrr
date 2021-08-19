@@ -274,7 +274,7 @@ export const UPDATE_COMP_SUB_SCORE_LIKES = gql`
 
 export const COUNT_LIKES = gql`
     query countLikes($post_id: Int) {
-        post_likes_aggregate(where: { post_id: { _eq: $post_id } }) {
+        post_likes_aggregate(where: { liked_post_id: { _eq: $post_id } }) {
             aggregate {
                 count
             }
