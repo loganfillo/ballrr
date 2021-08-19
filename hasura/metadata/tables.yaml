@@ -160,7 +160,7 @@
   - name: notifications
     using:
       foreign_key_constraint_on:
-        column: liked_post_id
+        column: post_id
         table:
           schema: public
           name: notifications
