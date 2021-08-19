@@ -35,12 +35,12 @@ const EditProfile: React.FC = () => {
         },
     });
 
-    const [position, setPosition] = useState(data.users_by_pk.position);
-    const [location, setLocation] = useState(data.users_by_pk.location);
-    const [height, setHeight] = useState(data.users_by_pk.height);
-    const [weight, setWeight] = useState(data.users_by_pk.weight);
-    const [foot, setFoot] = useState(data.users_by_pk.foot);
-    const [league, setLeague] = useState(data.users_by_pk.league);
+    const [position, setPosition] = useState<string>();
+    const [location, setLocation] = useState<string>();
+    const [height, setHeight] = useState<string>();
+    const [weight, setWeight] = useState<string>();
+    const [foot, setFoot] = useState<string>();
+    const [league, setLeague] = useState<string>();
 
     const SaveButton = () => <Button title={'Save'} onPress={onSave} disabled={saving} />;
 
