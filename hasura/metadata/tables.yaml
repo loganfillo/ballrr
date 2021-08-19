@@ -29,16 +29,10 @@
 - table:
     schema: public
     name: competition_submission
-- table:
-    schema: public
-    name: competitions
   object_relationships:
   - name: competition
     using:
       foreign_key_constraint_on: comp_id
-  - name: post
-    using:
-      foreign_key_constraint_on: post_id
 - table:
     schema: public
     name: competitions
