@@ -53,7 +53,7 @@ const DeletePostButton: React.FC<Props> = ({ post }: Props) => {
             deleteFromS3(post.thumbnailS3Key);
             deleteFromS3(post.s3Key);
 
-            Alert.alert('Post Deleted');
+            Alert.alert('Post Deleted.', 'Refresh to see change.');
         }
     }, [confirmDelete]);
 
