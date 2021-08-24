@@ -71,12 +71,36 @@ const NotificationItem: React.FC<Props> = ({
                 <>
                     <TouchableOpacity onPress={() => navigateToProfile(notifier_userId)}>
                         <View style={styles.thumbnailPic}>
-                            <Avatar.Image
-                                size={40}
-                                source={{
-                                    uri: prof_thumbnail,
-                                }}
-                            />
+                            {prof_thumbnail ? (
+                                <Avatar.Image
+                                    size={54}
+                                    source={{
+                                        uri: prof_thumbnail,
+                                    }}
+                                />
+                            ) : (
+                                <View
+                                    style={{
+                                        borderColor: 'lightgrey',
+                                        borderWidth: 1,
+                                        borderRadius: 100,
+                                        height: undefined,
+                                        aspectRatio: 1,
+                                        alignSelf: 'center',
+                                        justifyContent: 'center',
+                                    }}
+                                >
+                                    <Text
+                                        style={{
+                                            color: 'lightgrey',
+                                            fontSize: 50,
+                                            textAlign: 'center',
+                                        }}
+                                    >
+                                        ?
+                                    </Text>
+                                </View>
+                            )}
                         </View>
                     </TouchableOpacity>
                     <View style={styles.notifInfoLikesComments}>
@@ -115,12 +139,36 @@ const NotificationItem: React.FC<Props> = ({
                 <>
                     <TouchableOpacity onPress={() => navigateToProfile(notifier_userId)}>
                         <View style={styles.thumbnailPic}>
-                            <Avatar.Image
-                                size={40}
-                                source={{
-                                    uri: prof_thumbnail,
-                                }}
-                            />
+                            {prof_thumbnail ? (
+                                <Avatar.Image
+                                    size={54}
+                                    source={{
+                                        uri: prof_thumbnail,
+                                    }}
+                                />
+                            ) : (
+                                <View
+                                    style={{
+                                        borderColor: 'lightgrey',
+                                        borderWidth: 1,
+                                        borderRadius: 100,
+                                        height: undefined,
+                                        aspectRatio: 1,
+                                        alignSelf: 'center',
+                                        justifyContent: 'center',
+                                    }}
+                                >
+                                    <Text
+                                        style={{
+                                            color: 'lightgrey',
+                                            fontSize: 50,
+                                            textAlign: 'center',
+                                        }}
+                                    >
+                                        ?
+                                    </Text>
+                                </View>
+                            )}
                         </View>
                     </TouchableOpacity>
                     <View style={styles.notifInfoLikesComments}>
@@ -160,12 +208,36 @@ const NotificationItem: React.FC<Props> = ({
                 <>
                     <TouchableOpacity onPress={() => navigateToProfile(notifier_userId)}>
                         <View style={styles.thumbnailPic}>
-                            <Avatar.Image
-                                size={40}
-                                source={{
-                                    uri: prof_thumbnail,
-                                }}
-                            />
+                            {prof_thumbnail ? (
+                                <Avatar.Image
+                                    size={54}
+                                    source={{
+                                        uri: prof_thumbnail,
+                                    }}
+                                />
+                            ) : (
+                                <View
+                                    style={{
+                                        borderColor: 'lightgrey',
+                                        borderWidth: 1,
+                                        borderRadius: 100,
+                                        height: undefined,
+                                        aspectRatio: 1,
+                                        alignSelf: 'center',
+                                        justifyContent: 'center',
+                                    }}
+                                >
+                                    <Text
+                                        style={{
+                                            color: 'lightgrey',
+                                            fontSize: 50,
+                                            textAlign: 'center',
+                                        }}
+                                    >
+                                        ?
+                                    </Text>
+                                </View>
+                            )}
                         </View>
                     </TouchableOpacity>
                     <View style={styles.notifInfoFollow}>
@@ -229,19 +301,43 @@ const NotificationItem: React.FC<Props> = ({
                 <>
                     <TouchableOpacity onPress={() => navigateToProfile(notifier_userId)}>
                         <View style={styles.thumbnailPic}>
-                            <Avatar.Image
-                                size={40}
-                                source={{
-                                    uri: prof_thumbnail,
-                                }}
-                            />
+                            {prof_thumbnail ? (
+                                <Avatar.Image
+                                    size={54}
+                                    source={{
+                                        uri: prof_thumbnail,
+                                    }}
+                                />
+                            ) : (
+                                <View
+                                    style={{
+                                        borderColor: 'lightgrey',
+                                        borderWidth: 1,
+                                        borderRadius: 100,
+                                        height: undefined,
+                                        aspectRatio: 1,
+                                        alignSelf: 'center',
+                                        justifyContent: 'center',
+                                    }}
+                                >
+                                    <Text
+                                        style={{
+                                            color: 'lightgrey',
+                                            fontSize: 50,
+                                            textAlign: 'center',
+                                        }}
+                                    >
+                                        ?
+                                    </Text>
+                                </View>
+                            )}
                         </View>
                     </TouchableOpacity>
                     <View style={styles.notifInfoLikesComments}>
                         <TouchableOpacity onPress={() => navigateToPost(postId)}>
                             <Text>
-                                <Text style={{ fontWeight: '600' }}>@{username}</Text> has Shared a
-                                Post With You&nbsp;
+                                <Text style={{ fontWeight: '600' }}>@{username}</Text> shared a post
+                                with you&nbsp;
                                 <Moment
                                     element={Text}
                                     fromNow
