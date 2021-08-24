@@ -82,8 +82,8 @@ const NotificationItem: React.FC<Props> = ({
                     <View style={styles.notifInfoLikesComments}>
                         <TouchableOpacity onPress={() => navigateToPost(postId)}>
                             <Text>
-                                <Text style={{ fontWeight: '600' }}>@{username}</Text> has Liked
-                                Your Post.&nbsp;
+                                <Text style={{ fontWeight: '600' }}>@{username}</Text> liked your
+                                post.&nbsp;
                                 <Moment
                                     element={Text}
                                     fromNow
@@ -126,9 +126,9 @@ const NotificationItem: React.FC<Props> = ({
                     <View style={styles.notifInfoLikesComments}>
                         <TouchableOpacity onPress={() => navigateToPost(postId)}>
                             <Text>
-                                <Text style={{ fontWeight: '600' }}>@{username}</Text> Commented
+                                <Text style={{ fontWeight: '600' }}>@{username}</Text> commented
                                 &ldquo;
-                                {comment_message}&rdquo; on Your Post.&nbsp;
+                                {comment_message}&rdquo; on your post.&nbsp;
                                 <Moment
                                     element={Text}
                                     fromNow
@@ -171,8 +171,8 @@ const NotificationItem: React.FC<Props> = ({
                     <View style={styles.notifInfoFollow}>
                         <TouchableOpacity onPress={() => navigateToProfile(notifier_userId)}>
                             <Text>
-                                <Text style={{ fontWeight: '600' }}>@{username}</Text> has started
-                                Following You.&nbsp;
+                                <Text style={{ fontWeight: '600' }}>@{username}</Text> started
+                                following You.&nbsp;
                                 <Moment
                                     element={Text}
                                     fromNow
