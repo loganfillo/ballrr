@@ -25,22 +25,16 @@ const ProfilePic: React.FC<Props> = ({ flag, image }: Props) => {
                         }}
                     />
                 ) : (
-                    <View
+                    <Image
                         style={{
-                            borderColor: 'lightgrey',
-                            borderWidth: 1,
                             borderRadius: 100,
                             height: undefined,
-                            width: '90%',
+                            width: '80%',
                             aspectRatio: 1,
                             alignSelf: 'center',
-                            justifyContent: 'center',
                         }}
-                    >
-                        <Text style={{ color: 'lightgrey', fontSize: 50, textAlign: 'center' }}>
-                            ?
-                        </Text>
-                    </View>
+                        source={require('../../assets/profile_icon.png')}
+                    />
                 )}
             </View>
             {flag !== undefined && flag.noFlag !== true ? (
