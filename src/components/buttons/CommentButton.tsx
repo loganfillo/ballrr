@@ -46,18 +46,17 @@ const CommentButton: React.FC<Props> = ({ postId, size }: Props) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const navigation = useNavigation<StackNavigationProp<any>>();
 
-    const { loading, error, data, refetch } = useQuery(GET_COMMENTS, {
+    const { loading, error, data } = useQuery(GET_COMMENTS, {
         variables: { post_id: postId },
-        fetchPolicy: 'cache-and-network',
+        fetchPolicy: 'network-only',
     });
-
     const [insertComment] = useMutation(INSERT_COMMENT, {
         variables: { comment: comment, post_id: postId, user_id: user.id },
+        refetchQueries: [{ query: GET_COMMENTS, variables: { post_id: postId } }],
     });
 
     const onRefresh = useCallback(() => {
         setRefreshing(true);
-        refetch();
         wait(1000).then(() => setRefreshing(false));
     }, []);
 
@@ -65,7 +64,6 @@ const CommentButton: React.FC<Props> = ({ postId, size }: Props) => {
         if (comment != '') {
             insertComment();
             setComment('');
-            refetch();
         }
     }
 

@@ -169,34 +169,6 @@ const CreatePostScreen: React.FC = () => {
                             backgroundColor: 'transparent',
                         }}
                     >
-                        {/* <View
-                            style={{
-                                backgroundColor: 'white',
-                                borderColor: 'black',
-                                borderRadius: 10,
-                                padding: 15,
-                                alignItems: 'center',
-                                shadowColor: '#000',
-                                shadowOffset: {
-                                    width: 0,
-                                    height: 2,
-                                },
-                                shadowOpacity: 0.25,
-                                shadowRadius: 4,
-                                elevation: 5,
-                            }}
-                        >
-                            <Text
-                                style={{
-                                    paddingBottom: 0,
-                                    textAlign: 'center',
-                                    fontSize: 20,
-                                    color: 'slategrey',
-                                }}
-                            >
-                                Your post is uploading
-                            </Text>
-                        </View> */}
                         <View style={{ paddingTop: 25 }}>
                             <ActivityIndicator color="white" size="large" />
                         </View>
@@ -243,7 +215,7 @@ const CreatePostScreen: React.FC = () => {
                             />
                         </View>
                     </View>
-                    <View style={{ paddingHorizontal: 15, paddingVertical: 10 }}>
+                    {/* <View style={{ paddingHorizontal: 15, paddingVertical: 10 }}>
                         <Text
                             style={{
                                 textAlign: 'left',
@@ -254,8 +226,8 @@ const CreatePostScreen: React.FC = () => {
                         >
                             Security Settings
                         </Text>
-                    </View>
-                    <View style={{ paddingHorizontal: 12 }}>
+                    </View> */}
+                    {/* <View style={{ paddingHorizontal: 12 }}>
                         <CreatePostInput
                             title={'Set Private'}
                             icon={'lock'}
@@ -274,8 +246,8 @@ const CreatePostScreen: React.FC = () => {
                             onSwitchChange={setIsCommentsDisabled}
                             switchValue={isCommentsDisabled}
                         />
-                    </View>
-                    <View style={{ borderBottomWidth: 1, borderColor: 'lightgrey' }}></View>
+                    </View> */}
+                    {/* <View style={{ borderBottomWidth: 1, borderColor: 'lightgrey' }}></View> */}
                     <View style={{ paddingHorizontal: 15, paddingVertical: 10 }}>
                         <Text
                             style={{

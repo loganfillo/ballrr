@@ -4,6 +4,7 @@ import {
     CREATE_POST,
     CREATE_POST_MEDIA,
     CREATE_THUMBNAIL_MEDIA,
+    GET_POSTS,
 } from './queries';
 import { uploadMediaToS3 } from './media';
 import { Alert } from 'react-native';
@@ -111,6 +112,7 @@ export async function createPost(
                 postId,
             );
             await createThumbnailMediaEntry(apolloClient, uploadedThumbnail.name, postId);
+            await refetchPosts(apolloClient);
         } catch (e) {
             Alert.alert('Could Not Upload Post to DB');
         }
@@ -229,4 +231,10 @@ async function createCompetitionSubmissionEntry(
         variables: { post_id: postId, comp_id: compId, score: score },
     });
     return res.data.insert_competition_submission_one.id;
+}
+
+async function refetchPosts(apolloClient: ApolloClient<NormalizedCacheObject>) {
+    await apolloClient.query({
+        query: GET_POSTS,
+    });
 }

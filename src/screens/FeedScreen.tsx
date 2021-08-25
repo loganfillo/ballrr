@@ -1,15 +1,17 @@
-import { useQuery } from '@apollo/client';
+import { useApolloClient, useQuery } from '@apollo/client';
 import React, { useEffect, useState } from 'react';
 import { GET_POSTS, GET_POSTS_BY_ID } from '../lib/queries';
 import { Post } from '../lib/types';
 import FeedPost from '../components/FeedPost';
-import ViewPager from '@react-native-community/viewpager';
+import PagerView from 'react-native-pager-view';
 import { RouteProp, useIsFocused, useRoute } from '@react-navigation/native';
-import { Dimensions, Text, View } from 'react-native';
+import { Dimensions, Text, View, Animated } from 'react-native';
 import { Storage } from 'aws-amplify';
 import { StatusBar } from 'expo-status-bar';
 import { FeedStackParamList } from '../components/navigators/FeedNavigator';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+
+const AnimatedPagerView = Animated.createAnimatedComponent(PagerView);
 
 type FeedRouteProp = RouteProp<FeedStackParamList, 'Feed'>;
 
@@ -20,13 +22,25 @@ const FeedScreen: React.FC = () => {
     const [selected, setSelected] = useState(params?.listId === undefined ? 0 : params.listId);
 
     const isFocused = useIsFocused();
+    const apolloClient = useApolloClient();
     const { height } = Dimensions.get('window');
 
     useEffect(() => {
-        refetch();
-    }, [isFocused, selected]);
+        async function getPosts() {
+            const prevPosts = posts;
+            const res = await apolloClient.query({
+                query: params?.postIds === undefined ? GET_POSTS : GET_POSTS_BY_ID,
+                variables: params?.postIds === undefined ? {} : { post_ids: params.postIds },
+            });
+            setPosts(await organizePosts(res.data.posts));
+            if (posts.length != prevPosts.length) {
+                setSelected(0);
+            }
+        }
+        getPosts();
+    }, [isFocused]);
 
-    const { loading, error, data, refetch } = useQuery(
+    const { loading, error, data } = useQuery(
         params?.postIds === undefined ? GET_POSTS : GET_POSTS_BY_ID,
         {
             variables: params?.postIds === undefined ? {} : { post_ids: params.postIds },
@@ -36,43 +50,45 @@ const FeedScreen: React.FC = () => {
     useEffect(() => {
         async function fetchPosts() {
             if (!loading && !error) {
-                const fetchedPosts: Post[] = [];
-                for (const post of data.posts) {
-                    fetchedPosts.push({
-                        userId: post.user_id,
-                        profPicUrl:
-                            post.post_user_id.profile_pic == null
-                                ? 'https://www.macmillandictionary.com/external/slideshow/full/Grey_full.png'
-                                : ((await Storage.get(
-                                      post.post_user_id.profile_pic.s3_key,
-                                  )) as string),
-                        fullName: post.post_user_id.full_name,
-                        username: post.post_user_id.username,
-                        url: (await Storage.get(post.media.s3_key)) as string,
-                        caption: post.caption,
-                        type: post.media.type,
-                        id: post.id,
-                        s3Key: post.media.s3_key,
-                        thumbnailS3Key: post.thumbnail.s3_key,
-                    });
-                }
-                // SOot by postids if response is cached
-                if (params?.postIds !== undefined) {
-                    fetchedPosts.sort(function (a, b) {
-                        const A: number = a.id;
-                        const B: number = b.id;
-                        if (params.postIds.indexOf(A) > params.postIds.indexOf(B)) {
-                            return 1;
-                        } else {
-                            return -1;
-                        }
-                    });
-                }
-                setPosts(fetchedPosts);
+                setPosts(await organizePosts(data.posts));
             }
         }
         fetchPosts();
     }, [data]);
+
+    async function organizePosts(posts: any) {
+        const fetchedPosts: Post[] = [];
+        for (const post of posts) {
+            fetchedPosts.push({
+                userId: post.user_id,
+                profPicUrl:
+                    post.post_user_id.profile_pic == null
+                        ? 'https://www.macmillandictionary.com/external/slideshow/full/Grey_full.png'
+                        : ((await Storage.get(post.post_user_id.profile_pic.s3_key)) as string),
+                fullName: post.post_user_id.full_name,
+                username: post.post_user_id.username,
+                url: (await Storage.get(post.media.s3_key)) as string,
+                caption: post.caption,
+                type: post.media.type,
+                id: post.id,
+                s3Key: post.media.s3_key,
+                thumbnailS3Key: post.thumbnail.s3_key,
+            });
+        }
+        // Sort by postids if response is cached
+        if (params?.postIds !== undefined) {
+            fetchedPosts.sort(function (a, b) {
+                const A: number = a.id;
+                const B: number = b.id;
+                if (params.postIds.indexOf(A) > params.postIds.indexOf(B)) {
+                    return 1;
+                } else {
+                    return -1;
+                }
+            });
+        }
+        return fetchedPosts;
+    }
 
     return (
         <>
@@ -107,7 +123,7 @@ const FeedScreen: React.FC = () => {
                         </Text>
                     </View>
                 )}
-                <ViewPager
+                <AnimatedPagerView
                     style={{ flex: 1 }}
                     initialPage={selected}
                     orientation="vertical"
@@ -117,16 +133,12 @@ const FeedScreen: React.FC = () => {
                 >
                     {posts.map((post, id) => {
                         return (
-                            <View key={id}>
-                                <FeedPost
-                                    key={id}
-                                    post={post}
-                                    shouldPlay={selected === id && isFocused}
-                                />
+                            <View key={post.id}>
+                                <FeedPost post={post} shouldPlay={selected === id && isFocused} />
                             </View>
                         );
                     })}
-                </ViewPager>
+                </AnimatedPagerView>
             </View>
         </>
     );
