@@ -22,7 +22,7 @@ const FeedPostIconBar: React.FC<Props> = ({ post, compId }: Props) => {
     const [sendCompModalVisible, setSendCompModalVisible] = useState(false);
     const { width } = Dimensions.get('window');
     const user = useUser();
-    const ICON_SIZE = 0.1 * width;
+    const ICON_SIZE = 0.085 * width;
 
     function changeLike() {
         setLikeChanged(!likeChanged);
@@ -36,8 +36,6 @@ const FeedPostIconBar: React.FC<Props> = ({ post, compId }: Props) => {
                 profileUserId={user.id}
                 postId={post.id}
             />
-            <LikeButton postId={post.id} size={ICON_SIZE} onChange={changeLike} compId={compId} />
-            <LikeCount postId={post.id} likeChanged={likeChanged} />
             {compId !== 0 && (
                 <CreatePostButton
                     icon={'plus-box-multiple'}
@@ -46,6 +44,8 @@ const FeedPostIconBar: React.FC<Props> = ({ post, compId }: Props) => {
                     compId={compId}
                 ></CreatePostButton>
             )}
+            <LikeButton postId={post.id} size={ICON_SIZE} onChange={changeLike} compId={compId} />
+            <LikeCount postId={post.id} likeChanged={likeChanged} />
             <CommentButton postId={post.id} size={ICON_SIZE} />
             <CommentCount postId={post.id}></CommentCount>
             <TouchableOpacity onPress={() => setSendCompModalVisible(true)}>

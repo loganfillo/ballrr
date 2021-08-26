@@ -65,7 +65,7 @@ const FeedPost: React.FC<Props> = ({ post, shouldPlay }: Props) => {
                 style={{
                     position: 'absolute',
                     width: 0.15 * width,
-                    height: (1 / 3) * height,
+                    height: compId !== 0 ? (1 / 3) * height : (1 / 4) * height,
                     alignSelf: 'flex-end',
                     alignItems: 'center',
                     justifyContent: 'space-evenly',
