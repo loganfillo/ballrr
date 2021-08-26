@@ -1,5 +1,8 @@
-import React from 'react';
+import { useNavigation } from '@react-navigation/core';
+import { StackNavigationProp } from '@react-navigation/stack';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Flag } from '../lib/types';
 
 interface Props {
@@ -7,7 +10,7 @@ interface Props {
     username: string;
     full_name: string | undefined;
     profile_pic: string | undefined;
-    flag?: Flag | undefined;
+    flag: string;
 }
 const DefaultSearchItem: React.FC<Props> = ({
     resultUserId,
@@ -16,59 +19,66 @@ const DefaultSearchItem: React.FC<Props> = ({
     profile_pic,
     flag,
 }: Props) => {
+    const [user_flag, setUserFlag] = useState<Flag>();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const navigation = useNavigation<StackNavigationProp<any>>();
+
+    function navigateToProfile(userId: number) {
+        navigation.navigate('ProfileNavigator', { screen: 'Profile', params: { userId } });
+    }
+
+    useEffect(() => {
+        if (flag !== null) setUserFlag(JSON.parse(flag));
+    }, []);
+
     return (
         <View style={styles.column}>
-            <View style={styles.profPic}>
-                {profile_pic ? (
-                    <Image
-                        style={{
-                            borderColor: 'lightgrey',
-                            borderWidth: 1,
-                            borderRadius: 10,
-                            height: undefined,
-                            aspectRatio: 1,
-                            alignSelf: 'center',
-                            justifyContent: 'center',
-                            width: '85%',
-                        }}
-                        source={{
-                            uri: profile_pic,
-                        }}
-                    />
-                ) : (
-                    <Image
-                        style={{
-                            borderColor: 'lightgrey',
-                            borderWidth: 1,
-                            borderRadius: 10,
-                            height: undefined,
-                            aspectRatio: 1,
-                            alignSelf: 'center',
-                            justifyContent: 'center',
-                            width: '85%',
-                        }}
-                        source={require('../../assets/profile_icon.png')}
-                    />
-                )}
-                {flag ? (
-                    <View style={{ position: 'absolute', bottom: 0, right: 0 }}>
-                        <Text style={{ fontSize: 40 }}>{flag.emoji}</Text>
-                    </View>
-                ) : (
-                    <></>
-                )}
-            </View>
-            <View style={styles.profInfo}>
-                <Text style={styles.username}>@{username}</Text>
-                {full_name !== 'null' && <Text style={styles.fullname}>{full_name}</Text>}
-                {flag ? (
-                    <View>
-                        <Text style={{ fontSize: 40 }}>{flag.emoji}</Text>
-                    </View>
-                ) : (
-                    <></>
-                )}
-            </View>
+            <TouchableOpacity onPress={() => navigateToProfile(resultUserId)}>
+                <View style={styles.profPic}>
+                    {profile_pic ? (
+                        <Image
+                            style={{
+                                borderColor: 'lightgrey',
+                                borderWidth: 1,
+                                borderRadius: 10,
+                                height: undefined,
+                                aspectRatio: 1,
+                                alignSelf: 'center',
+                                justifyContent: 'center',
+                                width: '85%',
+                            }}
+                            source={{
+                                uri: profile_pic,
+                            }}
+                        />
+                    ) : (
+                        <Image
+                            style={{
+                                borderColor: 'lightgrey',
+                                borderWidth: 1,
+                                borderRadius: 10,
+                                height: undefined,
+                                aspectRatio: 1,
+                                alignSelf: 'center',
+                                justifyContent: 'center',
+                                width: '85%',
+                            }}
+                            source={require('../../assets/profile_icon.png')}
+                        />
+                    )}
+                    {user_flag ? (
+                        <View style={{ position: 'absolute', bottom: -15, right: -10 }}>
+                            <Text style={{ fontSize: 28 }}>{user_flag.emoji}</Text>
+                        </View>
+                    ) : (
+                        <></>
+                    )}
+                </View>
+                <View style={styles.profInfo}>
+                    <Text style={styles.username}>@{username}</Text>
+                    {full_name !== 'null' && <Text style={styles.fullname}>{full_name}</Text>}
+                </View>
+            </TouchableOpacity>
         </View>
     );
 };
