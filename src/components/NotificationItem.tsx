@@ -10,7 +10,7 @@ import { CHECK_IF_FOLLOWING, FOLLOW_USER } from '../lib/queries';
 interface Props {
     username: string;
     notifType: string;
-    prof_thumbnail: string;
+    prof_thumbnail: string | undefined;
     post_thumbnail: string | undefined;
     timestamp: number;
     curr_userId: number;
@@ -73,33 +73,16 @@ const NotificationItem: React.FC<Props> = ({
                         <View style={styles.thumbnailPic}>
                             {prof_thumbnail ? (
                                 <Avatar.Image
-                                    size={54}
+                                    size={46}
                                     source={{
                                         uri: prof_thumbnail,
                                     }}
                                 />
                             ) : (
-                                <View
-                                    style={{
-                                        borderColor: 'lightgrey',
-                                        borderWidth: 1,
-                                        borderRadius: 100,
-                                        height: undefined,
-                                        aspectRatio: 1,
-                                        alignSelf: 'center',
-                                        justifyContent: 'center',
-                                    }}
-                                >
-                                    <Text
-                                        style={{
-                                            color: 'lightgrey',
-                                            fontSize: 50,
-                                            textAlign: 'center',
-                                        }}
-                                    >
-                                        ?
-                                    </Text>
-                                </View>
+                                <Avatar.Image
+                                    size={46}
+                                    source={require('../../assets/profile_icon.png')}
+                                />
                             )}
                         </View>
                     </TouchableOpacity>
@@ -141,33 +124,16 @@ const NotificationItem: React.FC<Props> = ({
                         <View style={styles.thumbnailPic}>
                             {prof_thumbnail ? (
                                 <Avatar.Image
-                                    size={54}
+                                    size={46}
                                     source={{
                                         uri: prof_thumbnail,
                                     }}
                                 />
                             ) : (
-                                <View
-                                    style={{
-                                        borderColor: 'lightgrey',
-                                        borderWidth: 1,
-                                        borderRadius: 100,
-                                        height: undefined,
-                                        aspectRatio: 1,
-                                        alignSelf: 'center',
-                                        justifyContent: 'center',
-                                    }}
-                                >
-                                    <Text
-                                        style={{
-                                            color: 'lightgrey',
-                                            fontSize: 50,
-                                            textAlign: 'center',
-                                        }}
-                                    >
-                                        ?
-                                    </Text>
-                                </View>
+                                <Avatar.Image
+                                    size={46}
+                                    source={require('../../assets/profile_icon.png')}
+                                />
                             )}
                         </View>
                     </TouchableOpacity>
@@ -210,33 +176,16 @@ const NotificationItem: React.FC<Props> = ({
                         <View style={styles.thumbnailPic}>
                             {prof_thumbnail ? (
                                 <Avatar.Image
-                                    size={54}
+                                    size={46}
                                     source={{
                                         uri: prof_thumbnail,
                                     }}
                                 />
                             ) : (
-                                <View
-                                    style={{
-                                        borderColor: 'lightgrey',
-                                        borderWidth: 1,
-                                        borderRadius: 100,
-                                        height: undefined,
-                                        aspectRatio: 1,
-                                        alignSelf: 'center',
-                                        justifyContent: 'center',
-                                    }}
-                                >
-                                    <Text
-                                        style={{
-                                            color: 'lightgrey',
-                                            fontSize: 50,
-                                            textAlign: 'center',
-                                        }}
-                                    >
-                                        ?
-                                    </Text>
-                                </View>
+                                <Avatar.Image
+                                    size={46}
+                                    source={require('../../assets/profile_icon.png')}
+                                />
                             )}
                         </View>
                     </TouchableOpacity>
@@ -303,33 +252,16 @@ const NotificationItem: React.FC<Props> = ({
                         <View style={styles.thumbnailPic}>
                             {prof_thumbnail ? (
                                 <Avatar.Image
-                                    size={54}
+                                    size={46}
                                     source={{
                                         uri: prof_thumbnail,
                                     }}
                                 />
                             ) : (
-                                <View
-                                    style={{
-                                        borderColor: 'lightgrey',
-                                        borderWidth: 1,
-                                        borderRadius: 100,
-                                        height: undefined,
-                                        aspectRatio: 1,
-                                        alignSelf: 'center',
-                                        justifyContent: 'center',
-                                    }}
-                                >
-                                    <Text
-                                        style={{
-                                            color: 'lightgrey',
-                                            fontSize: 50,
-                                            textAlign: 'center',
-                                        }}
-                                    >
-                                        ?
-                                    </Text>
-                                </View>
+                                <Avatar.Image
+                                    size={46}
+                                    source={require('../../assets/profile_icon.png')}
+                                />
                             )}
                         </View>
                     </TouchableOpacity>

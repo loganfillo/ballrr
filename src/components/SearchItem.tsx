@@ -7,7 +7,7 @@ import { Avatar } from 'react-native-paper';
 interface Props {
     description: string;
     title: string;
-    profilePic: string;
+    profilePic: string | undefined;
 }
 const SearchItem: React.FC<Props> = ({ description, title, profilePic }: Props) => {
     return (
@@ -21,21 +21,10 @@ const SearchItem: React.FC<Props> = ({ description, title, profilePic }: Props) 
                         }}
                     />
                 ) : (
-                    <View
-                        style={{
-                            borderColor: 'lightgrey',
-                            borderWidth: 1,
-                            borderRadius: 100,
-                            height: undefined,
-                            aspectRatio: 1,
-                            alignSelf: 'center',
-                            justifyContent: 'center',
-                        }}
-                    >
-                        <Text style={{ color: 'lightgrey', fontSize: 50, textAlign: 'center' }}>
-                            ?
-                        </Text>
-                    </View>
+                    <Avatar.Image
+                        size={54}
+                        source={require('../../assets/profile_icon.png')}
+                    />
                 )}
             </View>
             <View style={styles.profInfo}>

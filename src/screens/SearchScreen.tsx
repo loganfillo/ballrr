@@ -11,8 +11,6 @@ import SearchBar from '../components/SearchBar';
 import SearchItem from '../components/SearchItem';
 import HardCodedSearchScreen from '../components/HardCodedSearch';
 
-const PLACE_HOLDER_IMAGE = 'https://files.thehandbook.com/uploads/2019/03/ronaldo.jpg';
-
 const SearchScreen: React.FC = () => {
     const [results, setResults] = useState<SearchResult[]>([]);
     const [searchQuery, setSearchQuery] = useState('');
@@ -42,7 +40,7 @@ const SearchScreen: React.FC = () => {
                         userId: user.id,
                         profPicUrl:
                             user.profile_pic === null
-                                ? PLACE_HOLDER_IMAGE
+                                ? undefined
                                 : ((await Storage.get(user.profile_pic.s3_key)) as string),
                     });
                 }

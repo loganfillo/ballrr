@@ -88,21 +88,21 @@ export interface SearchResult {
     username: string;
     fullName: string;
     userId: number;
-    profPicUrl: string;
+    profPicUrl: string | undefined;
 }
 
 export interface Follower {
     username: string;
     fullName: string;
     userId: number;
-    profPicUrl: string;
+    profPicUrl: string | undefined;
 }
 
 export interface Following {
     username: string;
     fullName: string;
     userId: number;
-    profPicUrl: string;
+    profPicUrl: string | undefined;
 }
 
 export interface CompSearchResult {
@@ -116,7 +116,7 @@ export interface Notification {
     username: string;
     type: string;
     notifier_user_id: number;
-    profile_thumbnail: string;
+    profile_thumbnail: string | undefined;
     post_thumbnail?: string;
     seen: boolean;
     timestamp: number;

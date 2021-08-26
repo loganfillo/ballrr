@@ -9,9 +9,7 @@ import { Storage } from 'aws-amplify';
 import { useUser } from '../lib/user';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { ProfileStackParamList } from '../components/navigators/ProfileNavigator';
-import FollowItem from '../components/FollowItem';
-
-const PLACE_HOLDER_IMAGE = 'https://files.thehandbook.com/uploads/2019/03/ronaldo.jpg';
+import FollowItem from '../components/FollowListItem';
 
 type FollowerRouteProp = RouteProp<ProfileStackParamList, 'FollowersList'>;
 
@@ -40,7 +38,7 @@ const FollowersList: React.FC = () => {
                         userId: user.user_follower.id,
                         profPicUrl:
                             user.user_follower.profile_pic === null
-                                ? PLACE_HOLDER_IMAGE
+                                ? undefined
                                 : ((await Storage.get(
                                       user.user_follower.profile_pic.s3_key,
                                   )) as string),
