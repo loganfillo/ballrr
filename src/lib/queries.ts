@@ -736,7 +736,7 @@ export const GET_USERS = gql`
             id
             username
             full_name
-            position
+            flag
             profile_pic {
                 id
                 s3_key

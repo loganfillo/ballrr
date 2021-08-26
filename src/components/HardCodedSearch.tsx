@@ -1,11 +1,10 @@
 import { useQuery } from '@apollo/client';
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView } from 'react-native';
 import { GET_USERS } from '../lib/queries';
 import { DisplayUsers } from '../lib/types';
 import { useUser } from '../lib/user';
 import { Storage } from 'aws-amplify';
-import { Col, Row, View } from 'native-base';
+import { View } from 'native-base';
 import DefaultSearchItem from './DefaultSearchItem';
 
 const HardCodedSearchScreen: React.FC = () => {
@@ -28,7 +27,7 @@ const HardCodedSearchScreen: React.FC = () => {
                         userId: user.id,
                         username: user.username,
                         fullName: user.full_name,
-                        position: user.position,
+                        flag: user.flag,
                         profPicUrl:
                             user.profile_pic === null
                                 ? undefined
@@ -55,7 +54,7 @@ const HardCodedSearchScreen: React.FC = () => {
                         key={index}
                         username={user.username}
                         full_name={user.fullName}
-                        position={user.position}
+                        flag={user.flag}
                         resultUserId={user.userId}
                         profile_pic={user.profPicUrl}
                     />
