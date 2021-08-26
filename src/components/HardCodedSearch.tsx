@@ -6,6 +6,7 @@ import { useUser } from '../lib/user';
 import { Storage } from 'aws-amplify';
 import { View } from 'native-base';
 import DefaultSearchItem from './DefaultSearchItem';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const HardCodedSearchScreen: React.FC = () => {
     const user = useUser();
@@ -27,7 +28,7 @@ const HardCodedSearchScreen: React.FC = () => {
                         userId: user.id,
                         username: user.username,
                         fullName: user.full_name,
-                        flag: user.flag,
+                        flag: user.flag === null ? '' : user.flag,
                         profPicUrl:
                             user.profile_pic === null
                                 ? undefined
@@ -41,26 +42,29 @@ const HardCodedSearchScreen: React.FC = () => {
     }, [data]);
 
     return (
-        <View
-            style={{
-                flex: 1,
-                flexDirection: 'row',
-                flexWrap: 'wrap',
-            }}
-        >
-            {users.map((user, index) => {
-                return (
-                    <DefaultSearchItem
-                        key={index}
-                        username={user.username}
-                        full_name={user.fullName}
-                        flag={user.flag}
-                        resultUserId={user.userId}
-                        profile_pic={user.profPicUrl}
-                    />
-                );
-            })}
-        </View>
+        <ScrollView alwaysBounceVertical={false}>
+            <View
+                style={{
+                    flex: 1,
+                    flexDirection: 'row',
+                    flexWrap: 'wrap',
+                    paddingBottom: 500,
+                }}
+            >
+                {users.map((user, index) => {
+                    return (
+                        <DefaultSearchItem
+                            key={index}
+                            username={user.username}
+                            full_name={user.fullName}
+                            flag={user.flag}
+                            resultUserId={user.userId}
+                            profile_pic={user.profPicUrl}
+                        />
+                    );
+                })}
+            </View>
+        </ScrollView>
     );
 };
 

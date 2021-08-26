@@ -156,6 +156,6 @@ export interface DisplayUsers {
     userId: number;
     username: string;
     fullName: string;
-    flag: string | undefined;
+    flag: string;
     profPicUrl: string | undefined;
 }

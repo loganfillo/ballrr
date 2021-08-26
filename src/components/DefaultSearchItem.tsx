@@ -28,7 +28,7 @@ const DefaultSearchItem: React.FC<Props> = ({
     }
 
     useEffect(() => {
-        if (flag !== null) setUserFlag(JSON.parse(flag));
+        if (flag !== '') setUserFlag(JSON.parse(flag));
     }, []);
 
     return (
@@ -85,7 +85,7 @@ const DefaultSearchItem: React.FC<Props> = ({
 const styles = StyleSheet.create({
     column: {
         width: '33%',
-        marginTop: 25,
+        marginTop: 5,
         alignItems: 'center',
     },
     profPic: {
