@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User } from './types';
 import { useApolloClient } from '@apollo/client';
-import { CREATE_USER, GET_USER } from './queries';
+import { CREATE_USER, GET_USER, FOLLOW_USER } from './queries';
 import { Auth } from 'aws-amplify';
 import Loading from '../components/Loading';
 import { Alert } from 'react-native';
@@ -55,6 +55,10 @@ export const UserProvider: React.FC<Props> = ({ children, updateAuthState }: Pro
                 let id: number;
                 if (res.data.insert_users_one !== null) {
                     id = res.data.insert_users_one.id;
+                    await apolloClient.mutate({
+                        mutation: FOLLOW_USER,
+                        variables: { user_id: id, user_followed_id: 6 },
+                    });
                 } else {
                     const res = await apolloClient.query({
                         query: GET_USER,
