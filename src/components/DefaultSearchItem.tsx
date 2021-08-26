@@ -37,22 +37,19 @@ const DefaultSearchItem: React.FC<Props> = ({
                         }}
                     />
                 ) : (
-                    <View
+                    <Image
                         style={{
                             borderColor: 'lightgrey',
                             borderWidth: 1,
-                            borderRadius: 5,
+                            borderRadius: 10,
                             height: undefined,
                             aspectRatio: 1,
                             alignSelf: 'center',
                             justifyContent: 'center',
                             width: '90%',
                         }}
-                    >
-                        <Text style={{ color: 'lightgrey', fontSize: 50, textAlign: 'center' }}>
-                            ?
-                        </Text>
-                    </View>
+                        source={require('../../assets/profile_icon.png')}
+                    />
                 )}
             </View>
             <View style={styles.profInfo}>
