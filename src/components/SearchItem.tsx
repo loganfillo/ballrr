@@ -1,8 +1,6 @@
-/* eslint-disable prettier/prettier */
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Avatar } from 'react-native-paper';
-
 
 interface Props {
     description: string;
@@ -40,9 +38,7 @@ const SearchItem: React.FC<Props> = ({ description, title, profilePic }: Props) 
             </View>
             <View style={styles.profInfo}>
                 <Text style={styles.username}>{description}</Text>
-                { title !== 'null' && (
-                    <Text style={styles.fullname}>{title}</Text>
-                )}
+                {title !== 'null' && <Text style={styles.fullname}>{title}</Text>}
             </View>
         </View>
     );

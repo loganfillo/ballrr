@@ -151,3 +151,11 @@ export interface LeaderBoardItem {
     score: number;
     postId: number;
 }
+
+export interface DisplayUsers {
+    userId: number;
+    username: string;
+    fullName: string;
+    position: string;
+    profPicUrl: string | undefined;
+}

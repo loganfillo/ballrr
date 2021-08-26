@@ -1,61 +1,68 @@
-import React from 'react';
-import { Text, StyleSheet, ScrollView, SafeAreaView, View } from 'react-native';
+import { useQuery } from '@apollo/client';
+import React, { useEffect, useState } from 'react';
+import { SafeAreaView } from 'react-native';
+import { GET_USERS } from '../lib/queries';
+import { DisplayUsers } from '../lib/types';
+import { useUser } from '../lib/user';
+import { Storage } from 'aws-amplify';
+import { Col, Row, View } from 'native-base';
+import DefaultSearchItem from './DefaultSearchItem';
 
 const HardCodedSearchScreen: React.FC = () => {
+    const user = useUser();
+    const [users, setUsers] = useState<DisplayUsers[]>([]);
+
+    const { loading, error, data } = useQuery(GET_USERS, {
+        variables: {
+            user_id: user.id,
+        },
+        fetchPolicy: 'cache-and-network',
+    });
+
+    useEffect(() => {
+        async function fetchUsers() {
+            if (!loading && !error) {
+                const fetchedUsers: DisplayUsers[] = [];
+                for (const user of data.users) {
+                    fetchedUsers.push({
+                        userId: user.id,
+                        username: user.username,
+                        fullName: user.full_name,
+                        position: user.position,
+                        profPicUrl:
+                            user.profile_pic === null
+                                ? undefined
+                                : ((await Storage.get(user.profile_pic.s3_key)) as string),
+                    });
+                }
+                setUsers(fetchedUsers);
+            }
+        }
+        fetchUsers();
+    }, [data]);
+
     return (
-        <SafeAreaView>
-            <View style={styles.profileRow}>
-                <View style={styles.profileView}>
-                    <Text style={{ textAlign: 'center' }}>Simon Cooper</Text>
-                </View>
-                <View style={styles.profileView}>
-                    <Text style={{ textAlign: 'center' }}>Desmond Tach</Text>
-                </View>
-                <View style={styles.profileView}>
-                    <Text style={{ textAlign: 'center' }}>Ben MacDonald</Text>
-                </View>
-            </View>
-            <View style={styles.profileRow}>
-                <View style={styles.profileView}>
-                    <Text style={{ textAlign: 'center' }}>Dana Harlos</Text>
-                </View>
-                <View style={styles.profileView}>
-                    <Text style={{ textAlign: 'center' }}>Logan Fillo</Text>
-                </View>
-                <View style={styles.profileView}>
-                    <Text style={{ textAlign: 'center' }}>Colin Little</Text>
-                </View>
-            </View>
-            <View style={styles.profileRow}>
-                <View style={styles.profileView}>
-                    <Text style={{ textAlign: 'center' }}>Marcus Rashford</Text>
-                </View>
-                <View style={styles.profileView}>
-                    <Text style={{ textAlign: 'center' }}>Lance Brass</Text>
-                </View>
-                <View style={styles.profileView}>
-                    <Text style={{ textAlign: 'center' }}>Peter Crouch</Text>
-                </View>
-            </View>
-        </SafeAreaView>
+        <View
+            style={{
+                flex: 1,
+                flexDirection: 'row',
+                flexWrap: 'wrap',
+            }}
+        >
+            {users.map((user, index) => {
+                return (
+                    <DefaultSearchItem
+                        key={index}
+                        username={user.username}
+                        full_name={user.fullName}
+                        position={user.position}
+                        resultUserId={user.userId}
+                        profile_pic={user.profPicUrl}
+                    />
+                );
+            })}
+        </View>
     );
 };
-
-const styles = StyleSheet.create({
-    profileRow: {
-        flexDirection: 'row',
-        marginBottom: 15,
-        flex: 3,
-    },
-    profileView: {
-        borderWidth: 1,
-        flex: 1,
-        borderColor: 'black',
-        borderRadius: 10,
-        height: 133,
-        width: 100,
-        margin: 5,
-    },
-});
 
 export default HardCodedSearchScreen;
