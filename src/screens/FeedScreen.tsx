@@ -1,15 +1,16 @@
 import { useApolloClient, useQuery } from '@apollo/client';
 import React, { useEffect, useState } from 'react';
-import { GET_POSTS, GET_POSTS_BY_ID } from '../lib/queries';
+import { GET_POSTS, GET_POSTS_BY_ID, GET_FOLLOWING } from '../lib/queries';
 import { Post } from '../lib/types';
 import FeedPost from '../components/FeedPost';
 import PagerView from 'react-native-pager-view';
 import { RouteProp, useIsFocused, useRoute } from '@react-navigation/native';
-import { Dimensions, Text, View, Animated } from 'react-native';
+import { Dimensions, Text, View, Animated, Alert } from 'react-native';
 import { Storage } from 'aws-amplify';
 import { StatusBar } from 'expo-status-bar';
 import { FeedStackParamList } from '../components/navigators/FeedNavigator';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useUser } from '../lib/user';
 
 const AnimatedPagerView = Animated.createAnimatedComponent(PagerView);
 
@@ -25,13 +26,35 @@ const FeedScreen: React.FC = () => {
     const apolloClient = useApolloClient();
     const { height } = Dimensions.get('window');
 
+    const user = useUser();
+
     useEffect(() => {
         async function getPosts() {
             const prevPosts = posts;
+
+            const followingQuery = await apolloClient.query({
+                query: GET_FOLLOWING,
+                variables: { user_id: user.id },
+            });
+
+            let following_ids = [];
+
+            if (followingQuery?.data?.followers == null) {
+                Alert.alert("You aren't following anyone!");
+            } else {
+                following_ids = Object.keys(followingQuery.data.followers).map(function (k) {
+                    return followingQuery.data.followers[k].user_followed.id;
+                });
+            }
+
             const res = await apolloClient.query({
                 query: params?.postIds === undefined ? GET_POSTS : GET_POSTS_BY_ID,
-                variables: params?.postIds === undefined ? {} : { post_ids: params.postIds },
+                variables:
+                    params?.postIds === undefined
+                        ? { following_ids: following_ids }
+                        : { post_ids: params.postIds },
             });
+
             setPosts(await organizePosts(res.data.posts));
             if (posts.length != prevPosts.length) {
                 setSelected(0);
@@ -39,11 +62,15 @@ const FeedScreen: React.FC = () => {
         }
         getPosts();
     }, [isFocused]);
-
+    /*
+    const following_ids = [1];
     const { loading, error, data } = useQuery(
         params?.postIds === undefined ? GET_POSTS : GET_POSTS_BY_ID,
         {
-            variables: params?.postIds === undefined ? {} : { post_ids: params.postIds },
+            variables:
+                params?.postIds === undefined
+                    ? { following_ids: following_ids }
+                    : { post_ids: params.postIds },
         },
     );
 
@@ -54,7 +81,7 @@ const FeedScreen: React.FC = () => {
             }
         }
         fetchPosts();
-    }, [data]);
+    }, [data]);*/
 
     async function organizePosts(posts: any) {
         const fetchedPosts: Post[] = [];

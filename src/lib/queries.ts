@@ -53,8 +53,8 @@ export const COUNT_USERS_POST = gql`
 `;
 
 export const GET_POSTS = gql`
-    query getPosts($post_ids: [Int!] = null) {
-        posts(order_by: { created_at: desc }) {
+    query getPosts($following_ids: [Int!] = null) {
+        posts(order_by: { created_at: desc }, where: { user_id: { _in: $following_ids } }) {
             user_id
             caption
             post_user_id {
