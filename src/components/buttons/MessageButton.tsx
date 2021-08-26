@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleProp, View, ViewStyle } from 'react-native';
+import { StyleProp, View, ViewStyle, Alert } from 'react-native';
 import ProfileButton from './ProfileButton';
 
 interface Props {
@@ -8,7 +8,10 @@ interface Props {
 const MessageButton: React.FC<Props> = ({ style }: Props) => {
     return (
         <View style={style}>
-            <ProfileButton title={'Message'} onPress={() => 0} />
+            <ProfileButton
+                title={'Message'}
+                onPress={() => Alert.alert('Messaging coming soon!')}
+            />
         </View>
     );
 };
