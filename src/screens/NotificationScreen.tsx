@@ -3,14 +3,11 @@ import { useNavigation } from '@react-navigation/native';
 import React, { useCallback, useEffect, useState } from 'react';
 import { StyleSheet, ScrollView, RefreshControl } from 'react-native';
 import { Storage } from 'aws-amplify';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import NotificationItem from '../components/NotificationItem';
 import { GET_NOTIFICATIONS, UPDATE_NOTIFICATIONS } from '../lib/queries';
 import { Notification } from '../lib/types';
 import { useUser } from '../lib/user';
 import { StackNavigationProp } from '@react-navigation/stack';
-
-const PLACE_HOLDER_IMAGE = 'https://files.thehandbook.com/uploads/2019/03/ronaldo.jpg';
 
 const wait = (timeout: number) => {
     return new Promise((resolve) => {
@@ -56,7 +53,7 @@ const NotificationScreen: React.FC = () => {
                         notifier_user_id: notif.notifier_user_id.id,
                         profile_thumbnail:
                             notif.notifier_user_id.profile_pic === null
-                                ? PLACE_HOLDER_IMAGE
+                                ? undefined
                                 : ((await Storage.get(
                                       notif.notifier_user_id.profile_pic.s3_key,
                                   )) as string),
