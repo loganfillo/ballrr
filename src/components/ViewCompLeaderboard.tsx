@@ -117,7 +117,7 @@ const LeaderboardList: React.FC<ListProps> = ({ refreshing, comp, onItemPress }:
                                     ? ((await Storage.get(
                                           d.post.post_user_id.profile_pic.s3_key,
                                       )) as string)
-                                    : PLACE_HOLDER_IMAGE,
+                                    : undefined,
                             name: d.post.post_user_id.full_name,
                             username: d.post.post_user_id.username,
                             score: d.score,
@@ -152,15 +152,27 @@ const LeaderboardList: React.FC<ListProps> = ({ refreshing, comp, onItemPress }:
                 }}
             >
                 <View style={{ flex: 1 }}>
-                    <Image
-                        style={{
-                            borderRadius: 100,
-                            height: 0.04 * height,
-                            aspectRatio: 1,
-                            alignSelf: 'center',
-                        }}
-                        source={{ uri: item.profPicUrl }}
-                    />
+                    {item.profPicUrl ? (
+                        <Image
+                            style={{
+                                borderRadius: 100,
+                                height: 0.04 * height,
+                                aspectRatio: 1,
+                                alignSelf: 'center',
+                            }}
+                            source={{ uri: item.profPicUrl }}
+                        />
+                    ) : (
+                        <Image
+                            style={{
+                                borderRadius: 100,
+                                height: 0.04 * height,
+                                aspectRatio: 1,
+                                alignSelf: 'center',
+                            }}
+                            source={require('../../assets/profile_icon.png')}
+                        />
+                    )}
                 </View>
                 <View style={{ flex: 4 }}>
                     <Text style={{ color: 'lightgrey', fontSize: 20 }}>@{item.username}</Text>

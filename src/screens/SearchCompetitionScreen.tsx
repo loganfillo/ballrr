@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { useApolloClient } from '@apollo/client';
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, View, ScrollView } from 'react-native';
+import { SafeAreaView, View, ScrollView, Dimensions } from 'react-native';
 import { SEARCH_COMPS, } from '../lib/queries';
 import { CompSearchResult } from '../lib/types';
 import SearchBar from '../components/SearchBar';
@@ -11,6 +11,7 @@ const SearchCompetitionScreen: React.FC = () => {
     const [results, setResults] = useState<CompSearchResult[]>([]);
     const [searchQuery, setSearchQuery] = useState('%');
     const apolloClient = useApolloClient();
+    const {height} = Dimensions.get("screen")
 
     function updateSearchQuery(query: string) {        
         if (query == "") {
@@ -38,10 +39,10 @@ const SearchCompetitionScreen: React.FC = () => {
                 }
 
                 const fetchedResults: CompSearchResult[] = [];
-                for (const comp of res.data.competitions) {
+                for (const comp of res.data.competitions) {                    
                     fetchedResults.push({
                         name: comp.name,
-                        type: comp.type,
+                        type: comp.leaderboard_type,
                         compId: comp.id
                     });
                 }
@@ -55,8 +56,7 @@ const SearchCompetitionScreen: React.FC = () => {
     }, [searchQuery]);    
 
     return (
-        <SafeAreaView>
-            <View style={{ padding: 2, borderRadius: 2, borderColor: 'black' }}>
+        <SafeAreaView style={{flex: 1}}>
                 <SearchBar
                     placeholder="Search"
                     onChangeText={updateSearchQuery}
@@ -65,7 +65,7 @@ const SearchCompetitionScreen: React.FC = () => {
                     leftIcon="search"
                     color="orange"
                 />
-                <ScrollView style={{ paddingBottom: 500}}>
+                <ScrollView style={{}}>
                 { searchQuery !== '' ? (
                 <View
                     style={{
@@ -76,6 +76,7 @@ const SearchCompetitionScreen: React.FC = () => {
                     }}
                 >
                 {results.map((result, index) => {
+                    
                     return (
                         <View key={index} style={{paddingLeft: 5, paddingTop: 5}} >
                             <CompetitionSearchItem
@@ -87,11 +88,11 @@ const SearchCompetitionScreen: React.FC = () => {
 
                     );
                 })}
+                <View style={{height: 0.5*height}}></View>
                 </View> ): ( 
                         <></>
                 )}
                 </ScrollView>
-            </View>
         </SafeAreaView>
     );
 };

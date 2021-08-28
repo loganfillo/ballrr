@@ -145,7 +145,7 @@ export interface Competition {
 }
 
 export interface LeaderBoardItem {
-    profPicUrl: string;
+    profPicUrl: string | undefined;
     name: string;
     username: string;
     score: number;

@@ -165,7 +165,14 @@ const BrowseChallengeScreen: React.FC = () => {
                     </Text>
                 </View>
             )}
-            <View style={{ justifyContent: 'center', alignItems: 'center', paddingVertical: 5 }}>
+            <View
+                style={{
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    paddingVertical: 5,
+                    paddingHorizontal: 10,
+                }}
+            >
                 <Text style={{ fontSize: 15, color: 'grey' }}>{competition?.description}</Text>
             </View>
             <View
