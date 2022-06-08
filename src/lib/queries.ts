@@ -729,3 +729,18 @@ export const GET_PROFILE_ATTRIBUTES = gql`
         }
     }
 `;
+
+export const GET_USERS = gql`
+    query getUsers($user_id: Int!) {
+        users(where: { id: { _neq: $user_id } }) {
+            id
+            username
+            full_name
+            flag
+            profile_pic {
+                id
+                s3_key
+            }
+        }
+    }
+`;
